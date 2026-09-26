@@ -13,6 +13,9 @@
     --ink:#081830; --ink-2:#0d223f;
     --paper:#F7F6F3; --off:#FCFBF8;
     --blue:#2A7FFF; --gold:#C6A86F; --gold-lt:#EADDC0;
+    --blue-dark:#246DDB; --gold-dark:#816D48; /* WCAG AA-safe variants for
+      text on light backgrounds — the base --blue/--gold only pass AA
+      against the dark ink background, confirmed by contrast calculation. */
     --line:rgba(8,24,48,.08); --line-2:rgba(8,24,48,.14);
     --danger:#dc2626; --ok:#047857;
     --serif:'Source Serif 4',Georgia,serif;
@@ -83,7 +86,7 @@
   .hero p.lede b{color:#fff; font-weight:600;}
   .hero-ctas{margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;}
   .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; height:48px; padding:0 28px; border-radius:var(--r-card); font-size:14px; font-weight:600; text-decoration:none; border:none; cursor:pointer; transition:all .2s;}
-  .btn-primary{background:var(--blue); color:#fff; box-shadow:0 8px 20px rgba(42,127,255,.35);} .btn-primary:hover{background:#1e6fe0;}
+  .btn-primary{background:var(--blue-dark); color:#fff; box-shadow:0 8px 20px rgba(36,109,219,.35);} .btn-primary:hover{background:#1c5cb8;}
   .btn-outline{background:transparent; border:1px solid rgba(255,255,255,.28); color:#fff;} .btn-outline:hover{background:rgba(255,255,255,.08);}
   .btn-dark{background:var(--ink); color:#fff;} .btn-dark:hover{background:#000;}
   .hero-stats{margin-top:52px; display:grid; grid-template-columns:1fr; gap:1px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.12); border-radius:var(--r-card); overflow:hidden;}
@@ -110,7 +113,8 @@
 
   /* SECTION HEADERS */
   .eyebrow{font-family:var(--serif); font-style:italic; font-weight:500; font-size:15px; letter-spacing:0; padding-left:14px; border-left:2px solid currentColor; line-height:1.3;}
-  .eyebrow.gold{color:var(--gold);} .eyebrow.blue{color:var(--blue);}
+  .eyebrow.gold{color:var(--gold-dark);} .eyebrow.blue{color:var(--blue-dark);}
+  .nodes .eyebrow.gold{color:var(--gold);} /* dark section background — full brightness passes AA here */
   h2{font-family:var(--serif); font-weight:600; letter-spacing:-.01em; line-height:1.05; font-size:clamp(27px,3.6vw,40px); margin-top:14px;}
   .section-sub{margin-top:16px; font-size:15px; color:rgba(8,24,48,.65); max-width:62ch; line-height:1.6;}
 
@@ -163,7 +167,7 @@
   .moat-card p{margin-top:10px; font-size:13px; color:rgba(8,24,48,.62); line-height:1.6;}
   .moat-card ul{margin-top:14px; display:flex; flex-direction:column; gap:6px; list-style:none;}
   .moat-card li{font-size:12px; color:rgba(8,24,48,.6);}
-  .moat-card li::before{content:'• '; color:var(--gold);}
+  .moat-card li::before{content:'• '; color:var(--gold-dark);}
 
   /* MARKET */
   .market{padding:80px 0; background:var(--paper);}
@@ -179,7 +183,7 @@
   .flywheel{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:28px;}
   .flywheel .mono{font-size:11px; letter-spacing:.1em; color:rgba(8,24,48,.4); font-weight:700;}
   .fly-step{display:flex; gap:12px; margin-top:16px;}
-  .fly-num{width:24px; height:24px; border-radius:50%; background:var(--blue); color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .fly-num{width:24px; height:24px; border-radius:50%; background:var(--blue-dark); color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .fly-step .t{font-size:13px; font-weight:700;}
   .fly-step .d{font-size:12px; color:rgba(8,24,48,.6); margin-top:2px;}
 
@@ -209,6 +213,7 @@
   .phase h4{margin-top:6px; font-size:14px; font-weight:800;}
   .phase p{margin-top:8px; font-size:12px; color:rgba(8,24,48,.62); line-height:1.6;}
   .phase .status{margin-top:14px; display:inline-flex; padding:4px 10px; border-radius:var(--r-tight); font-size:10px; font-weight:700; letter-spacing:.08em; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;}
+  .phase .status.status-progress{background:#fffbeb; color:#92400e; border-color:#fde68a;}
   .phase.blurred .blur-wrap{filter:blur(9px); opacity:.6; pointer-events:none; user-select:none;}
   .phase.blurred::after{content:'UPCOMING • LOCKED'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(8,24,48,.85); color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; font-weight:700; padding:8px 14px; border-radius:var(--r-tight); white-space:nowrap; z-index:3;}
   .phase.blurred::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.4), rgba(247,246,243,.7)); z-index:2;}
@@ -258,7 +263,7 @@
   .ccard h4{margin-top:14px; font-size:13.5px; font-weight:700;}
   .ccard p{margin-top:6px; font-size:11.5px; color:rgba(255,255,255,.6); line-height:1.5;}
   .ccard button.cta{margin-top:18px; height:36px; padding:0 16px; border-radius:var(--r-card); font-size:11.5px; font-weight:700; border:none; cursor:pointer;}
-  .cta-blue{background:var(--blue); color:#fff;} .cta-white{background:#fff; color:var(--ink);}
+  .cta-blue{background:var(--blue-dark); color:#fff;} .cta-white{background:#fff; color:var(--ink);}
   .share-row{margin-top:40px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; border-top:1px solid rgba(255,255,255,.08); padding-top:20px;}
   .share-icons{display:flex; gap:8px;}
   .share-icons a{width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:13px;}
@@ -283,6 +288,8 @@
   .page.active{display:block;}
   .app-topbar{border-bottom:1px solid var(--line); background:#fff;}
   .app-topbar-inner{height:64px; display:flex; align-items:center; justify-content:space-between;}
+  .app-back{font-size:12.5px; font-weight:700; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:4px;}
+  .app-back:hover{color:var(--blue-dark);}
   .app-brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.01em; font-size:15px; text-decoration:none; color:var(--ink);}
   .app-brand .mark-img{height:30px; width:auto; object-fit:contain;}
   .app-topbar-link{font-size:12.5px; font-weight:600; color:rgba(8,24,48,.6); text-decoration:none;}
@@ -362,7 +369,7 @@
   .interest-grid{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
   .interest-picker{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;}
   .interest-picker button{padding:7px 14px; border-radius:var(--r-tight); border:1px solid var(--line); background:#fff; font-size:12.5px; font-weight:600; cursor:pointer;}
-  .interest-picker button.selected{background:var(--blue); color:#fff; border-color:var(--blue);}
+  .interest-picker button.selected{background:var(--blue-dark); color:#fff; border-color:var(--blue-dark);}
   .milestone{display:flex; gap:13px; align-items:flex-start; padding:14px 0; border-bottom:1px solid var(--line);}
   .milestone:last-child{border-bottom:none;}
   .ms-dot{width:26px; height:26px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:var(--line); color:rgba(8,24,48,.5);}
@@ -390,7 +397,7 @@
   .msg-entry:last-child{border-bottom:none;}
   .msg-head{display:flex; align-items:baseline; gap:8px; margin-bottom:4px;}
   .msg-head .who{font-size:12.5px; font-weight:700; color:var(--ink);}
-  .msg-entry.out .msg-head .who{color:var(--gold);}
+  .msg-entry.out .msg-head .who{color:var(--gold-dark);}
   .msg-head .when{font-family:var(--mono); font-size:10.5px; color:rgba(8,24,48,.4); letter-spacing:.02em;}
   .msg-text{font-size:14px; line-height:1.6; color:rgba(8,24,48,.85); padding-left:1px;}
   .dash-chat-input{display:flex; gap:10px; padding:14px 18px; background:var(--off); border-top:1px solid var(--line);}
@@ -424,7 +431,7 @@
   .admin-row .info .n{font-size:13px; font-weight:700; color:var(--ink); display:flex; justify-content:space-between; gap:6px;}
   .admin-row .info .g{font-size:11px; color:rgba(8,24,48,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px;}
   .admin-row .info .m{font-family:var(--mono); font-size:10px; color:rgba(8,24,48,.38); margin-top:5px; letter-spacing:.02em;}
-  .unread-badge{background:var(--blue); color:#fff; font-family:var(--mono); font-size:10px; font-weight:700; border-radius:var(--r-tight); padding:1px 6px; flex-shrink:0;}
+  .unread-badge{background:var(--blue-dark); color:#fff; font-family:var(--mono); font-size:10px; font-weight:700; border-radius:var(--r-tight); padding:1px 6px; flex-shrink:0;}
   .admin-chat{flex:1; display:flex; flex-direction:column; min-width:0; background:#fff;}
   .admin-chat-empty{margin:auto; text-align:center; color:rgba(8,24,48,.4); font-size:13px; padding:30px; max-width:320px;}
   .admin-chat-head{padding:18px 24px; border-bottom:1px solid var(--line); flex-shrink:0;}
@@ -499,17 +506,6 @@
     <h1>Building Trust Infrastructure for Real Estate &amp; Construction in <span class="accent">Nigeria</span></h1>
     <p class="lede">We eliminate the <b>30% chaos premium</b> from infrastructure deals by turning unverified land and volatile construction into transparent, institutional-grade assets.</p>
 
-    <div class="searchbar">
-      <input type="text" id="heroSearch" placeholder="Search a location, estate or economic node…">
-      <select id="heroSearchCat">
-        <option value="">All listings</option>
-        <option value="land">Land / Real Estate</option>
-        <option value="construction">Construction</option>
-      </select>
-      <button id="heroSearchBtn">Search</button>
-    </div>
-    <div class="search-results" id="heroSearchResults"></div>
-
     <div class="hero-ctas">
       <button class="btn btn-primary" data-target="register">Create account</button>
       <button class="btn btn-outline" data-target="platform">See the platform</button>
@@ -568,7 +564,7 @@
       <p class="section-sub">Everything a buyer needs to verify land before paying, and everything a client needs to watch a build spend their money. Each tool lives in one of two dashboards.</p>
       <div class="stack-tabs" role="tablist">
         <button class="active" data-stack="all">All tools</button>
-        <button data-stack="land">Lands / Real Estate</button>
+        <button data-stack="land">Lands / Real Estate Dashboard</button>
         <button data-stack="build">Construction Dashboard</button>
       </div>
     </div>
@@ -658,8 +654,8 @@
         <div class="dot2" style="background:#081830;">1</div>
         <div class="meta">PHASE 1 • MONTH 1-6</div>
         <h4>Automated web + B2B</h4>
-        <p>Guarded Land v1, registry concierge, Lagos, Abuja and diaspora partnerships. Verification and escrow foundation live.</p>
-        <span class="status">● Live now</span>
+        <p>Guarded Land v1 and registry concierge in build. Verification and escrow infrastructure — not yet handling real funds or registry data.</p>
+        <span class="status status-progress">● In development</span>
       </div>
       <div class="phase blurred reveal"><div class="blur-wrap">
         <div class="dot2" style="background:#2A7FFF;">2</div>
@@ -751,14 +747,14 @@
 <div class="page" id="page-signup">
   <header class="app-topbar">
     <div class="wrap app-topbar-inner">
-      <a href="/" class="app-brand" data-nav="/"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
-      <a href="/login" class="app-topbar-link" data-nav="/login">Already registered? Log in</a>
+      <a href="#" class="app-back" data-nav="home">← Back</a>
+      <a href="#" class="app-brand" data-nav="home"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
+      <a href="#" class="app-topbar-link" data-nav="login">Already registered? Log in</a>
     </div>
   </header>
   <div class="app-page-body">
     <div class="wrap register-grid">
       <div class="reveal">
-        <div class="eyebrow blue">Early access</div>
         <h2 style="max-width:16ch;">Create an account. We only work with verified buyers.</h2>
         <p class="section-sub" style="max-width:520px;">Fraud prevention starts at registration. We accept only Gmail addresses, which keeps out disposable emails and gives us a reliable channel for title documents and updates.</p>
         <div class="why-gmail">
@@ -801,8 +797,9 @@
 <div class="page" id="page-login">
   <header class="app-topbar">
     <div class="wrap app-topbar-inner">
-      <a href="/" class="app-brand" data-nav="/"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
-      <a href="/signup" class="app-topbar-link" data-nav="/signup">No account? Create one</a>
+      <a href="#" class="app-back" data-nav="home">← Back</a>
+      <a href="#" class="app-brand" data-nav="home"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
+      <a href="#" class="app-topbar-link" data-nav="signup">No account? Create one</a>
     </div>
   </header>
   <div class="app-page-body app-page-narrow">
@@ -825,7 +822,7 @@
       </div>
       <div id="loginMsg"></div>
       <button class="submit" id="sendCodeBtn">Send code</button>
-      <p class="fine">No account yet? <a href="/signup" id="goRegisterLink" data-nav="/signup" style="color:var(--blue); font-weight:700;">Create one</a></p>
+      <p class="fine">No account yet? <a href="#" id="goRegisterLink" data-nav="signup" style="color:var(--blue-dark); font-weight:700;">Create one</a></p>
     </div>
     <div id="loginStepOtp" style="display:none;">
       <div class="step-label">Step 2 of 2 — Verification</div>
@@ -838,7 +835,7 @@
       <div id="otpMsg"></div>
       <button class="submit" id="verifyOtpBtn">Verify and continue</button>
       <p class="fine" style="margin-top:14px;">
-        <button type="button" id="resendOtpBtn" style="background:none; border:none; color:var(--blue); font-weight:700; cursor:pointer; font-size:12px; font-family:inherit;">Resend code</button>
+        <button type="button" id="resendOtpBtn" style="background:none; border:none; color:var(--blue-dark); font-weight:700; cursor:pointer; font-size:12px; font-family:inherit;">Resend code</button>
         &nbsp;·&nbsp;
         <button type="button" id="changeGmailBtn" style="background:none; border:none; color:rgba(8,24,48,.5); font-weight:600; cursor:pointer; font-size:12px; font-family:inherit;">Use a different Gmail</button>
       </p>
@@ -856,6 +853,7 @@
     </div>
     <div class="right">
       <span class="user-email" id="userTopEmail"></span>
+      <button id="userBackBtn">← Back</button>
       <button id="userLogoutBtn">Log out</button>
     </div>
   </div>
@@ -881,10 +879,6 @@
 
       <div class="section-label">Support</div>
       <button class="side-link" data-view="chat"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg> Chat with our desk</button>
-      <div id="adminQuickAccess" style="display:none;">
-        <div class="section-label">Administration</div>
-        <button class="side-link" id="openAdminFromUser"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg> Admin dashboard</button>
-      </div>
     </aside>
 
     <main class="user-main">
@@ -1039,12 +1033,9 @@
           <div id="buildMilestones" style="margin-top:14px;"></div>
         </div>
         <div class="dash-card">
-          <h3>Drone and site photo upload</h3>
-          <p>Site inspectors upload high-definition drone footage and geo-tagged photographs against each milestone.</p>
-          <label class="drop-zone" for="droneFile" id="droneDrop">Click to attach drone footage or a site photo</label>
-          <input type="file" id="droneFile" accept="image/*,video/*" style="display:none;">
-          <div class="tool-actions"><button class="btn-sm" id="droneUploadBtn">Upload evidence</button></div>
-          <div class="result-box" id="droneResult"></div>
+          <h3>Drone and site photo evidence</h3>
+          <p>Our inspectors upload time-stamped, geo-tagged drone footage and photographs against each milestone independently — customers view the results here but don't submit evidence themselves, since self-submitted "verification" wouldn't actually verify anything.</p>
+          <div class="dash-note" style="margin-top:0;">Evidence for your active milestones will appear above once an inspector visit is scheduled and completed.</div>
         </div>
       </div>
 
@@ -1110,7 +1101,7 @@
       <div class="field"><label>Password</label><input type="password" id="adminPassword" autocomplete="current-password"></div>
       <div id="adminLoginMsg"></div>
       <button class="submit" id="adminLoginSubmitBtn">Log in</button>
-      <p class="fine"><a href="/" data-nav="/" style="color:rgba(8,24,48,.5); font-weight:600;">Back to site</a></p>
+      <p class="fine"><a href="#" data-nav="home" style="color:rgba(8,24,48,.5); font-weight:600;">← Back to site</a></p>
     </div>
   </div>
   <div class="admin-shell-body" id="adminShellBody" style="display:none;">
@@ -1120,7 +1111,7 @@
         <span class="who" id="adminEmailLabel"></span>
         <button id="adminRefreshBtn">Refresh</button>
         <button id="adminLogoutBtn">Log out</button>
-        <button id="adminCloseBtn">Exit to site</button>
+        <button id="adminCloseBtn">← Back</button>
       </div>
     </div>
     <div class="admin-body">
@@ -1239,7 +1230,9 @@ const API_BASE = 'https://apexxcrestway-api.apexxcrestway.workers.dev'.replace(/
 
 /* ---------- tiny helpers ---------- */
 const $ = id => document.getElementById(id);
-const esc = s => (s ?? '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const ngn = n => '₦' + Number(n || 0).toLocaleString('en-NG', { maximumFractionDigits: 0 });
 const numOnly = v => parseFloat((v || '').toString().replace(/[^0-9.]/g, '')) || 0;
 function timeLabel(ts){
@@ -1247,15 +1240,14 @@ function timeLabel(ts){
   catch(e){ return ''; }
 }
 
-async function api(path, { method = 'GET', body, auth = false } = {}) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (auth) {
-    const t = sessionStorage.getItem('apexx_admin_token');
-    if (t) headers.Authorization = 'Bearer ' + t;
-  }
+/* Every call sends the httpOnly session cookie automatically via
+   credentials:'include' — no token is ever stored in JS-readable
+   storage anymore. That's the whole point of the Phase 1 auth change. */
+async function api(path, { method = 'GET', body } = {}) {
   const res = await fetch(API_BASE + path, {
     method,
-    headers,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined
   });
   return res.json();
@@ -1278,10 +1270,13 @@ const session = {
   },
   clear(){ sessionStorage.removeItem('apexx_customer'); }
 };
-const ADMIN_EMAILS = ['apexxbashir@gmail.com', 'hello@apexxcrestway.com'];
-const isAdminEmail = e => ADMIN_EMAILS.includes((e || '').toLowerCase());
+/* Phase 1: ADMIN_EMAILS and isAdminEmail removed. Admin access is decided
+   server-side only, via a real admin login — a customer's Gmail address
+   is never enough on its own, and it doesn't need to be known client-side. */
 
-/* ---------- router: path-based, MPA-style navigation on one page ---------- */
+/* ---------- view switcher: no URL changes, ever — the address bar always
+   just reads apexxcrestway.com. Each app page carries its own explicit
+   "back" link instead of relying on the browser back button. ---------- */
 const flatPages = ['home', 'signup', 'login'];
 function showFlatPage(name){
   flatPages.forEach(n => $('page-' + n).classList.toggle('active', n === name));
@@ -1289,16 +1284,15 @@ function showFlatPage(name){
   closeAdminShell();
   window.scrollTo(0, 0);
 }
-function render(){
-  const path = location.pathname.replace(/\/+$/, '') || '/';
-  if (path === '/signup') { showFlatPage('signup'); }
-  else if (path === '/login') { showFlatPage('login'); showGmailStep(); }
-  else if (path === '/dashboard') {
-    if (!session.get()) { navigate('/login', { replace:true }); return; }
+function navigate(view){
+  if (view === 'signup') { showFlatPage('signup'); }
+  else if (view === 'login') { showFlatPage('login'); showGmailStep(); }
+  else if (view === 'dashboard') {
+    if (!session.get()) { navigate('login'); return; }
     flatPages.forEach(n => $('page-' + n).classList.remove('active'));
     closeAdminShell();
     openUserDashboard();
-  } else if (path === '/admin') {
+  } else if (view === 'admin') {
     flatPages.forEach(n => $('page-' + n).classList.remove('active'));
     closeUserDashboard();
     openAdminShell();
@@ -1306,12 +1300,6 @@ function render(){
     showFlatPage('home');
   }
 }
-function navigate(path, opts = {}){
-  if (location.pathname === path && !opts.force) { render(); return; }
-  if (opts.replace) history.replaceState({}, '', path); else history.pushState({}, '', path);
-  render();
-}
-addEventListener('popstate', render);
 document.querySelectorAll('[data-nav]').forEach(el => el.addEventListener('click', e => {
   e.preventDefault();
   navigate(el.dataset.nav);
@@ -1322,7 +1310,7 @@ document.querySelectorAll('[data-nav]').forEach(el => el.addEventListener('click
 const header = $('siteHeader');
 addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 20));
 document.querySelectorAll('[data-target]').forEach(el => el.addEventListener('click', () => {
-  if (el.dataset.target === 'register') { navigate('/signup'); $('mobileMenu').classList.remove('open'); return; }
+  if (el.dataset.target === 'register') { navigate('signup'); $('mobileMenu').classList.remove('open'); return; }
   const t = $(el.dataset.target);
   if (t) t.scrollIntoView({ behavior: 'smooth' });
   $('mobileMenu').classList.remove('open');
@@ -1350,13 +1338,34 @@ const TOOLS = [
 function renderTools(filter = 'all') {
   $('toolGrid').innerHTML = TOOLS
     .filter(t => filter === 'all' || t.g === filter)
-    .map(t => `
-      <article class="tool">
+    .map(t => {
+      const isSearch = t.t === 'Verified listing search';
+      return `
+      <article class="tool ${isSearch ? 'tool-live' : ''}">
         <div class="ic">${t.ic}</div>
         <h3>${esc(t.t)}</h3>
         <p>${esc(t.d)}</p>
         <span class="grp ${t.g === 'land' ? 'grp-land' : 'grp-build'}">${t.g === 'land' ? 'LANDS / REAL ESTATE' : 'CONSTRUCTION'}</span>
-      </article>`).join('');
+        ${isSearch ? `
+        <div class="tool-search">
+          <div class="searchbar">
+            <input type="text" id="toolSearchInput" placeholder="Search a location, estate or economic node…">
+            <select id="toolSearchCat">
+              <option value="">All listings</option>
+              <option value="land">Land / Real Estate</option>
+              <option value="construction">Construction</option>
+            </select>
+            <button id="toolSearchBtn">Search</button>
+          </div>
+          <div class="search-results" id="toolSearchResults"></div>
+        </div>` : ''}
+      </article>`;
+    }).join('');
+  if ($('toolSearchBtn')) {
+    $('toolSearchBtn').addEventListener('click', () =>
+      runSearch($('toolSearchInput').value.trim(), $('toolSearchCat').value, $('toolSearchResults')));
+    $('toolSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('toolSearchBtn').click(); });
+  }
 }
 renderTools();
 document.querySelectorAll('.stack-tabs button').forEach(b => b.addEventListener('click', () => {
@@ -1440,7 +1449,10 @@ form.addEventListener('submit', async e => {
   const payload = {
     name: F.fullName.value.trim(), gmail: F.gmail.value.trim().toLowerCase(),
     phone: F.phone.value.trim(), investorType: F.investorType.value,
-    interest: F.interestArea.value, message: F.message.value.trim(), source: location.href
+    interest: F.interestArea.value, message: F.message.value.trim(), source: location.href,
+    company: $('company').value   // honeypot — real bots skip the browser and call
+                                   // the API directly, so this has to be checked
+                                   // server-side too, not just here.
   };
   try {
     const d = await api('/api/register', { method:'POST', body: payload });
@@ -1464,8 +1476,8 @@ form.addEventListener('submit', async e => {
 /* ---------- login / OTP ---------- */
 let pendingGmail = '', resendTimer = null, awaitingQuickRegister = false;
 
-function openLoginModal(){ navigate('/login'); }
-function closeLoginModal(){ clearInterval(resendTimer); navigate('/'); }
+function openLoginModal(){ navigate('login'); }
+function closeLoginModal(){ clearInterval(resendTimer); navigate('home'); }
 function showGmailStep(){
   $('loginStepOtp').style.display = 'none';
   $('loginStepGmail').style.display = 'block';
@@ -1554,8 +1566,7 @@ async function verifyOtp(){
     const d = await api('/api/otp/verify', { method:'POST', body:{ gmail: pendingGmail, otp } });
     if (d.status === 'success') {
       session.set(d.user);
-      if (d.adminToken) sessionStorage.setItem('apexx_admin_token', d.adminToken);
-      navigate('/dashboard');
+      navigate('dashboard');
     }
     else {
       $('otpMsg').innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Incorrect code.')}</div>`;
@@ -1585,7 +1596,6 @@ function openUserDashboard(view = 'overview'){
   $('overviewWelcome').textContent = `Welcome back, ${(u.name || '').split(' ')[0] || 'investor'}`;
   userShell.classList.add('open');
   document.body.style.overflow = 'hidden';
-  $('adminQuickAccess').style.display = isAdminEmail(u.gmail) ? 'block' : 'none';
   renderInterests(); renderProfile(); switchView(view);
 }
 function closeUserDashboard(){
@@ -1593,8 +1603,11 @@ function closeUserDashboard(){
   document.body.style.overflow = '';
   clearInterval(chatTimer);
 }
-$('userLogoutBtn').addEventListener('click', () => { session.clear(); navigate('/'); });
-$('openAdminFromUser').addEventListener('click', () => navigate('/admin'));
+$('userLogoutBtn').addEventListener('click', async () => {
+  await api('/api/logout', { method:'POST' }).catch(() => {});
+  session.clear(); navigate('home');
+});
+$('userBackBtn').addEventListener('click', () => navigate('home'));
 
 const VIEWS = ['overview','search','interests','profile','deed','gis','omonile','fees','escrow','build','materials','wallet','chat'];
 function switchView(view){
@@ -1797,25 +1810,9 @@ async function loadMilestones(){
       </div>`).join('') || '<div class="dash-note" style="margin-top:0;">No milestones on this deal yet.</div>';
   } catch(e){ wrap.innerHTML = '<div class="dash-note" style="margin-top:0;">Couldn\'t load milestones right now.</div>'; }
 }
-$('droneFile').addEventListener('change', e => {
-  const f = e.target.files[0];
-  $('droneDrop').textContent = f ? `Attached: ${f.name}` : 'Click to attach drone footage or a site photo';
-});
-$('droneUploadBtn').addEventListener('click', async () => {
-  const box = $('droneResult'), f = $('droneFile').files[0];
-  if (!f) return showError(box, 'Attach a file first.');
-  box.className = 'result-box show'; box.innerHTML = 'Uploading…';
-  const fd = new FormData();
-  fd.append('file', f);
-  const dealId = sessionStorage.getItem('apexx_deal_id');
-  if (dealId) fd.append('milestoneId', dealId);
-  try {
-    const res = await fetch(API_BASE + '/api/construction/drone-upload', { method:'POST', body: fd });
-    const d = await res.json();
-    if (d.status === 'success') box.innerHTML = '<span class="verdict v-clear">Uploaded</span><p style="margin-top:10px; font-size:12.5px; color:rgba(8,24,48,.65);">Our inspector will time-stamp and geo-verify this against the milestone.</p>';
-    else showError(box, d.message || 'Upload failed.');
-  } catch(e){ showError(box, 'Upload is unavailable right now.'); }
-});
+/* Drone/evidence upload UI removed from the customer dashboard — see the
+   dash-card note above for why. The real inspector-facing upload flow
+   belongs in the admin panel (Phase 3), not here. */
 
 /* materials */
 async function loadMaterials(){
@@ -1902,12 +1899,14 @@ async function sendChat(){
 $('dashChatSendBtn').addEventListener('click', sendChat);
 $('dashChatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
 
-/* ---------- admin ---------- */
+/* ---------- admin ----------
+   Auth state lives ONLY server-side now (httpOnly cookie). The frontend
+   can't read it directly — it asks /api/admin/me whenever it needs to know. */
 const adminShell = $('adminShell');
 let activeGmail = null, adminChatTimer = null, adminListTimer = null, cachedSignups = [];
 const initials = n => (n || '?').trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase();
 
-$('adminLinkBtn').addEventListener('click', () => navigate('/admin'));
+$('adminLinkBtn').addEventListener('click', () => navigate('admin'));
 
 $('adminLoginSubmitBtn').addEventListener('click', async () => {
   const username = $('adminUsername').value.trim(), password = $('adminPassword').value;
@@ -1917,7 +1916,6 @@ $('adminLoginSubmitBtn').addEventListener('click', async () => {
   try {
     const d = await api('/api/admin/login', { method:'POST', body:{ username, password } });
     if (d.status === 'success') {
-      sessionStorage.setItem('apexx_admin_token', d.token);
       $('adminEmailLabel').textContent = username;
       showAdminAuthed();
     } else msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Invalid credentials.')}</div>`;
@@ -1932,13 +1930,16 @@ function showAdminAuthed(){
   clearInterval(adminListTimer);
   adminListTimer = setInterval(loadSignups, 8000);
 }
-function openAdminShell(){
+async function openAdminShell(){
   adminShell.classList.add('open');
   document.body.style.overflow = 'hidden';
-  if (sessionStorage.getItem('apexx_admin_token')) {
+  $('adminShellBody').style.display = 'none';
+  $('adminGate').style.display = 'none'; // brief neutral state while we ask the server
+  const d = await api('/api/admin/me').catch(() => ({ authorized: false }));
+  if (d.authorized) {
+    $('adminEmailLabel').textContent = d.identity || '';
     showAdminAuthed();
   } else {
-    $('adminShellBody').style.display = 'none';
     $('adminGate').style.display = 'flex';
   }
 }
@@ -1947,16 +1948,16 @@ function closeAdminShell(){
   document.body.style.overflow = '';
   clearInterval(adminChatTimer); clearInterval(adminListTimer);
 }
-$('adminCloseBtn').addEventListener('click', () => navigate('/'));
+$('adminCloseBtn').addEventListener('click', () => navigate('home'));
 $('adminRefreshBtn').addEventListener('click', () => { loadSignups(); refreshAdminThread(); });
-$('adminLogoutBtn').addEventListener('click', () => {
-  sessionStorage.removeItem('apexx_admin_token'); activeGmail = null; navigate('/');
+$('adminLogoutBtn').addEventListener('click', async () => {
+  await api('/api/admin/logout', { method:'POST' }).catch(() => {});
+  activeGmail = null; navigate('home');
 });
 
 async function loadSignups(){
-  if (!sessionStorage.getItem('apexx_admin_token')) return;
   try {
-    const d = await api('/api/admin/signups', { auth:true });
+    const d = await api('/api/admin/signups');
     if (d.status === 'success') { cachedSignups = d.signups; renderAdminList(); }
     else $('adminListItems').innerHTML = `<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">${esc(d.message)}</div>`;
   } catch(e){
@@ -2016,7 +2017,7 @@ async function refreshAdminThread(){
   if (!activeGmail) return;
   const body = $('adminChatBody'); if (!body) return;
   try {
-    const d = await api(`/api/messages?gmail=${encodeURIComponent(activeGmail)}`, { auth:true });
+    const d = await api(`/api/messages?gmail=${encodeURIComponent(activeGmail)}`);
     if (d.status === 'success') renderMessages(body, d.messages, 'admin');
   } catch(e){}
 }
@@ -2025,22 +2026,19 @@ async function sendAdminMessage(){
   if (!activeGmail || !text) return;
   input.value = ''; btn.disabled = true;
   try {
-    await api('/api/messages/send', { method:'POST', auth:true, body:{ gmail:activeGmail, sender:'admin', text } });
+    await api('/api/messages/send', { method:'POST', body:{ gmail:activeGmail, sender:'admin', text } });
     await refreshAdminThread();
   } catch(e){ input.value = text; }
   finally { btn.disabled = false; }
 }
 
-/* hidden admin entry: Ctrl+Shift+A, or ?admin */
+/* hidden admin entry: Ctrl+Shift+A */
 addEventListener('keydown', e => {
   if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
     e.preventDefault();
-    navigate('/admin');
+    navigate('admin');
   }
 });
-if (location.search.includes('admin') || location.hash.includes('admin')) {
-  history.replaceState({}, '', '/admin');
-}
 
 /* ---------- legal modals ---------- */
 function openModal(id){ $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -2057,8 +2055,8 @@ addEventListener('keydown', e => {
   if (e.key === 'Escape') ['aboutModal','privacyModal','termsModal'].forEach(closeModal);
 });
 
-/* ---------- initial route on page load / hard refresh / direct link ---------- */
-render();
+/* ---------- initial view: always the homepage, URL never changes ---------- */
+navigate('home');
 </script>
 </body>
 </html>
