@@ -1419,8 +1419,10 @@ async function runSearch(q, cat, target) {
     target.innerHTML = '<div class="sr-empty">Search is unavailable right now. Please try again shortly.</div>';
   }
 }
-$('heroSearchBtn').addEventListener('click', () => runSearch($('heroSearch').value.trim(), $('heroSearchCat').value, $('heroSearchResults')));
-$('heroSearch').addEventListener('keydown', e => { if (e.key === 'Enter') $('heroSearchBtn').click(); });
+/* Old hero search bar listeners removed here — that search box was moved
+   into the "Verified listing search" tool card (see toolSearchBtn below);
+   these two lines used to reference elements that no longer exist, which
+   threw at script-load time and silently broke everything after it. */
 
 /* ---------- registration ---------- */
 const form = $('regForm'), submitBtn = $('submitBtn'), formMsg = $('formMsg');
