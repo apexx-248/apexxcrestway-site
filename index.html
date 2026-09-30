@@ -1581,7 +1581,7 @@ async function verifyOtp(){
 $('verifyOtpBtn').addEventListener('click', verifyOtp);
 $('otpInput').addEventListener('keydown', e => { if (e.key === 'Enter') verifyOtp(); });
 
-function handleLoginNav(){ navigate(session.get() ? '/dashboard' : '/login'); }
+function handleLoginNav(){ navigate(session.get() ? 'dashboard' : 'login'); }
 $('navLoginBtn').addEventListener('click', handleLoginNav);
 $('navLoginBtnMobile').addEventListener('click', () => { $('mobileMenu').classList.remove('open'); handleLoginNav(); });
 
