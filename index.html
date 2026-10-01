@@ -51,6 +51,21 @@
   }
   .pending-claim.on-light::after{color:rgba(8,24,48,.55);}
 
+  /* Same honest-pending language, sized for a whole tool card rather than
+     an inline badge — used for tools whose output isn't backed by real
+     verified data yet, so the mechanism is visible but unusable rather
+     than silently returning placeholder results as if they were real. */
+  .tool-pending{position:relative;}
+  .tool-pending > .tool-pending-content{filter:blur(4px); opacity:.45; user-select:none; pointer-events:none;}
+  .tool-pending::after{
+    content:attr(data-pending);
+    position:absolute; inset:0; margin:auto; height:fit-content;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; font-weight:700;
+    color:rgba(8,24,48,.7); background:rgba(247,246,243,.82); backdrop-filter:blur(2px);
+    border-radius:var(--r-card);
+  }
+
   header{position:fixed; top:0; left:0; right:0; z-index:50; transition:background .3s ease, border-color .3s ease;}
   header.scrolled{background:rgba(255,255,255,.92); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); box-shadow:0 8px 30px rgba(0,0,0,.06);}
   nav{display:flex; align-items:center; justify-content:space-between; height:68px; gap:16px;}
@@ -953,15 +968,19 @@
         <div class="dash-card">
           <h3>AI deed document scanner</h3>
           <p>Upload a Deed of Assignment, Certificate of Occupancy or survey plan. The scanner reads the document and flags forged signatures, invalid dates and registration numbers that don't match the registry.</p>
-          <div class="tool-form two">
-            <div><label>Document type</label><select id="deedType"><option value="deed_of_assignment">Deed of Assignment</option><option value="c_of_o">Certificate of Occupancy</option><option value="survey_plan">Survey plan</option></select></div>
-            <div><label>Registration number</label><input type="text" id="deedReg" placeholder="e.g. 42/42/2451"></div>
+          <div class="tool-pending" data-pending="COMING SOON — DOCUMENT OCR NOT YET CONNECTED">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Document type</label><select id="deedType"><option value="deed_of_assignment">Deed of Assignment</option><option value="c_of_o">Certificate of Occupancy</option><option value="survey_plan">Survey plan</option></select></div>
+                <div><label>Registration number</label><input type="text" id="deedReg" placeholder="e.g. 42/42/2451"></div>
+              </div>
+              <label class="drop-zone" for="deedFile" id="deedDrop">Click to attach the document · PDF, JPG or PNG</label>
+              <input type="file" id="deedFile" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
+              <div class="tool-actions"><button class="btn-sm" id="deedScanBtn">Run scan</button></div>
+              <div class="result-box" id="deedResult"></div>
+            </div>
           </div>
-          <label class="drop-zone" for="deedFile" id="deedDrop">Click to attach the document · PDF, JPG or PNG</label>
-          <input type="file" id="deedFile" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
-          <div class="tool-actions"><button class="btn-sm" id="deedScanBtn">Run scan</button></div>
-          <div class="result-box" id="deedResult"></div>
-          <div class="dash-note">A scan result is an indicator, not a legal opinion. Every flagged document is reviewed by our legal desk, and a clear result still requires registry confirmation before funds move.</div>
+          <div class="dash-note">We don't yet have a document-reading pipeline connected, so running this today would only check that a registration number is formatted correctly — not whether the document is genuine. We'd rather show you that plainly than return a result that looks like real verification and isn't.</div>
         </div>
       </div>
 
@@ -970,15 +989,20 @@
         <div class="dash-card">
           <h3>GIS coordinates mapper</h3>
           <p>Drop a pin on the land, or paste its coordinates. We check them against the government master plan and tell you whether the parcel is free, committed to infrastructure, or zoned agricultural.</p>
-          <div class="tool-form two">
-            <div><label>Latitude</label><input type="text" id="gisLat" placeholder="6.4501"></div>
-            <div><label>Longitude</label><input type="text" id="gisLng" placeholder="3.5123"></div>
+          <div class="tool-pending" data-pending="COMING SOON — AWAITING REAL MASTER-PLAN DATA">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Latitude</label><input type="text" id="gisLat" placeholder="6.4501"></div>
+                <div><label>Longitude</label><input type="text" id="gisLng" placeholder="3.5123"></div>
+              </div>
+              <div class="tool-actions">
+                <button class="btn-sm" id="gisCheckBtn">Check coordinates</button>
+                <button class="btn-sm ghost" id="gisLocateBtn">Use my location</button>
+              </div>
+              <div class="result-box" id="gisResult"></div>
+            </div>
           </div>
-          <div class="tool-actions">
-            <button class="btn-sm" id="gisCheckBtn">Check coordinates</button>
-            <button class="btn-sm ghost" id="gisLocateBtn">Use my location</button>
-          </div>
-          <div class="result-box" id="gisResult"></div>
+          <div class="dash-note">We don't yet have real government master-plan boundaries loaded — only a handful of test coordinates used to build this feature. A result today would cover almost nowhere real, so we're holding it back until actual registry data is in place rather than let it look more complete than it is.</div>
         </div>
       </div>
 
@@ -987,12 +1011,16 @@
         <div class="dash-card">
           <h3>Community risk profiling</h3>
           <p>Local families and community groups are rated on the risk of double-selling, youth disruption at commencement, and litigation history in that neighbourhood.</p>
-          <div class="tool-form">
-            <div><label>Area or neighbourhood</label><input type="text" id="omoArea" placeholder="Ibeju-Lekki, Ajah, Epe, Guzape…"></div>
+          <div class="tool-pending" data-pending="COMING SOON — NO VERIFIED FIELD DATA YET">
+            <div class="tool-pending-content">
+              <div class="tool-form">
+                <div><label>Area or neighbourhood</label><input type="text" id="omoArea" placeholder="Ibeju-Lekki, Ajah, Epe, Guzape…"></div>
+              </div>
+              <div class="tool-actions"><button class="btn-sm" id="omoBtn">Check area</button></div>
+              <div class="result-box" id="omoResult"></div>
+            </div>
           </div>
-          <div class="tool-actions"><button class="btn-sm" id="omoBtn">Check area</button></div>
-          <div class="result-box" id="omoResult"></div>
-          <div class="dash-note">Risk ratings describe recorded patterns in an area, not a judgement about any individual or family. They are a prompt to do deeper diligence, never a substitute for it.</div>
+          <div class="dash-note">This needs real, sourced, staff-reviewed field intelligence before it can say anything about a real place — rating a real neighbourhood on test data would be exactly the kind of false claim we're trying to eliminate from this market, not add to it. It stays off until every entry has a dated source and a named reviewer behind it.</div>
         </div>
       </div>
 
@@ -1021,7 +1049,7 @@
           </div>
           <div class="tool-actions"><button class="btn-sm" id="escrowCreateBtn">Open escrow deal</button></div>
           <div class="result-box" id="escrowResult"></div>
-          <div class="dash-note">Escrow is held with regulated partner banks. Apexx Crestway is a technology and trust intermediary, not a bank or a licensed escrow agent in its own right.</div>
+          <div class="dash-note">This opens a tracked escrow request on our side — it does not yet move or hold real funds, since we don't have a licensed banking partner in place. Apexx Crestway is a technology and trust intermediary, not a bank or a licensed escrow agent in its own right, and won't claim to be one before that partnership is real.</div>
         </div>
       </div>
 
@@ -1043,9 +1071,14 @@
       <div id="userView-materials" style="display:none;">
         <div class="dash-card">
           <h3>Supply chain material index</h3>
-          <p>Live raw material pricing across the sites we run. We track the index algorithmically and hedge bulk purchases, instead of passing an inflation premium on to you.</p>
-          <div id="materialList" style="margin-top:14px;"></div>
-          <div class="tool-actions"><button class="btn-sm ghost" id="materialRefreshBtn">Refresh index</button></div>
+          <p>Raw material pricing across the sites we run, tracked so price swings get hedged in bulk instead of passed on to you.</p>
+          <div class="tool-pending" data-pending="COMING SOON — NO LIVE PRICE SOURCE CONNECTED YET">
+            <div class="tool-pending-content">
+              <div id="materialList" style="margin-top:14px;"></div>
+              <div class="tool-actions"><button class="btn-sm ghost" id="materialRefreshBtn">Refresh index</button></div>
+            </div>
+          </div>
+          <div class="dash-note">The numbers behind this today are placeholder test data, not a real market feed — "live" and "algorithmic hedging" aren't true yet, so we've pulled that language and paused the tool until a real price source is connected.</div>
         </div>
       </div>
 
@@ -1053,14 +1086,18 @@
       <div id="userView-wallet" style="display:none;">
         <div class="dash-card">
           <h3>Digital wallet and cross-border payments</h3>
-          <p>Settle from USD, GBP or EUR straight into a Naira escrow account, with the anti-money-laundering checks handled as part of the flow.</p>
-          <div class="tool-form two">
-            <div><label>Currency</label><select id="walletCurrency"><option>USD</option><option>GBP</option><option>EUR</option></select></div>
-            <div><label>Amount</label><input type="text" id="walletAmount" inputmode="decimal" placeholder="25,000"></div>
+          <p>Settle from USD, GBP or EUR straight into a Naira escrow account, once a licensed payment partner is in place.</p>
+          <div class="tool-pending" data-pending="COMING SOON — NO PAYMENT PARTNER CONNECTED YET">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Currency</label><select id="walletCurrency"><option>USD</option><option>GBP</option><option>EUR</option></select></div>
+                <div><label>Amount</label><input type="text" id="walletAmount" inputmode="decimal" placeholder="25,000"></div>
+              </div>
+              <div class="tool-actions"><button class="btn-sm" id="walletConvertBtn">Preview conversion</button></div>
+              <div class="result-box" id="walletResult"></div>
+            </div>
           </div>
-          <div class="tool-actions"><button class="btn-sm" id="walletConvertBtn">Preview conversion</button></div>
-          <div class="result-box" id="walletResult"></div>
-          <div class="dash-note">Rates shown are indicative. Settlement runs through a licensed payment service provider, and the rate is locked at the moment funds are received, not at preview.</div>
+          <div class="dash-note">No licensed payment service provider is connected yet, and the AML/KYC checks a real version of this needs haven't been built. The rates this would show today are placeholders, not real quotes, so it's paused rather than left running on numbers that aren't true.</div>
         </div>
         <div class="dash-card">
           <h3>Transaction history</h3>
