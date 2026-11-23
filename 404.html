@@ -1537,6 +1537,20 @@ let pendingGmail = '', resendTimer = null, awaitingQuickRegister = false;
 function openLoginModal(){ navigate('login'); }
 function closeLoginModal(){ clearInterval(resendTimer); navigate('home'); }
 function showGmailStep(){
+  const params = new URLSearchParams(window.location.search);
+  const emailParam = params.get('email') || params.get('gmail');
+  const codeParam = params.get('code') || params.get('otp');
+
+  if (emailParam && codeParam) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(codeParam).catch(() => {});
+    }
+    showOtpStep(emailParam);
+    $('otpInput').value = codeParam;
+    $('otpMsg').innerHTML = '<div class="msg-box msg-ok">Code copied to clipboard & auto-filled.</div>';
+    return;
+  }
+
   $('loginStepOtp').style.display = 'none';
   $('loginStepGmail').style.display = 'block';
   $('otpMsg').innerHTML = ''; $('otpInput').value = '';
