@@ -421,54 +421,129 @@
   .dash-chat-empty{margin:auto; text-align:center; color:rgba(8,24,48,.4); font-size:13px; padding:20px; max-width:320px;}
 
   /* ADMIN */
-  .admin-shell{position:fixed; inset:0; width:100vw; height:100vh; z-index:95; background:#fff; display:none; flex-direction:column;}
+  .admin-shell{position:fixed; inset:0; width:100vw; height:100vh; z-index:95; background:var(--paper); display:none; flex-direction:column; overflow:hidden;}
   .admin-shell.open{display:flex;}
-  .admin-shell-body{flex:1; display:flex; flex-direction:column; min-height:0; height:100%;}
-  .admin-topbar{background:var(--ink); color:#fff; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:10px; border-bottom:1px solid rgba(255,255,255,.08);}
-  .admin-topbar .t{font-family:var(--serif); font-weight:600; font-size:16px; letter-spacing:-.005em; display:flex; align-items:center; gap:9px;}
-  .admin-topbar .t svg{color:var(--gold);}
+  .admin-shell.authed .admin-gate{display:none !important;}
+  .admin-shell-body{flex:1; display:flex; flex-direction:column; min-height:0; height:100%; overflow:hidden; background:#fff;}
+
+  /* ADMIN TOPBAR */
+  .admin-topbar{background:#0A192F; color:#fff; height:60px; min-height:60px; padding:0 24px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid rgba(197,168,128,.25); position:relative; z-index:30;}
+  .admin-topbar .t{font-family:var(--serif); font-weight:700; font-size:16px; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; color:#fff;}
+  .admin-topbar .t svg{color:#C5A880;}
+  .admin-topbar .admin-badge-text{font-family:var(--mono); font-size:11px; font-weight:700; color:#C5A880; letter-spacing:.12em; text-transform:uppercase; background:rgba(197,168,128,.12); padding:3px 8px; border-radius:4px; border:1px solid rgba(197,168,128,.25);}
   .admin-topbar .right{display:flex; align-items:center; gap:8px;}
-  .admin-topbar .who{font-family:var(--mono); font-size:10.5px; color:rgba(255,255,255,.55); letter-spacing:.02em; margin-right:4px;}
-  .admin-topbar button{background:transparent; border:1px solid rgba(255,255,255,.18); color:rgba(255,255,255,.85); font-size:11.5px; font-weight:600; padding:7px 14px; border-radius:var(--r-tight); cursor:pointer; transition:border-color .15s, color .15s;}
-  .admin-topbar button:hover{border-color:rgba(255,255,255,.4); color:#fff;}
-  .admin-body{flex:1; display:flex; overflow:hidden; width:100%;}
-  .admin-list{width:340px; max-width:42vw; border-right:1px solid var(--line); overflow-y:auto; flex-shrink:0; background:var(--off); display:flex; flex-direction:column;}
-  .admin-list-head{padding:16px 18px 12px; border-bottom:1px solid var(--line); flex-shrink:0;}
-  .admin-list-head .top-row{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
-  .admin-list-head .label{font-family:var(--serif); font-style:italic; font-size:14px; font-weight:500; color:var(--ink);}
-  .admin-list-head .count{font-family:var(--mono); font-size:11px; color:rgba(8,24,48,.45);}
-  .admin-list-head select{margin-top:10px; width:100%; font-size:11.5px; padding:7px 10px; border-radius:var(--r-tight); border:1px solid var(--line); background:#fff; font-family:inherit; color:rgba(8,24,48,.7);}
-  .admin-row{padding:13px 18px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; gap:11px; align-items:flex-start; transition:background .12s;}
-  .admin-row:hover{background:rgba(8,24,48,.025);}
-  .admin-row.active{background:#fff; box-shadow:inset 2px 0 0 var(--gold);}
-  .admin-row .av2{width:34px; height:34px; border-radius:var(--r-tight); background:var(--ink); color:var(--gold); font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:var(--mono);}
-  .admin-row .info{flex:1; min-width:0;}
-  .admin-row .info .n{font-size:13px; font-weight:700; color:var(--ink); display:flex; justify-content:space-between; gap:6px;}
-  .admin-row .info .g{font-size:11px; color:rgba(8,24,48,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px;}
-  .admin-row .info .m{font-family:var(--mono); font-size:10px; color:rgba(8,24,48,.38); margin-top:5px; letter-spacing:.02em;}
-  .unread-badge{background:var(--blue-dark); color:#fff; font-family:var(--mono); font-size:10px; font-weight:700; border-radius:var(--r-tight); padding:1px 6px; flex-shrink:0;}
-  .admin-chat{flex:1; display:flex; flex-direction:column; min-width:0; background:#fff;}
-  .admin-chat-empty{margin:auto; text-align:center; color:rgba(8,24,48,.4); font-size:13px; padding:30px; max-width:320px;}
-  .admin-chat-head{padding:18px 24px; border-bottom:1px solid var(--line); flex-shrink:0;}
-  .admin-chat-head .id-row{display:flex; align-items:center; gap:12px;}
-  .admin-chat-head .av2{width:38px; height:38px; border-radius:var(--r-tight); background:var(--ink); color:var(--gold); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:var(--mono);}
-  .admin-chat-head .n{font-family:var(--serif); font-weight:600; font-size:17px; color:var(--ink);}
-  .admin-chat-head .g{font-size:12px; color:rgba(8,24,48,.5); font-family:var(--mono); margin-top:1px;}
-  .admin-chat-head .tag-row{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
-  .admin-chat-head .dtag{font-size:10.5px; font-weight:600; padding:4px 9px; border-radius:var(--r-tight); background:var(--paper); border:1px solid var(--line); color:rgba(8,24,48,.65);}
-  .admin-chat-head .dtag.role{background:var(--ink); color:var(--gold-lt); border-color:var(--ink);}
-  .admin-chat-body{flex:1; overflow-y:auto; padding:4px 24px; background:#fff; display:flex; flex-direction:column;}
-  .admin-chat-input{display:flex; gap:10px; padding:16px 24px; border-top:1px solid var(--line); background:var(--off); flex-shrink:0;}
-  .admin-chat-input input{flex:1; height:42px; border-radius:var(--r-tight); border:1px solid var(--line); padding:0 14px; font-size:14px; font-family:inherit; outline:none; background:#fff;}
-  .admin-chat-input button{padding:0 18px; height:42px; border-radius:var(--r-tight); background:var(--ink); color:#fff; border:none; font-weight:700; font-size:12.5px; cursor:pointer;}
+  .admin-topbar .who{font-family:var(--mono); font-size:11px; color:#C5A880; background:rgba(197,168,128,.08); border:1px solid rgba(197,168,128,.22); padding:5px 12px; border-radius:6px; letter-spacing:.02em; display:inline-flex; align-items:center;}
+  .admin-top-btn{background:transparent; border:1px solid rgba(255,255,255,.18); color:rgba(255,255,255,.9); font-size:12px; font-weight:600; padding:6px 14px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease;}
+  .admin-top-btn:hover{border-color:#C5A880; color:#fff; background:rgba(197,168,128,.08);}
+  .admin-btn-gold{border-color:#C5A880; color:#C5A880; background:rgba(197,168,128,.1); font-weight:700;}
+  .admin-btn-gold:hover{background:#C5A880; color:#0A192F; border-color:#C5A880;}
+
+  /* SYSTEM CONTROLS DROPDOWN */
+  .admin-dropdown-wrap{position:relative;}
+  .admin-dropdown-menu{position:absolute; right:0; top:calc(100% + 8px); width:210px; background:#0A192F; border:1px solid rgba(197,168,128,.35); border-radius:8px; box-shadow:0 12px 28px rgba(10,25,47,.45); padding:6px 0; z-index:100;}
+  .admin-menu-item{width:100%; display:flex; align-items:center; gap:8px; padding:10px 16px; font-size:12px; font-weight:600; color:#fff; background:transparent; border:none; cursor:pointer; text-align:left; transition:background .12s;}
+  .admin-menu-item:hover{background:rgba(197,168,128,.15); color:#C5A880;}
+  .admin-menu-item svg{color:#C5A880;}
+  .admin-menu-item-purge{border-top:1px solid rgba(255,255,255,.08);}
+  .admin-menu-item-purge:hover{color:#fff; background:rgba(255,255,255,.08);}
+
+  /* MAIN 2-COLUMN WORKSPACE */
+  .admin-workspace{flex:1; display:flex; overflow:hidden; width:100%; height:calc(100vh - 60px);}
+
+  /* MEMBER LIST COLUMN (LEFT) */
+  .admin-list-col{width:360px; min-width:320px; max-width:380px; border-right:1px solid var(--line); background:#F8F9FA; display:flex; flex-direction:column; flex-shrink:0; height:100%;}
+  .admin-list-header{padding:16px 18px 12px; border-bottom:1px solid var(--line); background:#fff; flex-shrink:0;}
+  .admin-list-header .title-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .admin-list-header .title-row h4{margin:0; font-family:var(--serif); font-size:16px; font-weight:700; color:#0A192F;}
+  .admin-list-header .member-count-pill{font-family:var(--mono); font-size:11px; font-weight:700; color:#0A192F; background:rgba(10,25,47,.06); padding:2px 8px; border-radius:12px;}
+  .admin-search-box{position:relative; margin-bottom:8px;}
+  .admin-search-input{width:100%; height:34px; padding:0 10px 0 32px; font-size:12px; border:1px solid var(--line); border-radius:6px; background:#F8F9FA; outline:none; font-family:inherit; color:#0A192F;}
+  .admin-search-input:focus{border-color:#0A192F; background:#fff;}
+  .admin-search-icon{position:absolute; left:10px; top:10px; color:rgba(10,25,47,.4); pointer-events:none;}
+  .admin-sort-select{width:100%; height:32px; font-size:11.5px; padding:0 8px; border-radius:6px; border:1px solid var(--line); background:#fff; color:#0A192F; outline:none;}
+  .admin-list-scroll{flex:1; overflow-y:auto; background:#F8F9FA;}
+  .admin-member-card{padding:14px 18px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; gap:12px; align-items:flex-start; transition:all .12s; background:#F8F9FA;}
+  .admin-member-card:hover{background:#fff;}
+  .admin-member-card.active{background:#fff; border-left:3px solid #C5A880; box-shadow:0 2px 8px rgba(10,25,47,.04);}
+  .admin-member-av{width:36px; height:36px; border-radius:8px; background:#0A192F; color:#C5A880; font-family:var(--mono); font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .admin-member-info{flex:1; min-width:0;}
+  .admin-member-info .name-row{display:flex; justify-content:space-between; align-items:center; gap:6px;}
+  .admin-member-info .name{font-size:13.5px; font-weight:700; color:#0A192F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .admin-member-info .email{font-size:11.5px; color:rgba(10,25,47,.6); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;}
+  .admin-member-info .meta-row{display:flex; align-items:center; justify-content:space-between; gap:4px; margin-top:6px; font-size:10.5px; font-family:var(--mono);}
+  .admin-role-tag{background:rgba(10,25,47,.06); color:#0A192F; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;}
+  .unread-badge{background:#C5A880 !important; color:#0A192F !important; font-family:var(--mono); font-size:10px; font-weight:800; border-radius:4px; padding:2px 7px; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;}
+
+  /* ACTIVE CLIENT PANE (RIGHT) */
+  .admin-detail-pane{flex:1; display:flex; flex-direction:column; min-width:0; background:#fff; height:100%; overflow:hidden;}
+  .admin-empty-pane{margin:auto; text-align:center; color:rgba(10,25,47,.45); font-size:13.5px; padding:40px; max-width:360px; line-height:1.6;}
+  .admin-empty-pane svg{margin-bottom:14px; color:#C5A880;}
+
+  /* CLIENT HEADER */
+  .admin-client-header{padding:16px 24px; border-bottom:1px solid var(--line); background:#fff; flex-shrink:0; display:flex; justify-content:space-between; align-items:center; gap:16px;}
+  .admin-client-header .client-main{display:flex; align-items:center; gap:14px; min-width:0;}
+  .admin-client-header .av-large{width:44px; height:44px; border-radius:10px; background:#0A192F; color:#C5A880; font-family:var(--mono); font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .admin-client-header .title-block .name{font-family:var(--serif); font-size:18px; font-weight:700; color:#0A192F; margin:0;}
+  .admin-client-header .title-block .meta{font-size:12px; color:rgba(10,25,47,.55); font-family:var(--mono); margin-top:2px;}
+  .admin-client-header .badges-block{display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end;}
+  .admin-pill-badge{font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; letter-spacing:.04em; text-transform:uppercase; font-family:var(--mono);}
+  .badge-role{background:#0A192F; color:#C5A880; border:1px solid #C5A880;}
+  .badge-kyc{background:rgba(10,25,47,.06); color:#0A192F; border:1px solid var(--line);}
+  .badge-status{background:#F8F9FA; color:#0A192F; border:1px solid var(--line);}
+  .badge-test{background:rgba(197,168,128,.15); color:#0A192F; border:1px solid #C5A880;}
+
+  /* TABS NAVIGATION */
+  .admin-tab-nav{display:flex; align-items:center; gap:4px; padding:0 24px; background:#F8F9FA; border-bottom:1px solid var(--line); flex-shrink:0; overflow-x:auto;}
+  .admin-tab-btn{background:transparent; border:none; border-bottom:2px solid transparent; padding:12px 16px; font-size:12.5px; font-weight:600; color:rgba(10,25,47,.6); cursor:pointer; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; transition:all .12s;}
+  .admin-tab-btn:hover{color:#0A192F;}
+  .admin-tab-btn.active{color:#0A192F; font-weight:700; border-bottom-color:#C5A880; background:#fff;}
+
+  /* TAB BODY PANES */
+  .admin-tab-content{flex:1; overflow-y:auto; padding:24px; background:#fff;}
+  .admin-cards-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px;}
+  .admin-card{border:1px solid var(--line); border-radius:10px; padding:20px; background:#fff; box-shadow:0 2px 8px rgba(10,25,47,.03);}
+  .admin-card h5{margin:0 0 14px 0; font-family:var(--serif); font-size:15px; font-weight:700; color:#0A192F; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line); padding-bottom:10px;}
+  .admin-card h5 svg{color:#C5A880;}
+  .admin-kv-row{display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(10,25,47,.05); font-size:12.5px;}
+  .admin-kv-row:last-child{border-bottom:none;}
+  .admin-kv-label{color:rgba(10,25,47,.55); font-weight:500;}
+  .admin-kv-val{font-weight:700; color:#0A192F; font-family:var(--mono);}
+  .admin-tag-wrap{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .admin-tag-pill{font-size:11px; font-weight:600; padding:4px 9px; border-radius:4px; background:rgba(10,25,47,.04); border:1px solid var(--line); color:#0A192F;}
+
+  /* DATA TABLE */
+  .admin-table{width:100%; border-collapse:collapse; font-size:12px; margin-top:8px;}
+  .admin-table th{text-align:left; padding:10px 12px; background:#F8F9FA; font-family:var(--mono); font-size:11px; font-weight:700; color:rgba(10,25,47,.6); border-bottom:1px solid var(--line);}
+  .admin-table td{padding:10px 12px; border-bottom:1px solid rgba(10,25,47,.06); color:#0A192F; font-family:var(--mono); font-size:12px;}
+  .admin-table tr:hover td{background:#F8F9FA;}
+  .admin-empty-state{padding:30px 16px; text-align:center; color:rgba(10,25,47,.45); font-size:13px; font-style:italic; line-height:1.5;}
+
+  /* CHAT TAB */
+  .admin-chat-container{display:flex; flex-direction:column; height:100%; min-height:480px; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .admin-chat-messages{flex:1; overflow-y:auto; padding:20px; background:#fff; display:flex; flex-direction:column; gap:12px;}
+  .admin-chat-footer{display:flex; gap:10px; padding:16px 20px; background:#F8F9FA; border-top:1px solid var(--line);}
+  .admin-chat-footer input{flex:1; height:42px; border-radius:6px; border:1px solid var(--line); padding:0 14px; font-size:13.5px; outline:none; background:#fff; color:#0A192F; font-family:inherit;}
+  .admin-chat-footer button{height:42px; padding:0 20px; border-radius:6px; background:#0A192F; color:#C5A880; border:1px solid #C5A880; font-weight:700; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;}
+
+  /* MOBILE RESPONSIVE DRAWER & BREAKPOINTS */
+  .admin-mobile-back-btn{display:none; background:transparent; border:1px solid var(--line); color:#0A192F; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; align-items:center; gap:6px; margin-bottom:8px;}
 
   @media (max-width:860px){
     .user-body{flex-direction:column;}
     .user-sidebar{width:100%; flex-direction:row; overflow-x:auto; padding:10px; gap:6px; border-right:none; border-bottom:1px solid var(--line);}
     .user-sidebar .section-label{display:none;}
     .side-link{white-space:nowrap; width:auto;}
-    .admin-body{flex-direction:column;}
-    .admin-list{width:100%; max-width:100%; max-height:45vh;}
+    .admin-topbar{padding:0 16px; height:56px; min-height:56px;}
+    .admin-topbar .t span.admin-badge-text{display:none;}
+    .admin-workspace{height:calc(100vh - 56px);}
+    .admin-list-col{width:100%; max-width:100%; border-right:none;}
+    .admin-detail-pane{display:none; width:100%;}
+    .admin-workspace.mobile-detail-active .admin-list-col{display:none;}
+    .admin-workspace.mobile-detail-active .admin-detail-pane{display:flex;}
+    .admin-mobile-back-btn{display:inline-flex;}
+    .admin-client-header{flex-direction:column; align-items:flex-start; padding:14px 16px;}
+    .admin-tab-nav{padding:0 12px;}
+    .admin-tab-content{padding:16px;}
     .dash-chat-wrap{height:calc(100vh - 210px);}
   }
 </style>
@@ -1186,32 +1261,239 @@
     </div>
   </div>
   <div class="admin-shell-body" id="adminShellBody" style="display:none;">
+    <!-- TOPBAR -->
     <div class="admin-topbar">
-      <div class="t"><svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg>Apexx Crestway <span style="color:var(--gold);">admin</span></div>
+      <div class="t">
+        <svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg>
+        <span>Apexx Crestway</span>
+        <span class="admin-badge-text">Admin</span>
+      </div>
       <div class="right">
         <span class="who" id="adminEmailLabel"></span>
-        <button id="adminSeedDemoBtn" style="background:#047857; color:#fff; border-color:#047857; font-weight:700;">+ Seed Demo Data</button>
-        <button id="adminPurgeTestBtn" style="background:#dc2626; color:#fff; border-color:#dc2626; font-weight:700;">Purge Test Data</button>
-        <button id="adminRefreshBtn">Refresh</button>
-        <button id="adminLogoutBtn">Log out</button>
-        <button id="adminCloseBtn">← Back</button>
+        
+        <!-- System Controls Dropdown (Option A) -->
+        <div class="admin-dropdown-wrap" id="adminSystemMenuWrap">
+          <button id="adminSystemMenuBtn" class="admin-top-btn admin-btn-gold">
+            <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:4px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            System Controls ▾
+          </button>
+          <div class="admin-dropdown-menu" id="adminSystemDropdown" style="display:none;">
+            <button id="adminSeedDemoBtn" class="admin-menu-item">
+              <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              Seed Demo Data
+            </button>
+            <button id="adminPurgeTestBtn" class="admin-menu-item admin-menu-item-purge">
+              <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Purge Test Data
+            </button>
+          </div>
+        </div>
+
+        <button id="adminRefreshBtn" class="admin-top-btn">
+          <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+        <button id="adminLogoutBtn" class="admin-top-btn">
+          <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Log out
+        </button>
+        <button id="adminCloseBtn" class="admin-top-btn">← Back</button>
       </div>
     </div>
-    <div class="admin-body">
-      <div class="admin-list">
-        <div class="admin-list-head">
-          <div class="top-row"><span class="label">Registered members</span><span class="count" id="adminMemberCount"></span></div>
-          <select id="adminSortSelect">
+
+    <!-- MAIN 2-COLUMN WORKSPACE -->
+    <div class="admin-workspace" id="adminWorkspace">
+      
+      <!-- MEMBER LIST (LEFT PANE) -->
+      <div class="admin-list-col" id="adminListCol">
+        <div class="admin-list-header">
+          <div class="title-row">
+            <h4>Registered Members</h4>
+            <span class="member-count-pill" id="adminMemberCount">0</span>
+          </div>
+          <div class="admin-search-box">
+            <svg class="admin-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="adminMemberSearchInput" class="admin-search-input" placeholder="Search members…">
+          </div>
+          <select id="adminSortSelect" class="admin-sort-select">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
             <option value="name">Name A–Z</option>
+            <option value="unread">Unread first</option>
           </select>
         </div>
-        <div id="adminListItems"></div>
+        <div class="admin-list-scroll" id="adminListItems"></div>
       </div>
-      <div class="admin-chat" id="adminChatPane">
-        <div class="admin-chat-empty">Select a member to view their details and reply to them.</div>
+
+      <!-- ACTIVE CLIENT WORKSPACE (RIGHT PANE) -->
+      <div class="admin-detail-pane" id="adminActiveClientPane">
+        <div class="admin-empty-pane" id="adminEmptyPrompt">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div>Select a client from the list to inspect their dashboard profile, active escrows, project assets, and conversation history.</div>
+        </div>
+
+        <div id="adminClientViewContainer" style="display:none; flex-direction:column; height:100%; min-height:0;">
+          <!-- CLIENT HEADER -->
+          <div class="admin-client-header">
+            <div style="flex:1; min-width:0;">
+              <button class="admin-mobile-back-btn" id="adminMobileBackBtn">
+                ← All Members
+              </button>
+              <div class="client-main">
+                <div class="av-large" id="adminDetailAvatar">?</div>
+                <div class="title-block">
+                  <h3 class="name" id="adminDetailName">—</h3>
+                  <div class="meta" id="adminDetailEmail">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="badges-block" id="adminDetailBadges"></div>
+          </div>
+
+          <!-- TABS BAR -->
+          <div class="admin-tab-nav">
+            <button class="admin-tab-btn active" data-admin-tab="profile">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profile & KYC
+            </button>
+            <button class="admin-tab-btn" data-admin-tab="escrow">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              Escrow & Deals
+            </button>
+            <button class="admin-tab-btn" data-admin-tab="projects">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Land & Projects
+            </button>
+            <button class="admin-tab-btn" data-admin-tab="chat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Inquiries & Chat
+              <span class="unread-badge" id="adminDetailChatBadge" style="display:none; margin-left:4px;">0</span>
+            </button>
+          </div>
+
+          <!-- TAB CONTENT CONTAINERS -->
+          <div class="admin-tab-content">
+            <!-- TAB 1: PROFILE & KYC -->
+            <div id="adminTab-profile" class="admin-tab-pane">
+              <div class="admin-cards-grid">
+                <div class="admin-card">
+                  <h5>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Identity & Contact
+                  </h5>
+                  <div class="admin-kv-row"><span class="admin-kv-label">User ID</span><span class="admin-kv-val" id="adminKvId">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Full Name</span><span class="admin-kv-val" id="adminKvName">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Email Address</span><span class="admin-kv-val" id="adminKvEmail">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Phone</span><span class="admin-kv-val" id="adminKvPhone">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Registered Date</span><span class="admin-kv-val" id="adminKvCreated">—</span></div>
+                </div>
+
+                <div class="admin-card">
+                  <h5>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Role & Due Diligence
+                  </h5>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Account Role</span><span class="admin-kv-val" id="adminKvRole">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">KYC Tier</span><span class="admin-kv-val" id="adminKvKyc">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Investor Category</span><span class="admin-kv-val" id="adminKvInvestor">—</span></div>
+                  <div class="admin-kv-row"><span class="admin-kv-label">Record Type</span><span class="admin-kv-val" id="adminKvRecordType">—</span></div>
+                  <div style="margin-top:12px;">
+                    <div class="admin-kv-label" style="margin-bottom:6px;">Registered Interest Areas</div>
+                    <div class="admin-tag-wrap" id="adminKvInterests">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: ESCROW & DEALS -->
+            <div id="adminTab-escrow" class="admin-tab-pane" style="display:none;">
+              <div class="admin-card" style="margin-bottom:20px;">
+                <h5>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  Active Escrow Deals
+                </h5>
+                <div id="adminEscrowsContainer">
+                  <div class="admin-empty-state">No active escrow transactions recorded for this client.</div>
+                </div>
+              </div>
+
+              <div class="admin-card">
+                <h5>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                  Wallet Ledger Entries
+                </h5>
+                <div id="adminWalletContainer">
+                  <div class="admin-empty-state">No ledger transactions recorded for this client.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 3: LAND & PROJECTS -->
+            <div id="adminTab-projects" class="admin-tab-pane" style="display:none;">
+              <div class="admin-card" style="margin-bottom:20px;">
+                <h5>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  Submitted Deed Documents & Scans
+                </h5>
+                <div id="adminDeedsContainer">
+                  <div class="admin-empty-state">No deed document scans submitted by this client.</div>
+                </div>
+              </div>
+
+              <div class="admin-card" style="margin-bottom:20px;">
+                <h5>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                  GIS Coordinate Verifications
+                </h5>
+                <div id="adminGisContainer">
+                  <div class="admin-empty-state">No GIS coordinate searches recorded for this client.</div>
+                </div>
+              </div>
+
+              <div class="admin-card">
+                <h5>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  Construction Projects
+                </h5>
+                <div id="adminProjectsContainer">
+                  <div class="admin-empty-state">No construction project records for this client.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 4: INQUIRIES & CHAT -->
+            <div id="adminTab-chat" class="admin-tab-pane" style="display:none; height:100%;">
+              <div class="admin-chat-container">
+                <div class="admin-chat-messages" id="adminChatBody"></div>
+                <div class="admin-chat-footer">
+                  <input type="text" id="adminChatInput" placeholder="Reply to member…">
+                  <button id="adminChatSendBtn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM PURGE MODAL ===== -->
+<div class="overlay" id="adminPurgeConfirmModal">
+  <div class="modal-card" style="max-width:440px; background:#0A192F; border:1px solid rgba(197,168,128,0.3); color:#FFFFFF; border-radius:12px; padding:28px;">
+    <div style="font-family:var(--serif); font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:10px;">
+      Confirm Test Data Purge
+    </div>
+    <p style="font-size:13px; line-height:1.6; color:rgba(255,255,255,0.75); margin-bottom:24px;">
+      This operation will delete all volatile demo and test records marked with <code style="color:#C5A880; font-family:var(--mono);">is_test_data = 1</code>. Real production users and the primary admin account (<b style="color:#C5A880;">apexxbashir@gmail.com</b>) are permanently preserved and protected.
+    </p>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button id="adminPurgeCancelBtn" class="admin-top-btn">Cancel</button>
+      <button id="adminPurgeConfirmBtn" class="admin-top-btn admin-btn-gold">Confirm Purge</button>
     </div>
   </div>
 </div>
@@ -2145,6 +2427,7 @@ $('adminPasswordSubmitBtn').addEventListener('click', async () => {
 });
 
 function showAdminAuthed(){
+  adminShell.classList.add('authed');
   $('adminGate').style.display = 'none';
   $('adminShellBody').style.display = 'flex';
   loadSignups();
@@ -2161,88 +2444,396 @@ async function openAdminShell(){
     $('adminEmailLabel').textContent = d.identity || 'apexxbashir@gmail.com';
     showAdminAuthed();
   } else {
+    adminShell.classList.remove('authed');
     $('adminGate').style.display = 'flex';
     showAdminStep1();
   }
 }
 function closeAdminShell(){
   adminShell.classList.remove('open');
+  adminShell.classList.remove('authed');
   document.body.style.overflow = '';
   clearInterval(adminChatTimer); clearInterval(adminListTimer);
 }
 $('adminCloseBtn').addEventListener('click', () => navigate('home'));
-$('adminRefreshBtn').addEventListener('click', () => { loadSignups(); refreshAdminThread(); });
+$('adminRefreshBtn').addEventListener('click', () => {
+  loadSignups();
+  if (activeGmail) {
+    const s = cachedSignups.find(x => x.gmail === activeGmail);
+    openAdminThread(activeGmail, s ? s.name : '');
+  }
+});
 $('adminLogoutBtn').addEventListener('click', async () => {
   await api('/api/admin/logout', { method:'POST' }).catch(() => {});
-  activeGmail = null; navigate('home');
+  activeGmail = null;
+  adminShell.classList.remove('authed');
+  navigate('home');
 });
 
+/* System Controls Dropdown (Option A) */
+const systemMenuBtn = $('adminSystemMenuBtn');
+const systemDropdown = $('adminSystemDropdown');
+if (systemMenuBtn && systemDropdown) {
+  systemMenuBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const isShown = systemDropdown.style.display === 'block';
+    systemDropdown.style.display = isShown ? 'none' : 'block';
+  });
+  window.addEventListener('click', e => {
+    if (!e.target.closest('#adminSystemMenuWrap')) {
+      systemDropdown.style.display = 'none';
+    }
+  });
+}
+
+/* Purge Confirmation Modal & Test Data Controls */
+const purgeModal = $('adminPurgeConfirmModal');
+const purgeBtn = $('adminPurgeTestBtn');
+const purgeCancelBtn = $('adminPurgeCancelBtn');
+const purgeConfirmBtn = $('adminPurgeConfirmBtn');
+const seedBtn = $('adminSeedDemoBtn');
+
+if (purgeBtn && purgeModal) {
+  purgeBtn.addEventListener('click', () => {
+    if (systemDropdown) systemDropdown.style.display = 'none';
+    purgeModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+}
+if (purgeCancelBtn && purgeModal) {
+  purgeCancelBtn.addEventListener('click', () => {
+    purgeModal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+}
+if (purgeModal) {
+  purgeModal.addEventListener('click', e => {
+    if (e.target === purgeModal) {
+      purgeModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+}
+if (purgeConfirmBtn) {
+  purgeConfirmBtn.addEventListener('click', async () => {
+    purgeConfirmBtn.disabled = true;
+    purgeConfirmBtn.textContent = 'Purging…';
+    try {
+      const res = await api('/api/admin/reset-test-data', { method: 'POST' });
+      if (purgeModal) purgeModal.classList.remove('open');
+      document.body.style.overflow = '';
+      alert(res.message || 'All test data purged successfully.');
+      activeGmail = null;
+      $('adminEmptyPrompt').style.display = 'block';
+      $('adminClientViewContainer').style.display = 'none';
+      await loadSignups();
+    } catch(err) {
+      alert('Purge failed: ' + (err.message || err));
+    } finally {
+      purgeConfirmBtn.disabled = false;
+      purgeConfirmBtn.textContent = 'Confirm Purge';
+    }
+  });
+}
+if (seedBtn) {
+  seedBtn.addEventListener('click', async () => {
+    if (systemDropdown) systemDropdown.style.display = 'none';
+    seedBtn.disabled = true;
+    try {
+      const res = await api('/api/admin/seed-demo-data', { method: 'POST' });
+      alert(res.message || 'Demo data seeded successfully.');
+      await loadSignups();
+    } catch(err) {
+      alert('Seed failed: ' + (err.message || err));
+    } finally {
+      seedBtn.disabled = false;
+    }
+  });
+}
+
+/* Tab Navigation Switching */
+document.querySelectorAll('.admin-tab-btn[data-admin-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.dataset.adminTab;
+    document.querySelectorAll('.admin-tab-pane').forEach(p => {
+      p.style.display = 'none';
+    });
+    const pane = $('adminTab-' + target);
+    if (pane) {
+      pane.style.display = target === 'chat' ? 'flex' : 'block';
+    }
+  });
+});
+
+/* Mobile Detail Back Button */
+const mobileBackBtn = $('adminMobileBackBtn');
+if (mobileBackBtn) {
+  mobileBackBtn.addEventListener('click', () => {
+    $('adminWorkspace').classList.remove('mobile-detail-active');
+  });
+}
+
+/* Member List Load, Search, and Render */
 async function loadSignups(){
   try {
     const d = await api('/api/admin/signups');
-    if (d.status === 'success') { cachedSignups = d.signups; renderAdminList(); }
-    else $('adminListItems').innerHTML = `<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">${esc(d.message)}</div>`;
+    if (d.status === 'success') {
+      cachedSignups = d.signups || [];
+      renderAdminList();
+    } else {
+      $('adminListItems').innerHTML = `<div style="padding:20px; font-size:12.5px; color:rgba(10,25,47,.5);">${esc(d.message || 'Failed to load members.')}</div>`;
+    }
   } catch(e){
-    $('adminListItems').innerHTML = '<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">Couldn\'t load members.</div>';
+    $('adminListItems').innerHTML = '<div style="padding:20px; font-size:12.5px; color:rgba(10,25,47,.5);">Unable to reach server.</div>';
   }
 }
-function renderAdminList(){
-  const mode = $('adminSortSelect').value;
-  const sorted = [...cachedSignups].sort((a,b) =>
-    mode === 'name' ? (a.name||'').localeCompare(b.name||'')
-    : mode === 'oldest' ? new Date(a.timestamp) - new Date(b.timestamp)
-    : new Date(b.timestamp) - new Date(a.timestamp));
-  $('adminMemberCount').textContent = sorted.length + (sorted.length === 1 ? ' member' : ' members');
-  $('adminListItems').innerHTML = sorted.map(s => `
-    <div class="admin-row ${s.gmail === activeGmail ? 'active' : ''}" data-gmail="${esc(s.gmail)}" data-name="${esc(s.name)}">
-      <div class="av2">${esc(initials(s.name))}</div>
-      <div class="info">
-        <div class="n"><span>${esc(s.name)}</span>${s.unread > 0 ? `<span class="unread-badge">${s.unread}</span>` : ''}</div>
-        <div class="g">${esc(s.gmail)}</div>
-        <div class="m">${esc(s.investorType || '')} · ${timeLabel(s.timestamp)}</div>
-      </div>
-    </div>`).join('') || '<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">No members yet.</div>';
-  document.querySelectorAll('.admin-row').forEach(r =>
-    r.addEventListener('click', () => openAdminThread(r.dataset.gmail, r.dataset.name)));
-}
-$('adminSortSelect').addEventListener('change', renderAdminList);
 
-function openAdminThread(gmail, name){
-  activeGmail = gmail;
-  const s = cachedSignups.find(x => x.gmail === gmail) || {};
-  const interests = (s.interest || '').split(',').map(x => x.trim()).filter(Boolean);
-  const tags = [
-    s.investorType ? `<span class="dtag role">${esc(s.investorType)}</span>` : '',
-    ...interests.map(i => `<span class="dtag">${esc(i)}</span>`)
-  ].join('');
-  $('adminChatPane').innerHTML = `
-    <div class="admin-chat-head">
-      <div class="id-row">
-        <div class="av2">${esc(initials(name))}</div>
-        <div><div class="n">${esc(name)}</div><div class="g">${esc(gmail)}</div></div>
+function renderAdminList(){
+  const query = ($('adminMemberSearchInput')?.value || '').trim().toLowerCase();
+  const mode = $('adminSortSelect')?.value || 'newest';
+
+  const filtered = cachedSignups.filter(s => {
+    if (!query) return true;
+    const n = (s.name || '').toLowerCase();
+    const g = (s.gmail || '').toLowerCase();
+    const t = (s.investorType || '').toLowerCase();
+    const p = (s.phone || '').toLowerCase();
+    return n.includes(query) || g.includes(query) || t.includes(query) || p.includes(query);
+  });
+
+  const sorted = [...filtered].sort((a,b) => {
+    if (mode === 'name') return (a.name || '').localeCompare(b.name || '');
+    if (mode === 'oldest') return new Date(a.timestamp) - new Date(b.timestamp);
+    if (mode === 'unread') return (b.unread || 0) - (a.unread || 0);
+    return new Date(b.timestamp) - new Date(a.timestamp);
+  });
+
+  $('adminMemberCount').textContent = sorted.length + (sorted.length === 1 ? ' member' : ' members');
+
+  if (!sorted.length) {
+    $('adminListItems').innerHTML = '<div style="padding:24px 18px; font-size:12.5px; color:rgba(10,25,47,.45); text-align:center;">No matching members found.</div>';
+    return;
+  }
+
+  $('adminListItems').innerHTML = sorted.map(s => `
+    <div class="admin-member-card ${s.gmail === activeGmail ? 'active' : ''}" data-gmail="${esc(s.gmail)}" data-name="${esc(s.name)}">
+      <div class="admin-member-av">${esc(initials(s.name))}</div>
+      <div class="admin-member-info">
+        <div class="name-row">
+          <div class="name">${esc(s.name || 'Anonymous Member')}</div>
+          ${s.unread > 0 ? `<span class="unread-badge">${s.unread}</span>` : ''}
+        </div>
+        <div class="email">${esc(s.gmail || '')}</div>
+        <div class="meta-row">
+          <span class="admin-role-tag">${esc(s.investorType || 'Member')}</span>
+          <span style="color:rgba(10,25,47,.45);">${timeLabel(s.timestamp)}</span>
+        </div>
       </div>
-      ${tags ? `<div class="tag-row">${tags}</div>` : ''}
     </div>
-    <div class="admin-chat-body" id="adminChatBody"></div>
-    <div class="admin-chat-input">
-      <input type="text" id="adminChatInput" placeholder="Reply…">
-      <button id="adminChatSendBtn">Send</button>
-    </div>`;
-  refreshAdminThread();
-  clearInterval(adminChatTimer);
-  adminChatTimer = setInterval(refreshAdminThread, 4000);
-  $('adminChatSendBtn').addEventListener('click', sendAdminMessage);
-  $('adminChatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendAdminMessage(); });
-  renderAdminList();
+  `).join('');
+
+  document.querySelectorAll('.admin-member-card').forEach(card => {
+    card.addEventListener('click', () => openAdminThread(card.dataset.gmail, card.dataset.name));
+  });
 }
+
+$('adminMemberSearchInput')?.addEventListener('input', renderAdminList);
+$('adminSortSelect')?.addEventListener('change', renderAdminList);
+
+/* Active Client Details, Tab Population, and Chat */
+async function openAdminThread(gmail, name){
+  activeGmail = gmail;
+  $('adminWorkspace').classList.add('mobile-detail-active');
+
+  $('adminEmptyPrompt').style.display = 'none';
+  $('adminClientViewContainer').style.display = 'flex';
+
+  $('adminDetailAvatar').textContent = initials(name);
+  $('adminDetailName').textContent = name || 'Anonymous Member';
+  $('adminDetailEmail').textContent = gmail;
+
+  const s = cachedSignups.find(x => x.gmail === gmail) || {};
+  const badgesHtml = [
+    `<span class="admin-pill-badge badge-role">${esc(s.investorType || 'Buyer')}</span>`,
+    `<span class="admin-pill-badge badge-kyc">KYC Tier ${s.kycTier || 1}</span>`,
+    s.isTestData ? `<span class="admin-pill-badge badge-test">Demo Record</span>` : ''
+  ].filter(Boolean).join('');
+  $('adminDetailBadges').innerHTML = badgesHtml;
+
+  renderAdminList();
+
+  $('adminChatInput').value = '';
+  clearInterval(adminChatTimer);
+
+  await refreshAdminThread();
+  adminChatTimer = setInterval(refreshAdminThread, 4000);
+
+  try {
+    const res = await api('/api/admin/client-details?email=' + encodeURIComponent(gmail));
+    if (res && res.status === 'success') {
+      const c = res.client || {};
+
+      // Tab 1: Profile & KYC
+      $('adminKvId').textContent = c.id ? '#' + c.id : '—';
+      $('adminKvName').textContent = c.name || '—';
+      $('adminKvEmail').textContent = c.email || '—';
+      $('adminKvPhone').textContent = c.phone || '—';
+      $('adminKvCreated').textContent = c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : '—';
+      $('adminKvRole').textContent = (c.role || 'buyer').toUpperCase();
+      $('adminKvKyc').textContent = 'Tier ' + (c.kycTier || 1);
+      $('adminKvInvestor').textContent = c.investorType || '—';
+      $('adminKvRecordType').textContent = c.isTestData ? 'Demo / Staging Record' : 'Live Production Client';
+
+      const interests = Array.isArray(c.interests) ? c.interests : [];
+      $('adminKvInterests').innerHTML = interests.length
+        ? interests.map(i => `<span class="admin-tag-pill">${esc(i)}</span>`).join('')
+        : '<span style="color:rgba(10,25,47,.4); font-size:12px;">No specific interest tags recorded.</span>';
+
+      // Tab 2: Escrow & Deals
+      const escrows = res.escrows || [];
+      if (escrows.length) {
+        $('adminEscrowsContainer').innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Deal Code</th><th>Title</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              ${escrows.map(e => `
+                <tr>
+                  <td style="font-weight:700;">${esc(e.deal_code)}</td>
+                  <td>${esc(e.title)}</td>
+                  <td>₦${((e.total_kobo || 0)/100).toLocaleString('en-NG', {minimumFractionDigits:2})}</td>
+                  <td><span class="admin-pill-badge badge-status">${esc(e.status)}</span></td>
+                  <td>${esc(e.created_at ? e.created_at.slice(0,10) : '—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      } else {
+        $('adminEscrowsContainer').innerHTML = '<div class="admin-empty-state">No active escrow transactions recorded for this client.</div>';
+      }
+
+      const wallet = res.wallet || [];
+      if (wallet.length) {
+        $('adminWalletContainer').innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Reference</th><th>Type</th><th>Direction</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              ${wallet.map(w => `
+                <tr>
+                  <td style="font-size:11px;">${esc(w.reference || '—')}</td>
+                  <td><span class="admin-pill-badge badge-role">${esc(w.tx_type)}</span></td>
+                  <td>${esc(w.direction)}</td>
+                  <td style="font-weight:700;">${w.currency === 'NGN' ? '₦' : esc(w.currency + ' ')}${((w.amount_minor || 0)/100).toLocaleString('en-NG', {minimumFractionDigits:2})}</td>
+                  <td><span class="admin-pill-badge badge-status">${esc(w.status)}</span></td>
+                  <td>${esc(w.created_at ? w.created_at.slice(0,10) : '—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      } else {
+        $('adminWalletContainer').innerHTML = '<div class="admin-empty-state">No ledger transactions recorded for this client.</div>';
+      }
+
+      // Tab 3: Land & Projects
+      const deeds = res.deeds || [];
+      if (deeds.length) {
+        $('adminDeedsContainer').innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Document Type</th><th>Reg Number</th><th>Risk Score</th><th>Verdict</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              ${deeds.map(d => `
+                <tr>
+                  <td style="font-weight:700;">${esc(d.doc_type || '—')}</td>
+                  <td>${esc(d.reg_number || '—')}</td>
+                  <td>${d.risk_score || 0}</td>
+                  <td><span class="admin-pill-badge badge-status">${esc(d.verdict || 'review')}</span></td>
+                  <td>${esc(d.created_at ? d.created_at.slice(0,10) : '—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      } else {
+        $('adminDeedsContainer').innerHTML = '<div class="admin-empty-state">No deed document scans submitted by this client.</div>';
+      }
+
+      const gis = res.gis || [];
+      if (gis.length) {
+        $('adminGisContainer').innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Coordinates (Northing / Easting)</th><th>Zone Type</th><th>Matched Zone</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              ${gis.map(g => `
+                <tr>
+                  <td>${g.input_northing || '—'}, ${g.input_easting || '—'}</td>
+                  <td><span class="admin-pill-badge badge-role">${esc(g.zone_type || 'General')}</span></td>
+                  <td>${esc(g.matched_zone || '—')}</td>
+                  <td>${esc(g.created_at ? g.created_at.slice(0,10) : '—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      } else {
+        $('adminGisContainer').innerHTML = '<div class="admin-empty-state">No GIS coordinate searches recorded for this client.</div>';
+      }
+
+      const projects = res.projects || [];
+      if (projects.length) {
+        $('adminProjectsContainer').innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Project Title</th><th>Location</th><th>Progress</th><th>Budget</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              ${projects.map(p => `
+                <tr>
+                  <td style="font-weight:700;">${esc(p.title)}</td>
+                  <td>${esc(p.location)}</td>
+                  <td>${Math.round(p.progress_pct || 0)}%</td>
+                  <td>₦${((p.budget_kobo || 0)/100).toLocaleString('en-NG', {minimumFractionDigits:2})}</td>
+                  <td><span class="admin-pill-badge badge-status">${esc(p.status)}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      } else {
+        $('adminProjectsContainer').innerHTML = '<div class="admin-empty-state">No construction project records for this client.</div>';
+      }
+    }
+  } catch(err) {
+    console.error('Failed to load client details:', err);
+  }
+}
+
 async function refreshAdminThread(){
   if (!activeGmail) return;
   const body = $('adminChatBody'); if (!body) return;
   try {
     const d = await api(`/api/messages?gmail=${encodeURIComponent(activeGmail)}`);
-    if (d.status === 'success') renderMessages(body, d.messages, 'admin');
+    if (d.status === 'success') {
+      renderMessages(body, d.messages || [], 'admin');
+      const unreadCount = (d.messages || []).filter(m => m.sender !== 'admin' && !m.read).length;
+      const chatBadge = $('adminDetailChatBadge');
+      if (chatBadge) {
+        if (unreadCount > 0) {
+          chatBadge.textContent = unreadCount;
+          chatBadge.style.display = 'inline-flex';
+        } else {
+          chatBadge.style.display = 'none';
+        }
+      }
+    }
   } catch(e){}
 }
+
 async function sendAdminMessage(){
   const input = $('adminChatInput'), btn = $('adminChatSendBtn'), text = input.value.trim();
   if (!activeGmail || !text) return;
@@ -2250,9 +2841,15 @@ async function sendAdminMessage(){
   try {
     await api('/api/messages/send', { method:'POST', body:{ gmail:activeGmail, sender:'admin', text } });
     await refreshAdminThread();
-  } catch(e){ input.value = text; }
-  finally { btn.disabled = false; }
+  } catch(e){
+    input.value = text;
+  } finally {
+    btn.disabled = false;
+  }
 }
+
+$('adminChatSendBtn')?.addEventListener('click', sendAdminMessage);
+$('adminChatInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') sendAdminMessage(); });
 
 /* hidden admin entry: Ctrl+Shift+A */
 addEventListener('keydown', e => {
@@ -2275,28 +2872,6 @@ document.querySelectorAll('[data-close]').forEach(b =>
 });
 addEventListener('keydown', e => {
   if (e.key === 'Escape') ['aboutModal','privacyModal','termsModal'].forEach(closeModal);
-});
-
-/* ---------- Admin Test Data Controls ---------- */
-$('adminPurgeTestBtn')?.addEventListener('click', async () => {
-  if (!confirm('Are you sure you want to purge all test and demo data? Real users and admin records will NOT be deleted.')) return;
-  try {
-    const res = await api('/api/admin/reset-test-data', { method: 'POST' });
-    alert(res.message || 'All test data successfully purged.');
-    loadAdminSignups();
-  } catch(err) {
-    alert('Purge failed: ' + (err.message || err));
-  }
-});
-
-$('adminSeedDemoBtn')?.addEventListener('click', async () => {
-  try {
-    const res = await api('/api/admin/seed-demo-data', { method: 'POST' });
-    alert(res.message || 'Demo data seeded successfully.');
-    loadAdminSignups();
-  } catch(err) {
-    alert('Seed failed: ' + (err.message || err));
-  }
 });
 
 /* ---------- URL-Aware Routing on Initial Load (MPA on SPA) ---------- */
