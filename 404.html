@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEXXCRESTWAY — Trust Infrastructure for Land, Real Estate & Construction in Nigeria</title>
+<meta name="description" content="APEXXCRESTWAY is the trust and execution engine for verified land and construction deals in Nigeria — turning unverified land and volatile construction into transparent, institutional-grade assets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,wght@0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#081830; --ink-2:#0d223f;
+    --paper:#F7F6F3; --off:#FCFBF8;
+    --blue:#2A7FFF; --gold:#C6A86F; --gold-lt:#EADDC0;
+    --blue-dark:#246DDB; --gold-dark:#816D48; /* WCAG AA-safe variants for
+      text on light backgrounds — the base --blue/--gold only pass AA
+      against the dark ink background, confirmed by contrast calculation. */
+    --line:rgba(8,24,48,.08); --line-2:rgba(8,24,48,.14);
+    --danger:#dc2626; --ok:#047857;
+    --serif:'Source Serif 4',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',monospace;
+    /* radius scale — used deliberately by role, not applied uniformly */
+    --r-tight:4px;   /* inputs, small chips, table-like elements */
+    --r-card:8px;    /* cards, panels */
+    --r-modal:10px;  /* floating surfaces */
+    --r-full:999px;  /* true circular controls only (avatars, dots) */
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:#fff; line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;} img{max-width:100%; display:block;}
+  .wrap{max-width:1152px; margin:0 auto; padding:0 24px;}
+  :focus-visible{outline:2px solid var(--blue); outline-offset:3px;}
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none;} html{scroll-behavior:auto;} }
+
+  /* ===== BLURRED / PENDING-VERIFICATION CHROME ===== */
+  /* Accreditation claims that are still in process are visually withheld. */
+  .pending-claim{position:relative; display:inline-flex;}
+  .pending-claim > *{filter:blur(5px); opacity:.55; user-select:none; pointer-events:none;}
+  .pending-claim::after{
+    content:attr(data-pending);
+    position:absolute; inset:0; margin:auto; height:fit-content;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.14em; font-weight:700;
+    color:rgba(255,255,255,.9); white-space:nowrap;
+  }
+  .pending-claim.on-light::after{color:rgba(8,24,48,.55);}
+
+  /* Same honest-pending language, sized for a whole tool card rather than
+     an inline badge — used for tools whose output isn't backed by real
+     verified data yet, so the mechanism is visible but unusable rather
+     than silently returning placeholder results as if they were real. */
+  .tool-pending{position:relative;}
+  .tool-pending > .tool-pending-content{filter:blur(4px); opacity:.45; user-select:none; pointer-events:none;}
+  .tool-pending::after{
+    content:attr(data-pending);
+    position:absolute; inset:0; margin:auto; height:fit-content;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:0 20px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; font-weight:700;
+    color:rgba(8,24,48,.7); background:rgba(247,246,243,.82); backdrop-filter:blur(2px);
+    border-radius:var(--r-card);
+  }
+
+  header{position:fixed; top:0; left:0; right:0; z-index:50; transition:background .3s ease, border-color .3s ease;}
+  header.scrolled{background:rgba(255,255,255,.92); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); box-shadow:0 8px 30px rgba(0,0,0,.06);}
+  nav{display:flex; align-items:center; justify-content:space-between; height:68px; gap:16px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.02em; font-size:16px; flex-shrink:0;}
+  .brand .mark-img{height:36px; width:auto; object-fit:contain; border-radius:8px; padding:2px;}
+  .brand .apexx{color:#fff; -webkit-text-stroke:1px #C6A86F; paint-order:stroke fill; font-weight:900;}
+  header.scrolled .brand .apexx{color:var(--ink);}
+  .brand .accent{color:#C6A86F; font-weight:600; margin-left:2px;}
+  .navlinks{display:none; gap:26px; font-size:13.5px; font-weight:600;}
+  .navlinks button{background:none; border:none; font:inherit; color:#C6A86F; cursor:pointer; transition:color .2s;}
+  .navlinks button:hover{color:#fff;}
+  header.scrolled .navlinks button{color:#A68B5B;}
+  header.scrolled .navlinks button:hover{color:var(--ink);}
+  @media (min-width:1080px){ .navlinks{display:flex;} }
+  .nav-cta{display:none; height:36px; padding:0 20px; border-radius:var(--r-card); background:var(--ink); color:#fff; font-size:13px; font-weight:600; align-items:center; border:none; cursor:pointer;}
+  header.scrolled .nav-cta{background:var(--ink);}
+  @media (min-width:1080px){ .nav-cta{display:inline-flex;} }
+  .menu-btn{width:36px; height:36px; border-radius:var(--r-card); background:var(--ink); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  @media (min-width:1080px){ .menu-btn{display:none;} }
+  .mobile-menu{display:none; border-top:1px solid var(--line); background:rgba(255,255,255,.97); backdrop-filter:blur(14px);}
+  .mobile-menu.open{display:block;}
+  .mobile-menu .wrap{padding:20px 24px; display:flex; flex-direction:column; gap:16px;}
+  .mobile-menu button{background:none; border:none; text-align:left; font:inherit; font-size:15px; font-weight:600; padding:0; cursor:pointer; color:#A68B5B;}
+  #navLoginBtn{background:transparent; border:1px solid #C6A86F; color:#C6A86F;}
+
+  /* HERO */
+  .hero{background:radial-gradient(1200px 600px at 80% -10%, rgba(42,127,255,.18), transparent), radial-gradient(800px 500px at -10% 80%, rgba(198,168,111,.14), transparent), var(--ink); color:#fff; overflow:hidden; padding:140px 0 70px;}
+  .badge{display:inline-flex; align-items:center; gap:8px; padding:7px 14px; border-radius:var(--r-tight); border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.06); font-size:11px; letter-spacing:.12em; font-weight:700;}
+  .badge .dot{width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 0 4px rgba(52,211,153,.2);}
+  h1{font-family:var(--serif); font-weight:600; letter-spacing:-.01em; line-height:1.04; font-size:clamp(32px,5vw,56px); margin-top:26px; max-width:17ch;}
+  h1 .accent{background:linear-gradient(90deg,var(--gold),var(--gold-lt)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero p.lede{margin-top:22px; max-width:640px; font-size:16px; line-height:1.65; color:rgba(255,255,255,.72);}
+  .hero p.lede b{color:#fff; font-weight:600;}
+  .hero-ctas{margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; height:48px; padding:0 28px; border-radius:var(--r-card); font-size:14px; font-weight:600; text-decoration:none; border:none; cursor:pointer; transition:all .2s;}
+  .btn-primary{background:var(--blue-dark); color:#fff; box-shadow:0 8px 20px rgba(36,109,219,.35);} .btn-primary:hover{background:#1c5cb8;}
+  .btn-outline{background:transparent; border:1px solid rgba(255,255,255,.28); color:#fff;} .btn-outline:hover{background:rgba(255,255,255,.08);}
+  .btn-dark{background:var(--ink); color:#fff;} .btn-dark:hover{background:#000;}
+  .hero-stats{margin-top:52px; display:grid; grid-template-columns:1fr; gap:1px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.12); border-radius:var(--r-card); overflow:hidden;}
+  @media (min-width:640px){ .hero-stats{grid-template-columns:1fr 1fr;} }
+  .hero-stat{background:rgba(13,34,63,.85); padding:26px 28px;}
+  .hero-stat .num{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:26px; letter-spacing:-.02em;}
+  .hero-stat .lbl{margin-top:6px; font-size:13px; font-weight:700;}
+  .hero-stat .sub{margin-top:6px; font-size:12.5px; color:rgba(255,255,255,.58); line-height:1.5;}
+  .trust-pills{margin-top:24px; display:flex; flex-wrap:wrap; gap:10px;}
+  .pill{font-size:11px; padding:7px 13px; border-radius:var(--r-tight); background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); font-weight:600;}
+
+  /* SEARCH BAR */
+  .searchbar{margin-top:34px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:var(--r-card); padding:10px; display:flex; flex-wrap:wrap; gap:8px; max-width:720px;}
+  .searchbar input{flex:1; min-width:180px; height:44px; border-radius:var(--r-tight); border:none; background:rgba(255,255,255,.07); color:#fff; padding:0 14px; font-size:14px; font-family:inherit; outline:none;}
+  .searchbar input::placeholder{color:rgba(255,255,255,.45);}
+  .searchbar select{height:44px; border-radius:var(--r-tight); border:none; background:rgba(255,255,255,.07); color:#fff; padding:0 12px; font-size:13px; font-family:inherit; outline:none;}
+  .searchbar select option{background:var(--ink);}
+  .searchbar button{height:44px; padding:0 22px; border-radius:var(--r-tight); background:var(--gold); color:var(--ink); border:none; font-weight:700; font-size:13.5px; cursor:pointer;}
+  .search-results{margin-top:14px; display:grid; gap:10px; max-width:720px;}
+  .sr-item{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:14px 16px;}
+  .sr-item .t{font-size:13.5px; font-weight:700;}
+  .sr-item .m{font-size:11.5px; color:rgba(255,255,255,.55); margin-top:3px;}
+  .sr-empty{font-size:12.5px; color:rgba(255,255,255,.5); padding:10px 2px;}
+
+  /* SECTION HEADERS */
+  .eyebrow{font-family:var(--serif); font-style:italic; font-weight:500; font-size:15px; letter-spacing:0; padding-left:14px; border-left:2px solid currentColor; line-height:1.3;}
+  .eyebrow.gold{color:var(--gold-dark);} .eyebrow.blue{color:var(--blue-dark);}
+  .nodes .eyebrow.gold{color:var(--gold);} /* dark section background — full brightness passes AA here */
+  h2{font-family:var(--serif); font-weight:600; letter-spacing:-.01em; line-height:1.05; font-size:clamp(27px,3.6vw,40px); margin-top:14px;}
+  .section-sub{margin-top:16px; font-size:15px; color:rgba(8,24,48,.65); max-width:62ch; line-height:1.6;}
+
+  /* PROBLEM */
+  .problem{padding:80px 0; background:#fff;}
+  .grid{display:grid; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-card); overflow:hidden;}
+  .grid-3{grid-template-columns:1fr;}
+  @media (min-width:768px){ .grid-3{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1024px){ .grid-3{grid-template-columns:1fr 1fr 1fr;} }
+  .card{background:#fff; padding:26px;}
+  .card:hover{background:var(--off);}
+  .icon-badge{width:38px; height:38px; border-radius:11px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center;}
+  .card h3{margin-top:18px; font-size:15px; font-weight:700;}
+  .card p{margin-top:8px; font-size:13px; line-height:1.6; color:rgba(8,24,48,.65);}
+
+  /* PLATFORM (the 10 tools, split in 2 groups) */
+  .platform{padding:80px 0; background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .stack-tabs{margin-top:32px; display:inline-flex; padding:5px; border-radius:var(--r-tight); background:#fff; border:1px solid var(--line); gap:4px;}
+  .stack-tabs button{border:none; background:transparent; font:inherit; font-size:12.5px; font-weight:700; padding:10px 20px; border-radius:var(--r-tight); cursor:pointer; color:rgba(8,24,48,.55);}
+  .stack-tabs button.active{background:var(--ink); color:#fff;}
+  .tool-grid{margin-top:28px; display:grid; grid-template-columns:1fr; gap:16px;}
+  @media (min-width:700px){ .tool-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1100px){ .tool-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .tool{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:24px; display:flex; flex-direction:column;}
+  .tool .ic{width:40px; height:40px; border-radius:12px; background:var(--ink); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:17px;}
+  .tool h3{margin-top:16px; font-size:15px; font-weight:800; letter-spacing:-.01em;}
+  .tool p{margin-top:8px; font-size:12.8px; line-height:1.6; color:rgba(8,24,48,.62);}
+  .tool .grp{margin-top:14px; align-self:flex-start; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.1em; font-weight:700; padding:4px 10px; border-radius:var(--r-tight);}
+  .grp-land{background:#eef4ff; color:#1e4fa8; border:1px solid #cfe0ff;}
+  .grp-build{background:#fff6e8; color:#8a5a12; border:1px solid #f6e2be;}
+
+  /* ECONOMIC NODES */
+  .nodes{padding:80px 0; background:var(--ink); color:#fff;}
+  .node-grid{margin-top:40px; display:grid; grid-template-columns:1fr; gap:1px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.12); border-radius:var(--r-card); overflow:hidden;}
+  @media (min-width:640px){ .node-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1024px){ .node-grid{grid-template-columns:1fr 1fr 1fr 1fr;} }
+  .node{background:var(--ink-2); padding:24px; display:flex; flex-direction:column;}
+  .node .tag{align-self:flex-start; font-size:10px; font-family:'JetBrains Mono',monospace; letter-spacing:.1em; font-weight:700; color:var(--gold); border:1px solid rgba(198,168,111,.35); padding:4px 9px; border-radius:var(--r-tight);}
+  .node h3{margin-top:14px; font-size:15px; font-weight:800; letter-spacing:-.01em;}
+  .node .region{margin-top:4px; font-size:11.5px; color:var(--gold);}
+  .node p{margin-top:10px; font-size:12.5px; line-height:1.6; color:rgba(255,255,255,.6);}
+
+  /* MOAT */
+  .moat{padding:80px 0; background:#fff;}
+  .moat-grid{margin-top:44px; display:grid; grid-template-columns:1fr; gap:20px;}
+  @media (min-width:900px){ .moat-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .moat-card{border:1px solid var(--line); background:var(--off); border-radius:var(--r-card); padding:26px;}
+  .moat-card .icon{width:32px; height:32px; border-radius:10px; background:var(--gold); color:var(--ink); display:flex; align-items:center; justify-content:center;}
+  .moat-card h3{margin-top:18px; font-size:15px; font-weight:700; line-height:1.3;}
+  .moat-card p{margin-top:10px; font-size:13px; color:rgba(8,24,48,.62); line-height:1.6;}
+  .moat-card ul{margin-top:14px; display:flex; flex-direction:column; gap:6px; list-style:none;}
+  .moat-card li{font-size:12px; color:rgba(8,24,48,.6);}
+  .moat-card li::before{content:'• '; color:var(--gold-dark);}
+
+  /* MARKET */
+  .market{padding:80px 0; background:var(--paper);}
+  .market-grid{display:grid; grid-template-columns:1fr; gap:40px; align-items:center;}
+  @media (min-width:1000px){ .market-grid{grid-template-columns:1.1fr .9fr;} }
+  .market-stats{margin-top:32px; display:grid; grid-template-columns:1fr; gap:14px;}
+  @media (min-width:560px){ .market-stats{grid-template-columns:1fr 1fr;} }
+  .market-stat{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:18px;}
+  .market-stat .num{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:24px;}
+  .market-stat .lbl{margin-top:4px; font-size:13px; font-weight:700;}
+  .market-stat .sub{font-size:11px; color:rgba(8,24,48,.55); margin-top:2px;}
+  .tam-line{margin-top:24px; font-size:12px; color:rgba(8,24,48,.7);}
+  .flywheel{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:28px;}
+  .flywheel .mono{font-size:11px; letter-spacing:.1em; color:rgba(8,24,48,.4); font-weight:700;}
+  .fly-step{display:flex; gap:12px; margin-top:16px;}
+  .fly-num{width:24px; height:24px; border-radius:50%; background:var(--blue-dark); color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .fly-step .t{font-size:13px; font-weight:700;}
+  .fly-step .d{font-size:12px; color:rgba(8,24,48,.6); margin-top:2px;}
+
+  /* WHO WE SERVE */
+  .who{padding:80px 0; background:#fff;}
+  .who-grid{margin-top:36px; display:grid; grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-card); overflow:hidden;}
+  @media (min-width:640px){ .who-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1024px){ .who-grid{grid-template-columns:repeat(5,1fr);} }
+  .who-card{background:#fff; padding:24px; display:flex; flex-direction:column;}
+  .who-card:hover{background:var(--off);}
+  .who-card .loc{margin-top:8px; align-self:flex-start; font-size:10.5px; padding:4px 9px; border-radius:var(--r-tight); background:var(--line); font-weight:600;}
+  .who-card h3{margin-top:14px; font-size:13.5px; font-weight:700;}
+  .who-card p{margin-top:8px; font-size:12px; color:rgba(8,24,48,.6); line-height:1.5;}
+
+  /* ROADMAP */
+  .roadmap{padding:80px 0; background:var(--off); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .roadmap-head{display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:flex-end;}
+  .raise-tag{padding:9px 16px; border-radius:var(--r-tight); background:var(--ink); color:#fff; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;}
+  .phases{margin-top:44px; display:grid; grid-template-columns:1fr; gap:20px;}
+  @media (min-width:700px){ .phases{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1100px){ .phases{grid-template-columns:repeat(4,1fr);} }
+  .phase{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:22px; position:relative; overflow:hidden;}
+  .phase.active{border-color:var(--ink);}
+  .phase.active::before{content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--blue),var(--gold));}
+  .phase .dot2{width:32px; height:32px; border-radius:50%; color:#fff; font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center;}
+  .phase .meta{margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em; font-weight:700; color:rgba(8,24,48,.4);}
+  .phase h4{margin-top:6px; font-size:14px; font-weight:800;}
+  .phase p{margin-top:8px; font-size:12px; color:rgba(8,24,48,.62); line-height:1.6;}
+  .phase .status{margin-top:14px; display:inline-flex; padding:4px 10px; border-radius:var(--r-tight); font-size:10px; font-weight:700; letter-spacing:.08em; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;}
+  .phase .status.status-progress{background:#fffbeb; color:#92400e; border-color:#fde68a;}
+  .phase.blurred .blur-wrap{filter:blur(9px); opacity:.6; pointer-events:none; user-select:none;}
+  .phase.blurred::after{content:'UPCOMING • LOCKED'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(8,24,48,.85); color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; font-weight:700; padding:8px 14px; border-radius:var(--r-tight); white-space:nowrap; z-index:3;}
+  .phase.blurred::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.4), rgba(247,246,243,.7)); z-index:2;}
+  .raise-box{margin-top:32px; background:var(--ink); color:#fff; border-radius:var(--r-card); padding:18px 20px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;}
+  .raise-box .t{font-size:13px; font-weight:700;} .raise-box .d{font-size:11px; color:rgba(255,255,255,.6); margin-top:2px;}
+
+  /* REGISTER */
+  .register{padding:80px 0; background:#fff;}
+  .register-grid{display:grid; grid-template-columns:1fr; gap:50px;}
+  @media (min-width:960px){ .register-grid{grid-template-columns:1.05fr .95fr;} }
+  .why-gmail{margin-top:26px; display:flex; gap:12px; padding:16px; border-radius:var(--r-card); background:var(--paper); border:1px solid var(--line);}
+  .why-gmail .ic{width:32px; height:32px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .why-gmail h4{font-size:13px; font-weight:700;}
+  .why-gmail p{font-size:12px; color:rgba(8,24,48,.6); margin-top:4px; line-height:1.5;}
+  .benefit-grid{margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .benefit{padding:12px; border-radius:12px; background:#fff; border:1px solid var(--line); font-size:12px;}
+  .benefit .t{font-weight:700;} .benefit .d{color:rgba(8,24,48,.55); margin-top:2px;}
+  .form-card{border:1px solid var(--line); border-radius:var(--r-card); padding:28px; background:#fff;}
+  .form-head{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;}
+  .live-tag{font-size:11px; padding:5px 11px; border-radius:var(--r-tight); background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-weight:700;}
+  .field{margin-top:16px;}
+  .field label{font-size:12px; font-weight:700;}
+  .field input, .field select, .field textarea{width:100%; margin-top:6px; height:44px; padding:0 14px; border-radius:var(--r-tight); border:1px solid var(--line); font-size:14px; font-family:inherit; outline:none; transition:border-color .2s;}
+  .field textarea{height:auto; padding:10px 14px; resize:vertical;}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--blue); box-shadow:0 0 0 4px rgba(42,127,255,.1);}
+  .field .hint{font-size:11px; color:rgba(8,24,48,.5); margin-top:5px;}
+  .field .err{font-size:11px; color:var(--danger); margin-top:5px;}
+  .field.error input, .field.error select{border-color:var(--danger); background:#fef2f2;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .hp{position:absolute; left:-9999px; width:0; height:0; opacity:0;}
+  .msg-box{margin-top:16px; padding:12px 14px; border-radius:12px; font-size:12.5px;}
+  .msg-ok{background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;}
+  .msg-err{background:#fef2f2; border:1px solid #fecaca; color:#991b1b;}
+  .submit{margin-top:18px; width:100%; height:48px; border-radius:var(--r-card); background:var(--ink); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer;}
+  .submit:hover{background:#000;} .submit:disabled{opacity:.6; cursor:not-allowed;}
+  .fine{margin-top:12px; font-size:10.5px; color:rgba(8,24,48,.4); text-align:center; line-height:1.5;}
+
+  /* CONTACT + FOOTER */
+  .contact{padding:80px 0; background:var(--ink); color:#fff;}
+  .contact-top{display:grid; grid-template-columns:1fr; gap:32px;}
+  @media (min-width:900px){ .contact-top{grid-template-columns:1fr 1.5fr;} }
+  .contact h3{font-size:24px; font-weight:900; letter-spacing:-.02em; line-height:1.1;}
+  .contact-top > div:first-child p{margin-top:12px; font-size:13.5px; color:rgba(255,255,255,.6); line-height:1.6;}
+  .contact-cards{display:grid; grid-template-columns:1fr; gap:1px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.1); border-radius:var(--r-card); overflow:hidden;}
+  @media (min-width:640px){ .contact-cards{grid-template-columns:1fr 1fr;} }
+  .ccard{background:var(--ink-2); padding:24px;}
+  .ccard h4{margin-top:14px; font-size:13.5px; font-weight:700;}
+  .ccard p{margin-top:6px; font-size:11.5px; color:rgba(255,255,255,.6); line-height:1.5;}
+  .ccard button.cta{margin-top:18px; height:36px; padding:0 16px; border-radius:var(--r-card); font-size:11.5px; font-weight:700; border:none; cursor:pointer;}
+  .cta-blue{background:var(--blue-dark); color:#fff;} .cta-white{background:#fff; color:var(--ink);}
+  .share-row{margin-top:40px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; border-top:1px solid rgba(255,255,255,.08); padding-top:20px;}
+  .share-icons{display:flex; gap:8px;}
+  .share-icons a{width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:13px;}
+  footer{padding:44px 0; background:#060f1f; color:rgba(255,255,255,.6);}
+  .foot-top{display:flex; flex-wrap:wrap; gap:32px; justify-content:space-between;}
+  .foot-brand{display:flex; align-items:center; gap:8px;}
+  .foot-brand .mark-img{width:30px; height:30px; border-radius:9px; background:#fff; padding:2px; object-fit:contain;}
+  .foot-brand span{font-weight:900; color:#fff; font-size:14px;}
+  .foot-col{max-width:420px; font-size:11.5px; line-height:1.6;}
+  .foot-col.wide{max-width:380px;}
+  .foot-col h5{color:#fff; font-size:12px; font-weight:700; margin-bottom:8px;}
+  .foot-links{margin-top:26px; display:flex; flex-wrap:wrap; gap:18px;}
+  .foot-links button{background:none; border:none; color:rgba(255,255,255,.6); font:inherit; font-size:11.5px; font-weight:600; cursor:pointer; text-decoration:underline;}
+  .foot-links button:hover{color:#fff;}
+  .foot-bottom{margin-top:32px; padding-top:22px; border-top:1px solid rgba(255,255,255,.08); display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; font-size:11px;}
+
+  /* MODALS */
+  .overlay{position:fixed; inset:0; z-index:90; background:rgba(8,24,48,.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; padding:20px;}
+  .overlay.open{display:flex;}
+  /* ---------- routed pages (signup / login / admin gate) ---------- */
+  .page{display:none;}
+  .page.active{display:block;}
+  .app-topbar{border-bottom:1px solid var(--line); background:#fff;}
+  .app-topbar-inner{height:64px; display:flex; align-items:center; justify-content:space-between;}
+  .app-back{font-size:12.5px; font-weight:700; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:4px;}
+  .app-back:hover{color:var(--blue-dark);}
+  .app-brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.01em; font-size:15px; text-decoration:none; color:var(--ink);}
+  .app-brand .mark-img{height:30px; width:auto; object-fit:contain;}
+  .app-topbar-link{font-size:12.5px; font-weight:600; color:rgba(8,24,48,.6); text-decoration:none;}
+  .app-topbar-link:hover{color:var(--ink);}
+  .app-page-body{min-height:calc(100vh - 64px); display:flex; align-items:center; padding:56px 0;}
+  .app-page-narrow{align-items:flex-start; justify-content:center; padding-top:72px;}
+  .auth-card{width:100%; max-width:400px; margin:0 auto; border:1px solid var(--line); border-radius:var(--r-modal); padding:32px; background:#fff;}
+  #page-signup .app-page-body{align-items:flex-start; padding-top:56px;}
+  .admin-gate{flex:1; display:flex; align-items:flex-start; justify-content:center; padding-top:96px; background:var(--paper); overflow-y:auto;}
+  .modal-card{background:#fff; border-radius:var(--r-modal); width:100%; max-width:380px; padding:28px; position:relative; box-shadow:0 12px 32px rgba(8,24,48,.22);}
+  .step-indicator{display:flex; align-items:center; gap:0; margin-bottom:18px;}
+  .step-dot{width:8px; height:8px; border-radius:50%; background:var(--line); flex-shrink:0; transition:background .2s ease;}
+  .step-dot.active, .step-dot.done{background:var(--ink);}
+  .step-line{flex:1; height:1px; background:var(--line); margin:0 6px;}
+  .step-label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; font-weight:700; color:rgba(8,24,48,.4); text-transform:uppercase; margin-bottom:6px;}
+  .modal-card h3{font-size:18px; font-weight:900;}
+  .modal-card p.sub{margin-top:6px; font-size:12.5px; color:rgba(8,24,48,.6);}
+  .modal-close{position:absolute; top:16px; right:16px; width:28px; height:28px; border-radius:50%; background:var(--paper); border:none; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;}
+  .legal-modal{max-width:600px; max-height:80vh; overflow-y:auto; padding:30px 32px; margin:auto;}
+  .legal-modal::-webkit-scrollbar{width:8px;}
+  .legal-modal::-webkit-scrollbar-thumb{background:var(--line); border-radius:999px;}
+  .legal-modal .updated{margin-top:4px; margin-bottom:18px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.06em; color:rgba(8,24,48,.45); text-transform:uppercase;}
+  .legal-modal h4{margin-top:18px; margin-bottom:6px; font-size:12.5px; font-weight:800;}
+  .legal-modal h4:first-of-type{margin-top:4px;}
+  .legal-modal p{font-size:12.5px; line-height:1.65; color:rgba(8,24,48,.68); margin-top:6px;}
+  .legal-modal ul{margin-top:8px; padding-left:18px; display:flex; flex-direction:column; gap:6px;}
+  .legal-modal li{font-size:12.5px; line-height:1.6; color:rgba(8,24,48,.68);}
+  .legal-modal b{color:var(--ink); font-weight:700;}
+  @media (max-width:640px){ .legal-modal{max-width:94vw; max-height:85vh; padding:22px 18px;} }
+
+  /* ===== USER DASHBOARD ===== */
+  .user-shell{position:fixed; inset:0; z-index:80; background:#fff; display:none; flex-direction:column;}
+  .user-shell.open{display:flex;}
+  .user-topbar{background:var(--ink); color:#fff; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-shrink:0;}
+  .user-topbar .left{display:flex; align-items:center; gap:12px;}
+  .user-topbar img{height:32px; width:auto; border-radius:8px; background:#fff; padding:3px;}
+  .user-topbar .title{font-weight:900; font-size:15px;}
+  .user-topbar .right{display:flex; align-items:center; gap:10px;}
+  .user-topbar .user-email{font-size:12px; opacity:.7; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .user-topbar button{height:32px; padding:0 14px; border-radius:var(--r-card); border:none; font-size:12px; font-weight:700; cursor:pointer; background:rgba(255,255,255,.12); color:#fff;}
+  .user-body{flex:1; display:flex; overflow:hidden;}
+  .user-sidebar{width:270px; background:var(--off); border-right:1px solid var(--line); padding:16px; overflow-y:auto; flex-shrink:0; display:flex; flex-direction:column; gap:3px;}
+  .user-sidebar .section-label{font-size:10px; font-weight:800; letter-spacing:.12em; color:rgba(8,24,48,.4); margin:16px 0 6px 8px; text-transform:uppercase;}
+  .side-link{width:100%; text-align:left; padding:10px 13px; border-radius:10px; border:1px solid transparent; background:transparent; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:9px;}
+  .side-link.active{background:#fff; border-color:var(--line); box-shadow:0 2px 8px rgba(0,0,0,.04);}
+  .side-link:hover{background:#fff;}
+  .user-main{flex:1; overflow-y:auto; background:#fff; padding:24px;}
+  .dash-card{background:#fff; border:1px solid var(--line); border-radius:var(--r-card); padding:22px; margin-bottom:18px;}
+  .dash-card h3{font-size:16px; font-weight:800;}
+  .dash-card > p{font-size:13px; color:rgba(8,24,48,.6); margin-top:6px; line-height:1.55;}
+  .dash-note{margin-top:14px; padding:11px 13px; border-radius:11px; background:var(--paper); border:1px solid var(--line); font-size:11.5px; color:rgba(8,24,48,.6); line-height:1.55;}
+  .tool-form{margin-top:16px; display:grid; gap:12px;}
+  @media (min-width:620px){ .tool-form.two{grid-template-columns:1fr 1fr;} }
+  .tool-form label{font-size:11.5px; font-weight:700; display:block; margin-bottom:5px;}
+  .tool-form input, .tool-form select{width:100%; height:42px; border-radius:var(--r-tight); border:1px solid var(--line); padding:0 13px; font-size:13.5px; font-family:inherit; outline:none;}
+  .tool-form input:focus, .tool-form select:focus{border-color:var(--blue);}
+  .tool-actions{margin-top:14px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+  .btn-sm{height:40px; padding:0 20px; border-radius:var(--r-card); border:none; font-size:13px; font-weight:700; cursor:pointer; background:var(--ink); color:#fff;}
+  .btn-sm.ghost{background:#fff; border:1px solid var(--line); color:var(--ink);}
+  .result-box{margin-top:16px; border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--off); font-size:13px; display:none;}
+  .result-box.show{display:block;}
+  .verdict{display:inline-flex; align-items:center; gap:7px; padding:6px 13px; border-radius:var(--r-tight); font-size:11.5px; font-weight:800; letter-spacing:.04em;}
+  .v-clear{background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;}
+  .v-review{background:#fffbeb; color:#92400e; border:1px solid #fde68a;}
+  .v-risk{background:#fef2f2; color:#991b1b; border:1px solid #fecaca;}
+  .flag-list{margin-top:12px; padding-left:18px; display:flex; flex-direction:column; gap:5px;}
+  .flag-list li{font-size:12.5px; color:rgba(8,24,48,.7); line-height:1.5;}
+  .kv-row{display:flex; justify-content:space-between; gap:14px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:13px;}
+  .kv-row:last-child{border-bottom:none;}
+  .kv-row .k{color:rgba(8,24,48,.6);}
+  .kv-row .v{font-weight:700; font-family:'JetBrains Mono',monospace; font-size:12.5px;}
+  .kv-row.total{border-top:2px solid var(--ink); border-bottom:none; margin-top:6px; padding-top:12px;}
+  .kv-row.total .k, .kv-row.total .v{font-weight:800; font-size:14px; color:var(--ink);}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:var(--r-tight); background:var(--ink); color:#fff; font-size:12.5px; font-weight:600;}
+  .chip.light{background:var(--paper); color:var(--ink); border:1px solid var(--line);}
+  .chip button{border:none; width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,.2); color:#fff; cursor:pointer; font-size:10px;}
+  .interest-grid{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .interest-picker{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;}
+  .interest-picker button{padding:7px 14px; border-radius:var(--r-tight); border:1px solid var(--line); background:#fff; font-size:12.5px; font-weight:600; cursor:pointer;}
+  .interest-picker button.selected{background:var(--blue-dark); color:#fff; border-color:var(--blue-dark);}
+  .milestone{display:flex; gap:13px; align-items:flex-start; padding:14px 0; border-bottom:1px solid var(--line);}
+  .milestone:last-child{border-bottom:none;}
+  .ms-dot{width:26px; height:26px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:var(--line); color:rgba(8,24,48,.5);}
+  .ms-dot.done{background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;}
+  .ms-body .t{font-size:13.5px; font-weight:700;}
+  .ms-body .d{font-size:11.5px; color:rgba(8,24,48,.55); margin-top:2px;}
+  .mat-row{display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px;}
+  .mat-row:last-child{border-bottom:none;}
+  .mat-row .u{font-size:11px; color:rgba(8,24,48,.5);}
+  .mat-row .p{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px;}
+  .drop-zone{margin-top:14px; border:2px dashed var(--line); border-radius:14px; padding:28px; text-align:center; font-size:12.5px; color:rgba(8,24,48,.55); cursor:pointer;}
+  .drop-zone:hover{border-color:var(--blue); background:var(--off);}
+
+  /* chat */
+  .dash-chat-wrap{display:flex; flex-direction:column; height:calc(100vh - 170px); border:1px solid var(--line); border-radius:var(--r-card); overflow:hidden;}
+  .dash-chat-head{background:var(--ink); color:#fff; padding:14px 18px; display:flex; align-items:center; gap:12px;}
+  .dash-chat-head .av{width:36px; height:36px; border-radius:var(--r-tight); background:var(--gold); color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;}
+  .dash-chat-head .name{font-weight:800; font-size:14px;}
+  .dash-chat-head .status{font-size:11px; opacity:.8; display:flex; align-items:center; gap:5px;}
+  .dash-chat-head .status .dot{width:6px; height:6px; border-radius:50%; background:#34d399;}
+  .dash-chat-body{flex:1; overflow-y:auto; padding:4px 24px; background:#fff; display:flex; flex-direction:column;}
+  /* Correspondence-thread style: no bubbles, no chat-app affect — a running
+     record, the way a deal correspondence log or case file reads. */
+  .msg-entry{padding:14px 0; border-bottom:1px solid var(--line);}
+  .msg-entry:last-child{border-bottom:none;}
+  .msg-head{display:flex; align-items:baseline; gap:8px; margin-bottom:4px;}
+  .msg-head .who{font-size:12.5px; font-weight:700; color:var(--ink);}
+  .msg-entry.out .msg-head .who{color:var(--gold-dark);}
+  .msg-head .when{font-family:var(--mono); font-size:10.5px; color:rgba(8,24,48,.4); letter-spacing:.02em;}
+  .msg-text{font-size:14px; line-height:1.6; color:rgba(8,24,48,.85); padding-left:1px;}
+  .dash-chat-input{display:flex; gap:10px; padding:14px 18px; background:var(--off); border-top:1px solid var(--line);}
+  .dash-chat-input input{flex:1; height:42px; border-radius:var(--r-tight); border:1px solid var(--line); padding:0 14px; font-size:14px; outline:none; background:#fff;}
+  .dash-chat-input button{height:42px; padding:0 18px; border-radius:var(--r-tight); background:var(--ink); color:#fff; border:none; cursor:pointer; font-size:12.5px; font-weight:700; letter-spacing:.02em;}
+  .dash-chat-empty{margin:auto; text-align:center; color:rgba(8,24,48,.4); font-size:13px; padding:20px; max-width:320px;}
+
+  /* ADMIN */
+  .admin-shell{position:fixed; inset:0; width:100vw; height:100vh; z-index:95; background:#fff; display:none; flex-direction:column;}
+  .admin-shell.open{display:flex;}
+  .admin-shell-body{flex:1; display:flex; flex-direction:column; min-height:0; height:100%;}
+  .admin-topbar{background:var(--ink); color:#fff; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:10px; border-bottom:1px solid rgba(255,255,255,.08);}
+  .admin-topbar .t{font-family:var(--serif); font-weight:600; font-size:16px; letter-spacing:-.005em; display:flex; align-items:center; gap:9px;}
+  .admin-topbar .t svg{color:var(--gold);}
+  .admin-topbar .right{display:flex; align-items:center; gap:8px;}
+  .admin-topbar .who{font-family:var(--mono); font-size:10.5px; color:rgba(255,255,255,.55); letter-spacing:.02em; margin-right:4px;}
+  .admin-topbar button{background:transparent; border:1px solid rgba(255,255,255,.18); color:rgba(255,255,255,.85); font-size:11.5px; font-weight:600; padding:7px 14px; border-radius:var(--r-tight); cursor:pointer; transition:border-color .15s, color .15s;}
+  .admin-topbar button:hover{border-color:rgba(255,255,255,.4); color:#fff;}
+  .admin-body{flex:1; display:flex; overflow:hidden; width:100%;}
+  .admin-list{width:340px; max-width:42vw; border-right:1px solid var(--line); overflow-y:auto; flex-shrink:0; background:var(--off); display:flex; flex-direction:column;}
+  .admin-list-head{padding:16px 18px 12px; border-bottom:1px solid var(--line); flex-shrink:0;}
+  .admin-list-head .top-row{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
+  .admin-list-head .label{font-family:var(--serif); font-style:italic; font-size:14px; font-weight:500; color:var(--ink);}
+  .admin-list-head .count{font-family:var(--mono); font-size:11px; color:rgba(8,24,48,.45);}
+  .admin-list-head select{margin-top:10px; width:100%; font-size:11.5px; padding:7px 10px; border-radius:var(--r-tight); border:1px solid var(--line); background:#fff; font-family:inherit; color:rgba(8,24,48,.7);}
+  .admin-row{padding:13px 18px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; gap:11px; align-items:flex-start; transition:background .12s;}
+  .admin-row:hover{background:rgba(8,24,48,.025);}
+  .admin-row.active{background:#fff; box-shadow:inset 2px 0 0 var(--gold);}
+  .admin-row .av2{width:34px; height:34px; border-radius:var(--r-tight); background:var(--ink); color:var(--gold); font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:var(--mono);}
+  .admin-row .info{flex:1; min-width:0;}
+  .admin-row .info .n{font-size:13px; font-weight:700; color:var(--ink); display:flex; justify-content:space-between; gap:6px;}
+  .admin-row .info .g{font-size:11px; color:rgba(8,24,48,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px;}
+  .admin-row .info .m{font-family:var(--mono); font-size:10px; color:rgba(8,24,48,.38); margin-top:5px; letter-spacing:.02em;}
+  .unread-badge{background:var(--blue-dark); color:#fff; font-family:var(--mono); font-size:10px; font-weight:700; border-radius:var(--r-tight); padding:1px 6px; flex-shrink:0;}
+  .admin-chat{flex:1; display:flex; flex-direction:column; min-width:0; background:#fff;}
+  .admin-chat-empty{margin:auto; text-align:center; color:rgba(8,24,48,.4); font-size:13px; padding:30px; max-width:320px;}
+  .admin-chat-head{padding:18px 24px; border-bottom:1px solid var(--line); flex-shrink:0;}
+  .admin-chat-head .id-row{display:flex; align-items:center; gap:12px;}
+  .admin-chat-head .av2{width:38px; height:38px; border-radius:var(--r-tight); background:var(--ink); color:var(--gold); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:var(--mono);}
+  .admin-chat-head .n{font-family:var(--serif); font-weight:600; font-size:17px; color:var(--ink);}
+  .admin-chat-head .g{font-size:12px; color:rgba(8,24,48,.5); font-family:var(--mono); margin-top:1px;}
+  .admin-chat-head .tag-row{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
+  .admin-chat-head .dtag{font-size:10.5px; font-weight:600; padding:4px 9px; border-radius:var(--r-tight); background:var(--paper); border:1px solid var(--line); color:rgba(8,24,48,.65);}
+  .admin-chat-head .dtag.role{background:var(--ink); color:var(--gold-lt); border-color:var(--ink);}
+  .admin-chat-body{flex:1; overflow-y:auto; padding:4px 24px; background:#fff; display:flex; flex-direction:column;}
+  .admin-chat-input{display:flex; gap:10px; padding:16px 24px; border-top:1px solid var(--line); background:var(--off); flex-shrink:0;}
+  .admin-chat-input input{flex:1; height:42px; border-radius:var(--r-tight); border:1px solid var(--line); padding:0 14px; font-size:14px; font-family:inherit; outline:none; background:#fff;}
+  .admin-chat-input button{padding:0 18px; height:42px; border-radius:var(--r-tight); background:var(--ink); color:#fff; border:none; font-weight:700; font-size:12.5px; cursor:pointer;}
+
+  @media (max-width:860px){
+    .user-body{flex-direction:column;}
+    .user-sidebar{width:100%; flex-direction:row; overflow-x:auto; padding:10px; gap:6px; border-right:none; border-bottom:1px solid var(--line);}
+    .user-sidebar .section-label{display:none;}
+    .side-link{white-space:nowrap; width:auto;}
+    .admin-body{flex-direction:column;}
+    .admin-list{width:100%; max-width:100%; max-height:45vh;}
+    .dash-chat-wrap{height:calc(100vh - 210px);}
+  }
+</style>
+</head>
+<body>
+<div class="page active" id="page-home">
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <div class="brand">
+        <img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'">
+        <span class="apexx">APEXX</span><span class="accent">CRESTWAY</span>
+      </div>
+      <div class="navlinks">
+        <button data-target="problem">Problem</button>
+        <button data-target="platform">Platform</button>
+        <button data-target="nodes">Economic Nodes</button>
+        <button data-target="market">Market</button>
+        <button data-target="who">Who We Serve</button>
+        <button data-target="roadmap">Roadmap</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="nav-cta" id="navLoginBtn">Log in</button>
+        <button class="nav-cta" data-target="register">Create account</button>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      </div>
+    </nav>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="wrap">
+      <button data-target="problem">Problem</button>
+      <button data-target="platform">Platform</button>
+      <button data-target="nodes">Economic Nodes</button>
+      <button data-target="market">Market</button>
+      <button data-target="who">Who We Serve</button>
+      <button data-target="roadmap">Roadmap</button>
+      <button data-target="register">Create account</button>
+      <button id="navLoginBtnMobile">Log in</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <!-- Accreditation still in process — withheld until confirmed -->
+    <span class="pending-claim" data-pending="ACCREDITATION IN PROCESS">
+      <span class="badge"><span class="dot"></span>AGIS, LAGIS Registered</span>
+    </span>
+    <h1>Building Trust Infrastructure for Real Estate &amp; Construction in <span class="accent">Nigeria</span></h1>
+    <p class="lede">We eliminate the <b>30% chaos premium</b> from infrastructure deals by turning unverified land and volatile construction into transparent, institutional-grade assets.</p>
+
+    <div class="hero-ctas">
+      <button class="btn btn-primary" data-target="register">Create account</button>
+      <button class="btn btn-outline" data-target="platform">See the platform</button>
+    </div>
+
+    <div class="hero-stats reveal">
+      <div class="hero-stat">
+        <div class="num">5-min</div>
+        <div class="lbl">AI-verified title checks</div>
+        <div class="sub">Our deed scanner reads Deeds of Assignment, C of Os and survey plans, and flags forged signatures, invalid dates and mismatched registration numbers.</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">GIS + Drone</div>
+        <div class="lbl">Every plot, physically verified</div>
+        <div class="sub">Drop a pin and the platform checks the coordinates against master plans — free, committed, or agricultural — before a plot is ever listed.</div>
+      </div>
+    </div>
+
+    <div class="trust-pills reveal">
+      <span class="pill">Milestone-locked escrow</span>
+      <span class="pill">Drone-verified milestones</span>
+      <span class="pill">Hidden-fee calculator</span>
+      <span class="pill">Lagos • Abuja • Diaspora</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow gold">The problem</div>
+      <h2>Nigeria's land and construction markets are lucrative, and broken by design.</h2>
+      <p class="section-sub">Every deal carries invisible risk. Buyers pay for fraud, delays and shortages they never see coming, until it's too late.</p>
+    </div>
+    <div class="grid grid-3" style="margin-top:44px;">
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"/></svg></div><h3>Fraudulent sellers</h3><p>The same plot sold to several unsuspecting buyers at once.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><line x1="12" y1="13" x2="12" y2="8"/><line x1="12" y1="13" x2="15.5" y2="14.5"/><line x1="9" y1="2" x2="15" y2="2"/></svg></div><h3>Onerous title registration</h3><p>A Governor's Consent or Certificate of Occupancy can take months, sometimes years.</p></div>
+      <div class="card reveal"><div class="icon-badge">₦</div><h3>Hidden transaction costs</h3><p>Deed of Assignment charges, agency commissions and surveyor costs surface only after the buyer is committed.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="3"/><path d="M2.5 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M14 14.3c2 .5 3.5 2.6 3.5 5.7"/></svg></div><h3>Community extortion</h3><p>Local youths demand cash payments before construction is allowed to begin.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="6" height="11"/><rect x="14" y="4" width="6" height="16"/><line x1="6" y1="12" x2="8" y2="12"/><line x1="6" y1="15" x2="8" y2="15"/><line x1="16" y1="8" x2="18" y2="8"/><line x1="16" y1="12" x2="18" y2="12"/></svg></div><h3>Demolition risk</h3><p>Buyers unknowingly purchase land marked for government infrastructure or zoned agricultural, and lose it.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l8-15 8 15z"/><line x1="8" y1="20" x2="10.5" y2="14.5"/><line x1="16" y1="20" x2="13.5" y2="14.5"/></svg></div><h3>Infrastructure deficits</h3><p>Developers promise serviced plots and deliver no roads, power or drainage.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,17 10,10 14,14 21,6"/><polyline points="15,6 21,6 21,12"/></svg></div><h3>Budget overruns</h3><p>Final cost exceeds the original estimate by a margin that breaks the project.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></div><h3>Chronic delays</h3><p>Systemic disruptions push completion well past the agreed schedule.</p></div>
+      <div class="card reveal"><div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 0 1 16 0z"/><line x1="2.5" y1="15" x2="21.5" y2="15"/><line x1="12" y1="6" x2="12" y2="4"/></svg></div><h3>Skilled labour shortage</h3><p>Too few qualified workers to deliver projects safely, on time and on budget.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM: the two product stacks -->
+<section class="platform" id="platform">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow blue">The platform</div>
+      <h2 style="max-width:20ch;">Ten tools. Two stacks. One trust layer.</h2>
+      <p class="section-sub">Everything a buyer needs to verify land before paying, and everything a client needs to watch a build spend their money. Each tool lives in one of two dashboards.</p>
+      <div class="stack-tabs" role="tablist">
+        <button class="active" data-stack="all">All tools</button>
+        <button data-stack="land">Lands / Real Estate Dashboard</button>
+        <button data-stack="build">Construction Dashboard</button>
+      </div>
+    </div>
+    <div class="tool-grid" id="toolGrid"></div>
+  </div>
+</section>
+
+<!-- KEY ECONOMIC NODE AREAS -->
+<section class="nodes" id="nodes">
+  <div class="wrap">
+    <div class="reveal" style="max-width:620px;">
+      <div class="eyebrow gold">Key economic node areas</div>
+      <h2>Where infrastructure moves, land follows.</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,.62);">We concentrate verification and escrow capacity in the corridors where ports, refineries, expressways and government districts are actually driving value, rather than spreading thin across the whole country.</p>
+    </div>
+    <div class="node-grid" id="nodeGrid"></div>
+  </div>
+</section>
+
+<!-- MOAT -->
+<section class="moat">
+  <div class="wrap">
+    <div class="reveal" style="max-width:640px;">
+      <div class="eyebrow gold">Defensibility</div>
+      <h2>Not another marketplace. A regulated trust infrastructure.</h2>
+    </div>
+    <div class="moat-grid">
+      <div class="moat-card reveal"><div class="icon"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg></div><h3>Legal and regulatory moat</h3><p>Bank escrow partnerships, regulatory clearance and registry integration take 12 to 18 months to assemble and can't be cloned overnight.</p><ul><li>Multi-bank escrow agreements</li><li>Title perfection licence track</li><li>Insurance-backed guarantee</li></ul></div>
+      <div class="moat-card reveal"><div class="icon"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11.5L5.5 14a3.5 3.5 0 0 0 5 5L13 16.5"/><path d="M16 12.5l2.5-2.5a3.5 3.5 0 0 0-5-5L11 7.5"/><line x1="9.5" y1="14.5" x2="14.5" y2="9.5"/></svg></div><h3>Land-to-construction network effects</h3><p>Land buyers become construction clients, and banks plug into the same stream of verified data.</p><ul><li>Verification feeds the construction pipeline</li><li>Milestone data de-risks lending</li></ul></div>
+      <div class="moat-card reveal"><div class="icon"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="7"/><line x1="19" y1="20" x2="19" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg></div><h3>Proprietary data</h3><p>Every verified plot, community risk profile, price point and contractor rating builds a dataset nobody else can copy.</p><ul><li>10k+ plots mapped, 24-month target</li><li>Contractor performance scores</li><li>Price and fraud heatmaps</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section class="market" id="market">
+  <div class="wrap">
+    <div class="market-grid">
+      <div class="reveal">
+        <div class="eyebrow blue">Market opportunity</div>
+        <h2 style="max-width:16ch;">Nigeria's biggest sectors run on a trust deficit. We monetise trust.</h2>
+        <div class="market-stats">
+          <div class="market-stat"><div class="num">$2.61T</div><div class="lbl">Real estate</div><div class="sub">3rd largest GDP sector, 5.2% of GDP</div></div>
+          <div class="market-stat"><div class="num">$27B</div><div class="lbl">Construction</div><div class="sub">CAGR 9%, housing and infrastructure</div></div>
+        </div>
+        <div class="tam-line">Serviceable market (verified + escrow): $2.71M → Y5 $15M revenue target</div>
+      </div>
+      <div class="flywheel reveal">
+        <div class="mono">APEXXCRESTWAY FLYWHEEL</div>
+        <div class="fly-step"><div class="fly-num">1</div><div><div class="t">Guarded land and real estate</div><div class="d">Creates escrowed construction clients (70% convert)</div></div></div>
+        <div class="fly-step"><div class="fly-num">2</div><div><div class="t">Milestone construction escrow</div><div class="d">Generates verified contractor and material data that de-risks lending for banks</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section class="who" id="who">
+  <div class="wrap">
+    <div class="reveal" style="max-width:560px;">
+      <div class="eyebrow gold">Who we serve</div>
+      <h2>Built for those who can't afford a mistake.</h2>
+      <p class="section-sub">Litigation-free, C of O perfected plots through to milestone-escrow builds, segmented for Nigeria's real capital.</p>
+    </div>
+    <div class="who-grid">
+      <div class="who-card reveal"><div class="icon-badge"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l18-9-6 18-3-7-7-2z"/></svg></div><span class="pending-claim on-light" data-pending="COVERAGE PENDING"><span class="loc">UK / US / Canada</span></span><h3>Diaspora investors</h3><p>Remote verification, no family-agent risk, end-to-end verified channel.</p></div>
+      <div class="who-card reveal"><div class="icon-badge"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16l-1.5-9-4 4-2.5-6-2.5 6-4-4z"/></svg></div><span class="pending-claim on-light" data-pending="COVERAGE PENDING"><span class="loc">Lagos • Abuja</span></span><h3>Power players</h3><p>Litigation-free, C of O perfected plots, fully verified before listing.</p></div>
+      <div class="who-card reveal"><div class="icon-badge"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l5 3V10l5 3V7h6v14z"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div><span class="pending-claim on-light" data-pending="COVERAGE PENDING"><span class="loc">Pan-Nigeria</span></span><h3>Industrial conglomerates</h3><p>10 to 50 acre commercial land, escrowed builds, bulk hedging.</p></div>
+      <div class="who-card reveal"><div class="icon-badge"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></div><span class="pending-claim on-light" data-pending="COVERAGE PENDING"><span class="loc">Lagos • Abuja</span></span><h3>Corporate climbers</h3><p>Serviced plots plus milestone-escrow home builds.</p></div>
+      <div class="who-card reveal"><div class="icon-badge"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="20" y2="21"/><path d="M4 21V10l8-6 8 6v11"/><line x1="8" y1="21" x2="8" y2="12"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="16" y1="21" x2="16" y2="12"/></svg></div><span class="pending-claim on-light" data-pending="PARTNERSHIPS PENDING"><span class="loc">Registries / Banks</span></span><h3>Government and banks</h3><p>Data, mortgage rails and a de-risked pipeline through API partnerships.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap" id="roadmap">
+  <div class="wrap">
+    <div class="roadmap-head reveal">
+      <div>
+        <div class="eyebrow blue">Roadmap · 24-month execution</div>
+        <h2>From trust layer to mortgage rails.</h2>
+      </div>
+      <span class="raise-tag">Raising ₦600M → Y5 $15M revenue target</span>
+    </div>
+    <div class="phases">
+      <div class="phase active reveal">
+        <div class="dot2" style="background:#081830;">1</div>
+        <div class="meta">PHASE 1 • MONTH 1-6</div>
+        <h4>Automated web + B2B</h4>
+        <p>Guarded Land v1 and registry concierge in build. Verification and escrow infrastructure — not yet handling real funds or registry data.</p>
+        <span class="status status-progress">● In development</span>
+      </div>
+      <div class="phase blurred reveal"><div class="blur-wrap">
+        <div class="dot2" style="background:#2A7FFF;">2</div>
+        <div class="meta">PHASE 2 • MONTH 6-12</div>
+        <h4>Fractional + escrow v2</h4>
+        <p>Milestone escrow live, drone verification, bulk hedging, 300 plots and 80 builds.</p>
+      </div></div>
+      <div class="phase blurred reveal"><div class="blur-wrap">
+        <div class="dot2" style="background:#C6A86F; color:#081830;">3</div>
+        <div class="meta">PHASE 3 • MONTH 12-18</div>
+        <h4>API mortgage rails</h4>
+        <p>Bank API, mortgage pre-approval, insurance, 1,000-plot data milestone.</p>
+      </div></div>
+      <div class="phase blurred reveal"><div class="blur-wrap">
+        <div class="dot2" style="background:#081830;">4</div>
+        <div class="meta">PHASE 4 • MONTH 18-24</div>
+        <h4>Regional expansion</h4>
+        <p>Deepen Lagos and diaspora penetration, extend registry partnerships, explore Ghana and Rwanda.</p>
+      </div></div>
+    </div>
+    <div class="raise-box reveal">
+      <div><div class="t">₦600M raise breakdown</div><div class="d">₦504M seed ops, product and legal • ₦96M utility vehicles (site vehicles and drone fleet)</div></div>
+      <span class="raise-tag">Y5 $15M revenue target</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-top reveal">
+      <div>
+        <h3>Ready for a verified deal?</h3>
+        <p>Our investment desk is open 9am to 7pm WAT. Book a 30-minute deep dive covering Lagos, Abuja and diaspora deals.</p>
+      </div>
+      <div class="contact-cards">
+        <div class="ccard">
+          <div class="icon-badge"><svg class="i" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></div>
+          <h4>Schedule a call</h4>
+          <p>Thirty minutes with our desk. Lagos, Abuja or diaspora.</p>
+          <button class="cta cta-white" data-target="register">Request a call</button>
+        </div>
+        <div class="ccard">
+          <div class="icon-badge"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg></div>
+          <h4>Trust infrastructure</h4>
+          <p>Bank-grade title audit, drone-verified milestones, milestone-locked escrow. Real execution, no chatbots.</p>
+          <button class="cta cta-blue" data-target="register">Create account</button>
+        </div>
+      </div>
+    </div>
+    <div class="share-row">
+      <span class="mono" style="font-size:11px; letter-spacing:.1em; font-weight:700; color:rgba(255,255,255,.4);">SHARE</span>
+      <div class="share-icons">
+        <a href="https://x.com/apexxcrestway" target="_blank" rel="noopener" aria-label="X">𝕏</a>
+        <a href="https://www.linkedin.com/company/apexxcrestway" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        <a href="https://www.instagram.com/apexxcrestway" target="_blank" rel="noopener" aria-label="Instagram"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-col wide">
+        <div class="foot-brand"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span>APEXXCRESTWAY</span></div>
+        <p style="margin-top:14px;">The trust and execution engine for Nigerian land, real estate and construction. We eliminate the chaos premium by turning unverified land and volatile construction into transparent, institutional-grade assets. Not a real estate agency — a regulated trust infrastructure.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Disclaimer</h5>
+        <p>All plots are subject to independent legal verification and confirmation with the relevant state land registry. Escrow services are provided through regulated partner banks. Drone verification is not a substitute for physical inspection, and past verification does not guarantee future title status. Buyers are advised to conduct their own independent due diligence. Licensing and accreditation are in process.</p>
+      </div>
+    </div>
+    <div class="foot-links">
+      <button data-modal="about">About us</button>
+      <button data-modal="privacy">Privacy policy</button>
+      <button data-modal="terms">Terms and conditions</button>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 APEXXCRESTWAY. Apexx Crestway Ltd.</span>
+      <span class="mono">RAISING ₦600M • Y5 $15M REVENUE TARGET</span>
+    </div>
+    <div style="display:none;"><button id="adminLinkBtn">Admin</button></div>
+  </div>
+</footer>
+</div><!-- /page-home -->
+
+<!-- ===== SIGN-UP PAGE ===== -->
+<div class="page" id="page-signup">
+  <header class="app-topbar">
+    <div class="wrap app-topbar-inner">
+      <a href="#" class="app-back" data-nav="home">← Back</a>
+      <a href="#" class="app-brand" data-nav="home"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
+      <a href="#" class="app-topbar-link" data-nav="login">Already registered? Log in</a>
+    </div>
+  </header>
+  <div class="app-page-body">
+    <div class="wrap register-grid">
+      <div class="reveal">
+        <h2 style="max-width:16ch;">Create an account. We only work with verified buyers.</h2>
+        <p class="section-sub" style="max-width:520px;">Fraud prevention starts at registration. We accept only Gmail addresses, which keeps out disposable emails and gives us a reliable channel for title documents and updates.</p>
+        <div class="why-gmail">
+          <div class="ic"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="5,13 10,18 19,7"/></svg></div>
+          <div>
+            <h4>Why Gmail only?</h4>
+            <p>Disposable emails mean fraud risk. Gmail gives us a verifiable identity, document sharing for title files, and reliable delivery for your login codes.</p>
+          </div>
+        </div>
+        <div class="benefit-grid">
+          <div class="benefit"><div class="t">No spam</div><div class="d">One or two updates a month</div></div>
+          <div class="benefit"><div class="t">Full toolkit</div><div class="d">Deed scanner, GIS check, fee calculator</div></div>
+        </div>
+      </div>
+      <div class="form-card reveal">
+        <div class="form-head">
+          <h3 style="font-size:17px; font-weight:900;">Create your account</h3>
+          <span class="live-tag">● Live</span>
+        </div>
+        <form id="regForm" novalidate>
+          <div class="field" id="f-name"><label>Full name *</label><input type="text" id="fullName" autocomplete="name" placeholder="Dr. Ibrahim Musa"><div class="err" style="display:none;"></div></div>
+          <div class="field" id="f-gmail"><label>Gmail address *</label><input type="email" id="gmail" autocomplete="email" placeholder="you@gmail.com"><div class="hint">We only accept Gmail, to prevent fraud.</div><div class="err" style="display:none;"></div></div>
+          <div class="field-row">
+            <div class="field" id="f-phone"><label>Phone (optional)</label><input type="tel" id="phone" autocomplete="tel" placeholder="0803 123 4567"><div class="hint">080… or +234…</div><div class="err" style="display:none;"></div></div>
+            <div class="field" id="f-investor"><label>Investor type *</label><select id="investorType"><option value="" selected disabled>Select type</option><option>Diaspora Investor</option><option>Power Players — $100k-$2M</option><option>Corporate Climbers — $15k-$80k</option><option>Industrial Conglomerate</option><option>Government / Bank Partner</option><option>Other</option></select><div class="err" style="display:none;"></div></div>
+          </div>
+          <div class="field" id="f-interest"><label>Interest area *</label><select id="interestArea"><option value="" selected disabled>Select interest</option><option>Guarded Land / Real Estate Deals</option><option>Milestone Escrow Construction</option><option>Both</option></select><div class="err" style="display:none;"></div></div>
+          <div class="field"><label>Message (optional)</label><textarea id="message" rows="3" placeholder="Tell us about your land or construction needs, budget, timeline…"></textarea></div>
+          <input class="hp" type="text" id="company" tabindex="-1" autocomplete="off">
+          <div id="formMsg"></div>
+          <button type="submit" class="submit" id="submitBtn">Create account</button>
+          <p class="fine">By joining you agree to KYC verification on your first deal. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="page" id="page-login">
+  <header class="app-topbar">
+    <div class="wrap app-topbar-inner">
+      <a href="#" class="app-back" data-nav="home">← Back</a>
+      <a href="#" class="app-brand" data-nav="home"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
+      <a href="#" class="app-topbar-link" data-nav="signup">No account? Create one</a>
+    </div>
+  </header>
+  <div class="app-page-body app-page-narrow">
+    <div class="auth-card">
+    <div class="step-indicator">
+      <span class="step-dot active" id="stepDot1"></span><span class="step-line"></span><span class="step-dot" id="stepDot2"></span>
+    </div>
+    <div id="loginStepGmail">
+      <div class="step-label">Step 1 of 2 — Identity</div>
+      <h3>Log in to your dashboard</h3>
+      <p class="sub">Enter the Gmail address you registered with. We'll send a one-time code to confirm it's you.</p>
+      <div class="field">
+        <label>Gmail address</label>
+        <input type="email" id="loginGmail" placeholder="you@gmail.com">
+      </div>
+      <div class="field" id="loginQuickName" style="display:none;">
+        <label>Full name</label>
+        <input type="text" id="loginNameQuick" placeholder="Dr. Ibrahim Musa">
+        <div class="hint">We didn't find that Gmail. Add your name to register and get your code.</div>
+      </div>
+      <div id="loginMsg"></div>
+      <button class="submit" id="sendCodeBtn">Send code</button>
+      <p class="fine">No account yet? <a href="#" id="goRegisterLink" data-nav="signup" style="color:var(--blue-dark); font-weight:700;">Create one</a></p>
+    </div>
+    <div id="loginStepOtp" style="display:none;">
+      <div class="step-label">Step 2 of 2 — Verification</div>
+      <h3>Enter your code</h3>
+      <p class="sub">We sent a 6-digit code to <b id="otpGmailLabel"></b>. It expires in five minutes.</p>
+      <div class="field">
+        <label>6-digit code</label>
+        <input type="text" id="otpInput" inputmode="numeric" maxlength="6" placeholder="••••••" style="height:48px; font-size:20px; letter-spacing:.35em; text-align:center; font-family:'JetBrains Mono',monospace;">
+      </div>
+      <div id="otpMsg"></div>
+      <button class="submit" id="verifyOtpBtn">Verify and continue</button>
+      <p class="fine" style="margin-top:14px;">
+        <button type="button" id="resendOtpBtn" style="background:none; border:none; color:var(--blue-dark); font-weight:700; cursor:pointer; font-size:12px; font-family:inherit;">Resend code</button>
+        &nbsp;·&nbsp;
+        <button type="button" id="changeGmailBtn" style="background:none; border:none; color:rgba(8,24,48,.5); font-weight:600; cursor:pointer; font-size:12px; font-family:inherit;">Use a different Gmail</button>
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== USER DASHBOARD ===== -->
+<div class="user-shell" id="userShell">
+  <div class="user-topbar">
+    <div class="left">
+      <img src="APEXX.PNG" alt="" onerror="this.style.display='none'">
+      <span class="title">APEXXCRESTWAY</span>
+    </div>
+    <div class="right">
+      <span class="user-email" id="userTopEmail"></span>
+      <button id="userBackBtn">← Back</button>
+      <button id="userLogoutBtn">Log out</button>
+    </div>
+  </div>
+  <div class="user-body">
+    <aside class="user-sidebar">
+      <div class="section-label">Account</div>
+      <button class="side-link active" data-view="overview"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg> Overview</button>
+      <button class="side-link" data-view="search"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg> Search listings</button>
+      <button class="side-link" data-view="interests"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,3 14.6,9.2 21.3,9.6 16.2,13.9 17.9,20.4 12,16.8 6.1,20.4 7.8,13.9 2.7,9.6 9.4,9.2"/></svg> My interests</button>
+      <button class="side-link" data-view="profile"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.1 3.4-7.5 7.5-7.5s7.5 3.4 7.5 7.5"/></svg> Profile</button>
+
+      <div class="section-label">Lands / Real Estate</div>
+      <button class="side-link" data-view="deed"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><line x1="9.5" y1="12" x2="14.5" y2="12"/><line x1="9.5" y1="15" x2="14.5" y2="15"/></svg> Deed scanner</button>
+      <button class="side-link" data-view="gis"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg> GIS coordinates</button>
+      <button class="side-link" data-view="omonile"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="15,9 13,13 9,15 11,11"/></svg> Community risk</button>
+      <button class="side-link" data-view="fees"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><line x1="8" y1="7" x2="16" y2="7"/><circle cx="8" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="16" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="8" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="8" cy="18.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="0.7" fill="currentColor" stroke="none"/></svg> Hidden fee calculator</button>
+
+      <div class="section-label">Construction</div>
+      <button class="side-link" data-view="escrow"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg> Milestone escrow</button>
+      <button class="side-link" data-view="build"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="6" height="11"/><rect x="14" y="4" width="6" height="16"/><line x1="6" y1="12" x2="8" y2="12"/><line x1="6" y1="15" x2="8" y2="15"/><line x1="16" y1="8" x2="18" y2="8"/><line x1="16" y1="12" x2="18" y2="12"/></svg> Live build dashboard</button>
+      <button class="side-link" data-view="materials"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5L12 3l8.5 4.5V16.5L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5"/><line x1="12" y1="12" x2="12" y2="21"/></svg> Material index</button>
+      <button class="side-link" data-view="wallet"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13"/><polyline points="14,3 17,7 14,11"/><path d="M20 17H7"/><polyline points="10,13 7,17 10,21"/></svg> Wallet and FX</button>
+
+      <div class="section-label">Support</div>
+      <button class="side-link" data-view="chat"><svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg> Chat with our desk</button>
+    </aside>
+
+    <main class="user-main">
+      <!-- OVERVIEW -->
+      <div id="userView-overview">
+        <div class="dash-card">
+          <h3 id="overviewWelcome">Welcome back</h3>
+          <p>Your verification toolkit is on the left, split into the two stacks: everything for buying land sits under Lands / Real Estate, everything for watching a build sits under Construction.</p>
+          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="chip light"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="5,13 10,18 19,7"/></svg> Gmail verified</span>
+            <span class="chip light">Milestone-locked escrow</span>
+            <span class="chip light">Drone-verified milestones</span>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h3>Your two stacks</h3>
+          <div style="margin-top:16px; display:grid; gap:12px; grid-template-columns:1fr;">
+            <div style="padding:16px; border-radius:12px; background:var(--paper); border:1px solid var(--line);">
+              <div style="font-size:12.5px; font-weight:800;">Lands / Real Estate</div>
+              <div style="font-size:12px; color:rgba(8,24,48,.6); margin-top:5px; line-height:1.55;">Deed scanner, GIS coordinate mapper, community risk profiling, hidden fee calculator and listing search.</div>
+            </div>
+            <div style="padding:16px; border-radius:12px; background:var(--paper); border:1px solid var(--line);">
+              <div style="font-size:12.5px; font-weight:800;">Construction Dashboard</div>
+              <div style="font-size:12px; color:rgba(8,24,48,.6); margin-top:5px; line-height:1.55;">Milestone-based escrow, live build tracking with drone uploads, supply-chain material index and the cross-border wallet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEARCH -->
+      <div id="userView-search" style="display:none;">
+        <div class="dash-card">
+          <h3>Search listings</h3>
+          <p>Find verified plots and projects by location, estate name or economic node.</p>
+          <div class="tool-form two">
+            <div><label>Search</label><input type="text" id="dashSearchQ" placeholder="Ibeju-Lekki, Guzape, Free Trade Zone…"></div>
+            <div><label>Category</label><select id="dashSearchCat"><option value="">All</option><option value="land">Land / Real Estate</option><option value="construction">Construction</option></select></div>
+          </div>
+          <div class="tool-actions"><button class="btn-sm" id="dashSearchBtn">Search</button></div>
+          <div class="result-box" id="dashSearchResult"></div>
+        </div>
+      </div>
+
+      <!-- INTERESTS -->
+      <div id="userView-interests" style="display:none;">
+        <div class="dash-card">
+          <h3>My interest areas</h3>
+          <p>Set during registration. Add or remove any time to change what we send you.</p>
+          <div class="interest-grid" id="myInterestsGrid"></div>
+          <div style="margin-top:20px;">
+            <div style="font-size:12px; font-weight:700;">Available options</div>
+            <div class="interest-picker" id="interestPicker"></div>
+            <div class="tool-actions">
+              <button class="btn-sm" id="saveInterestsBtn">Save interests</button>
+              <span id="interestSaveMsg" style="font-size:12px; color:var(--ok); font-weight:700;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="userView-profile" style="display:none;">
+        <div class="dash-card">
+          <h3>Profile</h3>
+          <p>Your verified buyer profile. Gmail is your identity for document sharing and KYC.</p>
+          <div id="profileDetails" style="margin-top:16px;"></div>
+        </div>
+      </div>
+
+      <!-- DEED SCANNER -->
+      <div id="userView-deed" style="display:none;">
+        <div class="dash-card">
+          <h3>AI deed document scanner</h3>
+          <p>Upload a Deed of Assignment, Certificate of Occupancy or survey plan. The scanner reads the document and flags forged signatures, invalid dates and registration numbers that don't match the registry.</p>
+          <div class="tool-pending" data-pending="COMING SOON — DOCUMENT OCR NOT YET CONNECTED">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Document type</label><select id="deedType"><option value="deed_of_assignment">Deed of Assignment</option><option value="c_of_o">Certificate of Occupancy</option><option value="survey_plan">Survey plan</option></select></div>
+                <div><label>Registration number</label><input type="text" id="deedReg" placeholder="e.g. 42/42/2451"></div>
+              </div>
+              <label class="drop-zone" for="deedFile" id="deedDrop">Click to attach the document · PDF, JPG or PNG</label>
+              <input type="file" id="deedFile" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
+              <div class="tool-actions"><button class="btn-sm" id="deedScanBtn">Run scan</button></div>
+              <div class="result-box" id="deedResult"></div>
+            </div>
+          </div>
+          <div class="dash-note">We don't yet have a document-reading pipeline connected, so running this today would only check that a registration number is formatted correctly — not whether the document is genuine. We'd rather show you that plainly than return a result that looks like real verification and isn't.</div>
+        </div>
+      </div>
+
+      <!-- GIS -->
+      <div id="userView-gis" style="display:none;">
+        <div class="dash-card">
+          <h3>GIS coordinates mapper</h3>
+          <p>Drop a pin on the land, or paste its coordinates. We check them against the government master plan and tell you whether the parcel is free, committed to infrastructure, or zoned agricultural.</p>
+          <div class="tool-pending" data-pending="COMING SOON — AWAITING REAL MASTER-PLAN DATA">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Latitude</label><input type="text" id="gisLat" placeholder="6.4501"></div>
+                <div><label>Longitude</label><input type="text" id="gisLng" placeholder="3.5123"></div>
+              </div>
+              <div class="tool-actions">
+                <button class="btn-sm" id="gisCheckBtn">Check coordinates</button>
+                <button class="btn-sm ghost" id="gisLocateBtn">Use my location</button>
+              </div>
+              <div class="result-box" id="gisResult"></div>
+            </div>
+          </div>
+          <div class="dash-note">We don't yet have real government master-plan boundaries loaded — only a handful of test coordinates used to build this feature. A result today would cover almost nowhere real, so we're holding it back until actual registry data is in place rather than let it look more complete than it is.</div>
+        </div>
+      </div>
+
+      <!-- OMONILE -->
+      <div id="userView-omonile" style="display:none;">
+        <div class="dash-card">
+          <h3>Community risk profiling</h3>
+          <p>Local families and community groups are rated on the risk of double-selling, youth disruption at commencement, and litigation history in that neighbourhood.</p>
+          <div class="tool-pending" data-pending="COMING SOON — NO VERIFIED FIELD DATA YET">
+            <div class="tool-pending-content">
+              <div class="tool-form">
+                <div><label>Area or neighbourhood</label><input type="text" id="omoArea" placeholder="Ibeju-Lekki, Ajah, Epe, Guzape…"></div>
+              </div>
+              <div class="tool-actions"><button class="btn-sm" id="omoBtn">Check area</button></div>
+              <div class="result-box" id="omoResult"></div>
+            </div>
+          </div>
+          <div class="dash-note">This needs real, sourced, staff-reviewed field intelligence before it can say anything about a real place — rating a real neighbourhood on test data would be exactly the kind of false claim we're trying to eliminate from this market, not add to it. It stays off until every entry has a dated source and a named reviewer behind it.</div>
+        </div>
+      </div>
+
+      <!-- FEES -->
+      <div id="userView-fees" style="display:none;">
+        <div class="dash-card">
+          <h3>Hidden fee calculator</h3>
+          <p>The true cost of a plot, broken down before you commit: agency fees, legal fees, surveying, title perfection and the community development levy you should expect to budget for.</p>
+          <div class="tool-form">
+            <div><label>Land price (₦)</label><input type="text" id="feePrice" inputmode="numeric" placeholder="25,000,000"></div>
+          </div>
+          <div class="tool-actions"><button class="btn-sm" id="feeBtn">Calculate true cost</button></div>
+          <div class="result-box" id="feeResult"></div>
+          <div class="dash-note">Percentages are our current standard estimates. Your final figures are confirmed in writing before any payment is made.</div>
+        </div>
+      </div>
+
+      <!-- ESCROW -->
+      <div id="userView-escrow" style="display:none;">
+        <div class="dash-card">
+          <h3>Milestone-based escrow</h3>
+          <p>Your funds sit in escrow and are released in tranches: 20% on title verification, 40% on physical allocation, 40% on deed execution. Nothing moves until the stage is independently verified.</p>
+          <div class="tool-form two">
+            <div><label>Deal value (₦)</label><input type="text" id="escrowAmount" inputmode="numeric" placeholder="45,000,000"></div>
+            <div><label>Settlement currency</label><select id="escrowCurrency"><option>NGN</option><option>USD</option><option>GBP</option><option>EUR</option></select></div>
+          </div>
+          <div class="tool-actions"><button class="btn-sm" id="escrowCreateBtn">Open escrow deal</button></div>
+          <div class="result-box" id="escrowResult"></div>
+          <div class="dash-note">This opens a tracked escrow request on our side — it does not yet move or hold real funds, since we don't have a licensed banking partner in place. Apexx Crestway is a technology and trust intermediary, not a bank or a licensed escrow agent in its own right, and won't claim to be one before that partnership is real.</div>
+        </div>
+      </div>
+
+      <!-- LIVE BUILD -->
+      <div id="userView-build" style="display:none;">
+        <div class="dash-card">
+          <h3>Live construction dashboard</h3>
+          <p>Independent, time-stamped and geo-located evidence of progress, streamed to you directly rather than through a relative or a realtor.</p>
+          <div id="buildMilestones" style="margin-top:14px;"></div>
+        </div>
+        <div class="dash-card">
+          <h3>Drone and site photo evidence</h3>
+          <p>Our inspectors upload time-stamped, geo-tagged drone footage and photographs against each milestone independently — customers view the results here but don't submit evidence themselves, since self-submitted "verification" wouldn't actually verify anything.</p>
+          <div class="dash-note" style="margin-top:0;">Evidence for your active milestones will appear above once an inspector visit is scheduled and completed.</div>
+        </div>
+      </div>
+
+      <!-- MATERIALS -->
+      <div id="userView-materials" style="display:none;">
+        <div class="dash-card">
+          <h3>Supply chain material index</h3>
+          <p>Raw material pricing across the sites we run, tracked so price swings get hedged in bulk instead of passed on to you.</p>
+          <div class="tool-pending" data-pending="COMING SOON — NO LIVE PRICE SOURCE CONNECTED YET">
+            <div class="tool-pending-content">
+              <div id="materialList" style="margin-top:14px;"></div>
+              <div class="tool-actions"><button class="btn-sm ghost" id="materialRefreshBtn">Refresh index</button></div>
+            </div>
+          </div>
+          <div class="dash-note">The numbers behind this today are placeholder test data, not a real market feed — "live" and "algorithmic hedging" aren't true yet, so we've pulled that language and paused the tool until a real price source is connected.</div>
+        </div>
+      </div>
+
+      <!-- WALLET -->
+      <div id="userView-wallet" style="display:none;">
+        <div class="dash-card">
+          <h3>Digital wallet and cross-border payments</h3>
+          <p>Settle from USD, GBP or EUR straight into a Naira escrow account, once a licensed payment partner is in place.</p>
+          <div class="tool-pending" data-pending="COMING SOON — NO PAYMENT PARTNER CONNECTED YET">
+            <div class="tool-pending-content">
+              <div class="tool-form two">
+                <div><label>Currency</label><select id="walletCurrency"><option>USD</option><option>GBP</option><option>EUR</option></select></div>
+                <div><label>Amount</label><input type="text" id="walletAmount" inputmode="decimal" placeholder="25,000"></div>
+              </div>
+              <div class="tool-actions"><button class="btn-sm" id="walletConvertBtn">Preview conversion</button></div>
+              <div class="result-box" id="walletResult"></div>
+            </div>
+          </div>
+          <div class="dash-note">No licensed payment service provider is connected yet, and the AML/KYC checks a real version of this needs haven't been built. The rates this would show today are placeholders, not real quotes, so it's paused rather than left running on numbers that aren't true.</div>
+        </div>
+        <div class="dash-card">
+          <h3>Transaction history</h3>
+          <div id="walletHistory" style="margin-top:12px;"></div>
+        </div>
+      </div>
+
+      <!-- CHAT -->
+      <div id="userView-chat" style="display:none;">
+        <div class="dash-chat-wrap">
+          <div class="dash-chat-head">
+            <div class="av">A</div>
+            <div>
+              <div class="name">Apexx Crestway desk</div>
+              <div class="status"><span class="dot"></span>Online · average reply 11 minutes</div>
+            </div>
+          </div>
+          <div class="dash-chat-body" id="dashChatBody">
+            <div class="dash-chat-empty">Say hello. You're talking to our customer care team, not a bot.</div>
+          </div>
+          <div class="dash-chat-input">
+            <input type="text" id="dashChatInput" placeholder="Type a message…">
+            <button id="dashChatSendBtn">Send</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== ADMIN (gate + dashboard, one routed page) ===== -->
+<div class="admin-shell" id="adminShell">
+  <div class="admin-gate" id="adminGate">
+    <div class="auth-card" style="max-width:380px;">
+      <h3>Admin sign-in</h3>
+      <p class="sub">Restricted to the Apexx Crestway team.</p>
+      <div class="field"><label>Email or username</label><input type="text" id="adminUsername" autocomplete="username"></div>
+      <div class="field"><label>Password</label><input type="password" id="adminPassword" autocomplete="current-password"></div>
+      <div id="adminLoginMsg"></div>
+      <button class="submit" id="adminLoginSubmitBtn">Log in</button>
+      <p class="fine"><a href="#" data-nav="home" style="color:rgba(8,24,48,.5); font-weight:600;">← Back to site</a></p>
+    </div>
+  </div>
+  <div class="admin-shell-body" id="adminShellBody" style="display:none;">
+    <div class="admin-topbar">
+      <div class="t"><svg class="i" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3z"/></svg>Apexx Crestway <span style="color:var(--gold);">admin</span></div>
+      <div class="right">
+        <span class="who" id="adminEmailLabel"></span>
+        <button id="adminSeedDemoBtn" style="background:#047857; color:#fff; border-color:#047857; font-weight:700;">+ Seed Demo Data</button>
+        <button id="adminPurgeTestBtn" style="background:#dc2626; color:#fff; border-color:#dc2626; font-weight:700;">Purge Test Data</button>
+        <button id="adminRefreshBtn">Refresh</button>
+        <button id="adminLogoutBtn">Log out</button>
+        <button id="adminCloseBtn">← Back</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <div class="admin-list">
+        <div class="admin-list-head">
+          <div class="top-row"><span class="label">Registered members</span><span class="count" id="adminMemberCount"></span></div>
+          <select id="adminSortSelect">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div id="adminListItems"></div>
+      </div>
+      <div class="admin-chat" id="adminChatPane">
+        <div class="admin-chat-empty">Select a member to view their details and reply to them.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEGAL MODALS ===== -->
+<div class="overlay" id="aboutModal">
+  <div class="modal-card legal-modal">
+    <button class="modal-close" data-close="aboutModal"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <h3>About us</h3>
+    <div class="updated">Apexx Crestway Ltd</div>
+    <h4>Who we are</h4>
+    <p>Apexx Crestway Ltd exists to make owning premium assets in Nigeria — land, real estate and construction — safe, transparent and simple. We are the trust and execution layer standing between capital and Nigeria's most valuable, and most vulnerable, asset classes.</p>
+    <h4>The problem we're solving</h4>
+    <p>Deploying capital into Nigerian land and construction has always meant absorbing enormous, avoidable risk: the same plot sold to several buyers, title registration that drags on for years, fees that surface only after money has changed hands, local extortion that stalls projects before they start, and developers who promise serviced plots and deliver none of it.</p>
+    <p>These aren't edge cases. They are the default experience for buyers, investors and diaspora Nigerians trying to build wealth back home, and the result is a chaos premium baked into nearly every transaction — money lost not to bad investments but to bad information.</p>
+    <h4>Our solution</h4>
+    <p><b>Guarded land and real estate deals:</b> we pre-vet land using GIS mapping, drone surveillance and deep-tier legal audits, then hand buyers clean, litigation-free titles instead of a gamble.</p>
+    <p><b>Milestone-locked construction escrow:</b> client funds are secured in escrow and released only at verified project milestones, with live tracking so clients see progress and spending as it happens.</p>
+    <h4>Our mission</h4>
+    <p>To eliminate the chaos premium from Nigerian infrastructure, turning unverified land and volatile construction into transparent, institutional-grade assets that anyone — from a first-time diaspora buyer to a tier-one bank — can trust.</p>
+    <h4>Why now</h4>
+    <p>Nigeria's real estate sector has overtaken oil and gas as the third-largest contributor to GDP. State land registries are digitising. Document verification has become affordable. And a growing diaspora, remitting billions annually, is looking for a way to invest at home without relying on middlemen they can't fully trust.</p>
+  </div>
+</div>
+
+<div class="overlay" id="privacyModal">
+  <div class="modal-card legal-modal">
+    <button class="modal-close" data-close="privacyModal"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <h3>Privacy policy</h3>
+    <div class="updated">Last updated: September 2026 · Apexx Crestway Ltd</div>
+    <h4>1. Who we are</h4>
+    <p>Apexx Crestway Ltd is a tech-enabled land, real estate and construction platform operating in Nigeria and for the diaspora.</p>
+    <h4>2. Data we collect</h4>
+    <ul>
+      <li><b>Identity data:</b> name, email, phone, ID, BVN/NIN for KYC and AML</li>
+      <li><b>Transaction data:</b> land details, project milestones, payment records, escrow data</li>
+      <li><b>Technical data:</b> IP address, device, cookies, dashboard usage</li>
+      <li><b>Property data:</b> GIS coordinates, drone images and survey reports uploaded to your dashboard</li>
+    </ul>
+    <h4>3. How we use your data</h4>
+    <p>To provide and improve our services: land verification, escrow management, live construction tracking, fraud prevention and legal compliance. We do not sell your data.</p>
+    <h4>4. Data sharing</h4>
+    <p>We share data only with partner banks for escrow, lawyers, surveyors and state land registries, and with regulators where the law requires it. All partners are bound by confidentiality.</p>
+    <h4>5. Data security</h4>
+    <p>Data is encrypted in transit and at rest, and funds are held in a multi-bank escrow architecture. No system is completely secure, and we will notify you promptly of any breach affecting your data.</p>
+    <h4>6. Your rights</h4>
+    <p>You can request access to, correction of, or deletion of your data at contact@apexxcrestway.com.</p>
+    <h4>7. Cookies</h4>
+    <p>We use cookies to keep you signed in and to improve the dashboard. You can disable them in your browser.</p>
+    <h4>8. Contact</h4>
+    <p>Apexx Crestway Ltd<br>Plot 753, Babagana Kingibe Street, Guzape District, Abuja FCT<br>contact@apexxcrestway.com</p>
+  </div>
+</div>
+
+<div class="overlay" id="termsModal">
+  <div class="modal-card legal-modal">
+    <button class="modal-close" data-close="termsModal"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <h3>Terms and conditions</h3>
+    <div class="updated">Last updated: September 2026 · Apexx Crestway Ltd</div>
+    <h4>1. Acceptance of terms</h4>
+    <p>By using the Apexx Crestway website and platform you agree to be bound by these terms. If you do not agree, do not use our services.</p>
+    <h4>2. Our services</h4>
+    <ul>
+      <li>Guarded land deals: GIS mapping, title verification and due diligence</li>
+      <li>Milestone-locked construction escrow: holding client funds and releasing them only on verified milestones</li>
+      <li>Title perfection concierge, risk profiling, live dashboards and fractional co-investment</li>
+    </ul>
+    <p>We act as a technology and trust intermediary. We are not a bank or a licensed escrow agent except where we partner with one.</p>
+    <h4>3. Payments and escrow</h4>
+    <ul>
+      <li>Project funds are held in milestone-based escrow accounts with regulated partner institutions</li>
+      <li>Transactional, service and platform fees are disclosed during onboarding</li>
+      <li>Refunds are subject to milestone completion and the escrow provider's policies</li>
+    </ul>
+    <h4>4. Client responsibilities</h4>
+    <ul>
+      <li>Provide accurate KYC documents for AML compliance</li>
+      <li>Approve milestones within 48 hours of notification</li>
+      <li>Understand that land and construction carry risk: we perform due diligence but cannot guarantee against government action, community disputes or force majeure</li>
+    </ul>
+    <h4>5. Intellectual property</h4>
+    <p>All platform content, algorithms, dashboards and branding are the property of Apexx Crestway Ltd and may not be copied or resold.</p>
+    <h4>6. Limitation of liability</h4>
+    <p>We are not liable for indirect damages, and our total liability will not exceed the service fees you paid in the preceding six months.</p>
+    <h4>7. Governing law</h4>
+    <p>These terms are governed by the laws of the Federal Republic of Nigeria, with disputes resolved in the Lagos courts.</p>
+    <h4>8. Changes</h4>
+    <p>We may update these terms. Continued use means acceptance.</p>
+  </div>
+</div>
+<script>
+/* =======================================================================
+   APEXXCRESTWAY frontend — talks to the Cloudflare Worker API.
+   Point API_BASE at your deployed worker (or a custom domain route).
+   ======================================================================= */
+/* Point this at your deployed Worker (or a custom domain route). Any
+   trailing slash is stripped automatically below, so it's safe either way. */
+const API_BASE = 'https://apexxcrestway-api.apexxcrestway.workers.dev'.replace(/\/+$/, '');
+
+/* ---------- tiny helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => (s ?? '').toString()
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const ngn = n => '₦' + Number(n || 0).toLocaleString('en-NG', { maximumFractionDigits: 0 });
+const numOnly = v => parseFloat((v || '').toString().replace(/[^0-9.]/g, '')) || 0;
+function timeLabel(ts){
+  try { return new Date(ts).toLocaleString([], { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
+  catch(e){ return ''; }
+}
+
+/* Every call sends the httpOnly session cookie automatically via
+   credentials:'include' — no token is ever stored in JS-readable
+   storage anymore. That's the whole point of the Phase 1 auth change. */
+async function api(path, { method = 'GET', body } = {}) {
+  const res = await fetch(API_BASE + path, {
+    method,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  return res.json();
+}
+
+function showResult(box, html, cls = '') {
+  box.className = 'result-box show ' + cls;
+  box.innerHTML = html;
+}
+function showError(box, msg) {
+  showResult(box, `<div class="msg-box msg-err" style="margin:0;">${esc(msg)}</div>`);
+}
+
+/* ---------- session ---------- */
+const session = {
+  get(){ const r = sessionStorage.getItem('apexx_customer'); return r ? JSON.parse(r) : null; },
+  set(u){
+    if (!Array.isArray(u.interests)) u.interests = [];
+    sessionStorage.setItem('apexx_customer', JSON.stringify(u));
+  },
+  clear(){ sessionStorage.removeItem('apexx_customer'); }
+};
+/* Phase 1: ADMIN_EMAILS and isAdminEmail removed. Admin access is decided
+   server-side only, via a real admin login — a customer's Gmail address
+   is never enough on its own, and it doesn't need to be known client-side. */
+
+/* ---------- view switcher: no URL changes, ever — the address bar always
+   just reads apexxcrestway.com. Each app page carries its own explicit
+   "back" link instead of relying on the browser back button. ---------- */
+const flatPages = ['home', 'signup', 'login'];
+function showFlatPage(name){
+  flatPages.forEach(n => $('page-' + n).classList.toggle('active', n === name));
+  closeUserDashboard();
+  closeAdminShell();
+  window.scrollTo(0, 0);
+}
+function getRouteFromPath() {
+  const p = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  if (['signup', 'login', 'dashboard', 'admin'].includes(p)) return p;
+  return 'home';
+}
+
+function navigate(view, push = true){
+  if (push) {
+    const targetPath = view === 'home' ? '/' : `/${view}`;
+    if (window.location.pathname !== targetPath) {
+      try { history.pushState({ view }, '', targetPath); } catch(_) {}
+    }
+  }
+  if (view === 'signup') { showFlatPage('signup'); }
+  else if (view === 'login') { showFlatPage('login'); showGmailStep(); }
+  else if (view === 'dashboard') {
+    if (!session.get()) { navigate('login', push); return; }
+    flatPages.forEach(n => $('page-' + n).classList.remove('active'));
+    closeAdminShell();
+    openUserDashboard();
+  } else if (view === 'admin') {
+    flatPages.forEach(n => $('page-' + n).classList.remove('active'));
+    closeUserDashboard();
+    openAdminShell();
+  } else {
+    showFlatPage('home');
+  }
+}
+
+window.addEventListener('popstate', (e) => {
+  const view = (e.state && e.state.view) || getRouteFromPath();
+  navigate(view, false);
+});
+document.querySelectorAll('[data-nav]').forEach(el => el.addEventListener('click', e => {
+  e.preventDefault();
+  navigate(el.dataset.nav);
+  $('mobileMenu').classList.remove('open');
+}));
+
+/* ---------- nav & reveal ---------- */
+const header = $('siteHeader');
+addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 20));
+document.querySelectorAll('[data-target]').forEach(el => el.addEventListener('click', () => {
+  if (el.dataset.target === 'register') { navigate('signup'); $('mobileMenu').classList.remove('open'); return; }
+  const t = $(el.dataset.target);
+  if (t) t.scrollIntoView({ behavior: 'smooth' });
+  $('mobileMenu').classList.remove('open');
+}));
+$('menuBtn').addEventListener('click', () => $('mobileMenu').classList.toggle('open'));
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ---------- the ten tools, grouped ---------- */
+const TOOLS = [
+  { g:'land',  ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><line x1="9.5" y1="12" x2="14.5" y2="12"/><line x1="9.5" y1="15" x2="14.5" y2="15"/></svg>', t:'AI deed document scanner', d:'Reads Deeds of Assignment, Certificates of Occupancy and survey plans, then flags forged signatures, invalid dates and registration numbers that don\'t match the registry.' },
+  { g:'land',  ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>', t:'GIS coordinates mapper', d:'Drop a pin on the land from your phone. The coordinates are checked against government master plans to confirm whether the parcel is free, committed, or agricultural.' },
+  { g:'land',  ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="15,9 13,13 9,15 11,11"/></svg>', t:'Community risk profiling', d:'A database rating local families and communities on the risk of double-selling, youth disruption at commencement, and litigation history in that neighbourhood.' },
+  { g:'land',  ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><line x1="8" y1="7" x2="16" y2="7"/><circle cx="8" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="16" cy="11.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="8" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="16" cy="15" r="0.7" fill="currentColor" stroke="none"/><circle cx="8" cy="18.5" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="0.7" fill="currentColor" stroke="none"/></svg>', t:'Hidden fee calculator', d:'The true cost of the land before you commit: agency fees, legal fees, surveying costs and the community development levy you should expect to budget for.' },
+  { g:'land',  ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><line x1="15" y1="15" x2="20" y2="20"/></svg>', t:'Verified listing search', d:'Search plots and projects by location, estate or economic node. Nothing appears here until it has cleared title and boundary verification.' },
+  { g:'build', ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>', t:'Milestone-based escrow', d:'Your funds are held securely and released in tranches — 20% on title verification, 40% on physical allocation, 40% on deed execution.' },
+  { g:'build', ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="12" height="10" rx="1.5"/><circle cx="10" cy="12" r="2.5"/><path d="M16 10l4-2v8l-4-2z"/></svg>', t:'3D drone and image upload', d:'Independent, high-definition drone footage streamed to your dashboard, bypassing biased videos from family or realtors. Developers must post milestones verified by our inspectors with time-stamped, geo-located photos.' },
+  { g:'build', ic:'<svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="7"/><line x1="19" y1="20" x2="19" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>', t:'Live construction dashboard', d:'Every stage of the build, with spend against milestone, so you can see where your money went without asking anyone.' },
+  { g:'build', ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5L12 3l8.5 4.5V16.5L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5"/><line x1="12" y1="12" x2="12" y2="21"/></svg>', t:'Supply chain indexing and hedging', d:'While the giants buffer against inflation by charging an expensive premium, we track material pricing algorithmically and hedge bulk purchases to absorb the shock.' },
+  { g:'build', ic:'<svg class="i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13"/><polyline points="14,3 17,7 14,11"/><path d="M20 17H7"/><polyline points="10,13 7,17 10,21"/></svg>', t:'Digital wallet and cross-border gateway', d:'Settle in USD, GBP or EUR directly into Naira escrow accounts, with anti-money-laundering compliance built into the flow.' }
+];
+function renderTools(filter = 'all') {
+  $('toolGrid').innerHTML = TOOLS
+    .filter(t => filter === 'all' || t.g === filter)
+    .map(t => {
+      const isSearch = t.t === 'Verified listing search';
+      return `
+      <article class="tool ${isSearch ? 'tool-live' : ''}">
+        <div class="ic">${t.ic}</div>
+        <h3>${esc(t.t)}</h3>
+        <p>${esc(t.d)}</p>
+        <span class="grp ${t.g === 'land' ? 'grp-land' : 'grp-build'}">${t.g === 'land' ? 'LANDS / REAL ESTATE' : 'CONSTRUCTION'}</span>
+        ${isSearch ? `
+        <div class="tool-search">
+          <div class="searchbar">
+            <input type="text" id="toolSearchInput" placeholder="Search a location, estate or economic node…">
+            <select id="toolSearchCat">
+              <option value="">All listings</option>
+              <option value="land">Land / Real Estate</option>
+              <option value="construction">Construction</option>
+            </select>
+            <button id="toolSearchBtn">Search</button>
+          </div>
+          <div class="search-results" id="toolSearchResults"></div>
+        </div>` : ''}
+      </article>`;
+    }).join('');
+  if ($('toolSearchBtn')) {
+    $('toolSearchBtn').addEventListener('click', () =>
+      runSearch($('toolSearchInput').value.trim(), $('toolSearchCat').value, $('toolSearchResults')));
+    $('toolSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('toolSearchBtn').click(); });
+  }
+}
+renderTools();
+document.querySelectorAll('.stack-tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.stack-tabs button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  renderTools(b.dataset.stack);
+}));
+
+/* ---------- key economic node areas ---------- */
+const FALLBACK_NODES = [
+  { name:'Lekki Free Trade Zone', region:'Lagos', tag:'Free Trade Zone', description:'Deep seaport, refinery and industrial corridor driving the strongest land appreciation in the South-West.' },
+  { name:'Lekki–Epe Expressway Corridor', region:'Lagos', tag:'Growth Corridor', description:'Residential and serviced-estate belt feeding off the Free Trade Zone and the new airport.' },
+  { name:'Ibeju-Lekki', region:'Lagos', tag:'Industrial Belt', description:'Refinery-adjacent land bank. High upside, and high title risk without verification.' },
+  { name:'Guzape & Asokoro Extension', region:'Abuja FCT', tag:'Prime Residential', description:'Diplomatic and high-net-worth residential district with stable C of O pipelines.' },
+  { name:'Abuja Airport Road Axis', region:'Abuja FCT', tag:'Growth Corridor', description:'Infrastructure-led expansion along the Outer Southern Expressway.' },
+  { name:'Karsana & Lugbe Districts', region:'Abuja FCT', tag:'Housing Belt', description:'Mass-housing and serviced-plot supply for the middle market.' },
+  { name:'Agbara–Badagry Industrial Axis', region:'Lagos / Ogun', tag:'Industrial Belt', description:'Manufacturing and logistics land at scale, close to the Seme border.' },
+  { name:'Port Harcourt GRA & Trans-Amadi', region:'Rivers', tag:'Commercial Hub', description:'Oil-services commercial property with strong rental yields.' }
+];
+function renderNodes(nodes) {
+  $('nodeGrid').innerHTML = nodes.map(n => `
+    <article class="node">
+      <span class="tag">${esc(n.tag || '')}</span>
+      <h3>${esc(n.name)}</h3>
+      <div class="region">${esc(n.region || '')}</div>
+      <p>${esc(n.description || '')}</p>
+    </article>`).join('');
+}
+(async () => {
+  try {
+    const d = await api('/api/economic-nodes');
+    renderNodes(d.status === 'success' && d.nodes.length ? d.nodes : FALLBACK_NODES);
+  } catch (e) { renderNodes(FALLBACK_NODES); }
+})();
+
+/* ---------- listing search ---------- */
+async function runSearch(q, cat, target) {
+  target.innerHTML = '<div class="sr-empty">Searching…</div>';
+  try {
+    const d = await api(`/api/listings/search?q=${encodeURIComponent(q)}&category=${encodeURIComponent(cat)}`);
+    if (d.status === 'success' && d.listings.length) {
+      target.innerHTML = d.listings.map(l => `
+        <div class="sr-item">
+          <div class="t">${esc(l.title)}</div>
+          <div class="m">${esc(l.location || '')}${l.economic_node ? ' · ' + esc(l.economic_node) : ''}${l.price_ngn ? ' · ' + ngn(l.price_ngn) : ''}</div>
+        </div>`).join('');
+    } else {
+      target.innerHTML = '<div class="sr-empty">No listings match that yet. Our verified inventory is still being published — create an account and we\'ll alert you as plots clear verification.</div>';
+    }
+  } catch (e) {
+    target.innerHTML = '<div class="sr-empty">Search is unavailable right now. Please try again shortly.</div>';
+  }
+}
+/* Old hero search bar listeners removed here — that search box was moved
+   into the "Verified listing search" tool card (see toolSearchBtn below);
+   these two lines used to reference elements that no longer exist, which
+   threw at script-load time and silently broke everything after it. */
+
+/* ---------- registration ---------- */
+const form = $('regForm'), submitBtn = $('submitBtn'), formMsg = $('formMsg');
+const F = { fullName:$('fullName'), gmail:$('gmail'), phone:$('phone'), investorType:$('investorType'), interestArea:$('interestArea'), message:$('message') };
+function fieldErr(id, text) {
+  const w = $(id), e = w.querySelector('.err');
+  if (text) { w.classList.add('error'); e.textContent = text; e.style.display = 'block'; }
+  else { w.classList.remove('error'); e.style.display = 'none'; }
+}
+const isGmail = v => /^[^\s@]+@gmail\.com$/i.test((v || '').trim());
+const isNgPhone = v => !v.trim() || /^(0[7-9][0-1]\d{8}|\+234[7-9][0-1]\d{8})$/.test(v.replace(/\s/g, ''));
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  formMsg.innerHTML = '';
+  let ok = true;
+  if (F.fullName.value.trim().length < 2) { fieldErr('f-name', 'Enter your full name'); ok = false; } else fieldErr('f-name');
+  if (!isGmail(F.gmail.value)) { fieldErr('f-gmail', 'Must be a valid @gmail.com address'); ok = false; } else fieldErr('f-gmail');
+  if (!isNgPhone(F.phone.value)) { fieldErr('f-phone', 'Use 080… or +234…'); ok = false; } else fieldErr('f-phone');
+  if (!F.investorType.value) { fieldErr('f-investor', 'Select an investor type'); ok = false; } else fieldErr('f-investor');
+  if (!F.interestArea.value) { fieldErr('f-interest', 'Select an interest area'); ok = false; } else fieldErr('f-interest');
+  if ($('company').value) return;           // honeypot
+  if (!ok) return;
+
+  submitBtn.disabled = true; submitBtn.textContent = 'Creating account…';
+  const payload = {
+    name: F.fullName.value.trim(), gmail: F.gmail.value.trim().toLowerCase(),
+    phone: F.phone.value.trim(), investorType: F.investorType.value,
+    interest: F.interestArea.value, message: F.message.value.trim(), source: location.href,
+    company: $('company').value   // honeypot — real bots skip the browser and call
+                                   // the API directly, so this has to be checked
+                                   // server-side too, not just here.
+  };
+  try {
+    const d = await api('/api/register', { method:'POST', body: payload });
+    if (d.status === 'success' || d.status === 'duplicate') {
+      formMsg.innerHTML = `<div class="msg-box msg-ok">${d.status === 'duplicate' ? 'You already have an account — sending you a login code.' : 'Account created. Sending your login code…'}</div>`;
+      form.reset();
+      await api('/api/otp/request', { method:'POST', body:{ gmail: payload.gmail } });
+      openLoginModal(); showOtpStep(payload.gmail);
+    } else if (d.status === 'invalid_gmail') {
+      formMsg.innerHTML = '<div class="msg-box msg-err">Only valid @gmail.com addresses are accepted.</div>';
+    } else {
+      formMsg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Something went wrong. Please try again.')}</div>`;
+    }
+  } catch (err) {
+    formMsg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Check your connection and try again.</div>';
+  } finally {
+    submitBtn.disabled = false; submitBtn.textContent = 'Create account';
+  }
+});
+
+/* ---------- login / OTP ---------- */
+let pendingGmail = '', resendTimer = null, awaitingQuickRegister = false;
+
+function openLoginModal(){ navigate('login'); }
+function closeLoginModal(){ clearInterval(resendTimer); navigate('home'); }
+function showGmailStep(){
+  $('loginStepOtp').style.display = 'none';
+  $('loginStepGmail').style.display = 'block';
+  $('otpMsg').innerHTML = ''; $('otpInput').value = '';
+  awaitingQuickRegister = false;
+  $('loginQuickName').style.display = 'none'; $('loginNameQuick').value = '';
+  $('sendCodeBtn').textContent = 'Send code';
+  $('stepDot1').classList.add('active'); $('stepDot1').classList.remove('done');
+  $('stepDot2').classList.remove('active');
+}
+function showOtpStep(gmail){
+  pendingGmail = gmail;
+  $('otpGmailLabel').textContent = gmail;
+  $('loginStepGmail').style.display = 'none';
+  $('loginStepOtp').style.display = 'block';
+  $('otpMsg').innerHTML = ''; $('otpInput').value = ''; $('otpInput').focus();
+  $('stepDot1').classList.add('done'); $('stepDot1').classList.remove('active');
+  $('stepDot2').classList.add('active');
+  startResendCooldown();
+}
+function startResendCooldown(){
+  let s = 30; const b = $('resendOtpBtn');
+  b.disabled = true; b.textContent = `Resend code (${s}s)`;
+  clearInterval(resendTimer);
+  resendTimer = setInterval(() => {
+    if (--s <= 0) { clearInterval(resendTimer); b.disabled = false; b.textContent = 'Resend code'; }
+    else b.textContent = `Resend code (${s}s)`;
+  }, 1000);
+}
+$('changeGmailBtn').addEventListener('click', showGmailStep);
+
+$('sendCodeBtn').addEventListener('click', async () => {
+  const gmail = $('loginGmail').value.trim().toLowerCase();
+  const msg = $('loginMsg'), btn = $('sendCodeBtn');
+  if (!isGmail(gmail)) { msg.innerHTML = '<div class="msg-box msg-err">Enter a valid Gmail address.</div>'; return; }
+
+  if (awaitingQuickRegister) {
+    const name = $('loginNameQuick').value.trim();
+    if (name.length < 2) { msg.innerHTML = '<div class="msg-box msg-err">Enter your full name.</div>'; return; }
+    btn.disabled = true; btn.textContent = 'Registering…';
+    try {
+      const r = await api('/api/register', { method:'POST', body:{ name, gmail, source: location.href } });
+      if (r.status !== 'success' && r.status !== 'duplicate') {
+        msg.innerHTML = `<div class="msg-box msg-err">${esc(r.message || 'Could not register.')}</div>`; return;
+      }
+      const o = await api('/api/otp/request', { method:'POST', body:{ gmail } });
+      if (o.status === 'success') showOtpStep(gmail);
+      else msg.innerHTML = `<div class="msg-box msg-err">${esc(o.message || 'Could not send code.')}</div>`;
+    } catch (e) {
+      msg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
+    } finally { btn.disabled = false; btn.textContent = 'Register and send code'; }
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const d = await api('/api/otp/request', { method:'POST', body:{ gmail } });
+    if (d.status === 'success') showOtpStep(gmail);
+    else if (d.status === 'not_found') {
+      awaitingQuickRegister = true;
+      $('loginQuickName').style.display = 'block';
+      msg.innerHTML = '';
+      btn.textContent = 'Register and send code';
+      $('loginNameQuick').focus();
+    } else msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Something went wrong.')}</div>`;
+  } catch (e) {
+    msg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
+  } finally {
+    btn.disabled = false;
+    if (!awaitingQuickRegister) btn.textContent = 'Send code';
+  }
+});
+
+$('resendOtpBtn').addEventListener('click', async () => {
+  if ($('resendOtpBtn').disabled) return;
+  const d = await api('/api/otp/request', { method:'POST', body:{ gmail: pendingGmail } }).catch(() => null);
+  if (d && d.status === 'success') { $('otpMsg').innerHTML = '<div class="msg-box msg-ok">A new code is on its way.</div>'; startResendCooldown(); }
+  else $('otpMsg').innerHTML = '<div class="msg-box msg-err">Could not resend the code.</div>';
+});
+
+async function verifyOtp(){
+  const otp = $('otpInput').value.trim(), btn = $('verifyOtpBtn');
+  if (!/^\d{6}$/.test(otp)) { $('otpMsg').innerHTML = '<div class="msg-box msg-err">Enter the 6-digit code.</div>'; return; }
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  try {
+    const d = await api('/api/otp/verify', { method:'POST', body:{ gmail: pendingGmail, otp } });
+    if (d.status === 'success') {
+      session.set(d.user);
+      navigate('dashboard');
+    }
+    else {
+      $('otpMsg').innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Incorrect code.')}</div>`;
+      if (d.status === 'expired') showGmailStep();
+    }
+  } catch (e) {
+    $('otpMsg').innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
+  } finally { btn.disabled = false; btn.textContent = 'Verify and continue'; }
+}
+$('verifyOtpBtn').addEventListener('click', verifyOtp);
+$('otpInput').addEventListener('keydown', e => { if (e.key === 'Enter') verifyOtp(); });
+
+function handleLoginNav(){ navigate(session.get() ? 'dashboard' : 'login'); }
+$('navLoginBtn').addEventListener('click', handleLoginNav);
+$('navLoginBtnMobile').addEventListener('click', () => { $('mobileMenu').classList.remove('open'); handleLoginNav(); });
+
+/* ---------- user dashboard ---------- */
+const userShell = $('userShell');
+const ALL_INTERESTS = ['Guarded Land / Real Estate','Milestone Construction Escrow','Title Verification & Perfection','Diaspora Investment','Commercial & Industrial Land','Serviced Plots'];
+let selectedInterests = [], chatTimer = null;
+
+function openUserDashboard(view = 'overview'){
+  const u = session.get();
+  if (!u) { openLoginModal(); return; }
+  selectedInterests = [...(u.interests || [])];
+  $('userTopEmail').textContent = u.gmail;
+  $('overviewWelcome').textContent = `Welcome back, ${(u.name || '').split(' ')[0] || 'investor'}`;
+  userShell.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderInterests(); renderProfile(); switchView(view);
+}
+function closeUserDashboard(){
+  userShell.classList.remove('open');
+  document.body.style.overflow = '';
+  clearInterval(chatTimer);
+}
+$('userLogoutBtn').addEventListener('click', async () => {
+  await api('/api/logout', { method:'POST' }).catch(() => {});
+  session.clear(); navigate('home');
+});
+$('userBackBtn').addEventListener('click', () => navigate('home'));
+
+const VIEWS = ['overview','search','interests','profile','deed','gis','omonile','fees','escrow','build','materials','wallet','chat'];
+function switchView(view){
+  document.querySelectorAll('.side-link[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  VIEWS.forEach(v => { const el = $('userView-' + v); if (el) el.style.display = v === view ? 'block' : 'none'; });
+  clearInterval(chatTimer);
+  if (view === 'chat') { refreshChat(); chatTimer = setInterval(refreshChat, 4000); }
+  if (view === 'materials') loadMaterials();
+  if (view === 'build') loadMilestones();
+  if (view === 'wallet') loadWalletHistory();
+}
+document.querySelectorAll('.side-link[data-view]').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+
+/* interests */
+function renderInterests(){
+  const g = $('myInterestsGrid');
+  g.innerHTML = selectedInterests.length
+    ? selectedInterests.map(i => `<div class="chip">${esc(i)} <button data-i="${esc(i)}"><svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>`).join('')
+    : '<span style="font-size:12px; color:rgba(8,24,48,.5);">Nothing selected yet.</span>';
+  g.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    selectedInterests = selectedInterests.filter(i => i !== b.dataset.i); renderInterests();
+  }));
+  const p = $('interestPicker');
+  p.innerHTML = '';
+  ALL_INTERESTS.forEach(opt => {
+    const b = document.createElement('button');
+    b.textContent = opt;
+    if (selectedInterests.includes(opt)) b.className = 'selected';
+    b.addEventListener('click', () => {
+      selectedInterests = selectedInterests.includes(opt)
+        ? selectedInterests.filter(i => i !== opt)
+        : [...selectedInterests, opt];
+      renderInterests();
+    });
+    p.appendChild(b);
+  });
+}
+$('saveInterestsBtn').addEventListener('click', async () => {
+  const u = session.get(); if (!u) return;
+  u.interests = [...selectedInterests]; session.set(u);
+  try { await api('/api/interests', { method:'POST', body:{ gmail:u.gmail, interests:selectedInterests } }); } catch(e){}
+  $('interestSaveMsg').textContent = 'Saved';
+  setTimeout(() => $('interestSaveMsg').textContent = '', 2000);
+  renderProfile();
+});
+
+function renderProfile(){
+  const u = session.get(); if (!u) return;
+  const row = (k, v) => `<div class="kv-row"><span class="k">${k}</span><span class="v">${esc(v || '—')}</span></div>`;
+  $('profileDetails').innerHTML =
+    row('Full name', u.name) + row('Gmail', u.gmail) + row('Phone', u.phone) +
+    row('Investor type', u.investorType) +
+    `<div class="kv-row"><span class="k">Interests</span><span style="display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end;">${(u.interests||[]).map(i=>`<span class="chip light">${esc(i)}</span>`).join('') || '—'}</span></div>` +
+    row('Member since', timeLabel(u.timestamp));
+}
+
+/* dashboard search */
+$('dashSearchBtn').addEventListener('click', async () => {
+  const box = $('dashSearchResult');
+  box.className = 'result-box show';
+  box.innerHTML = 'Searching…';
+  try {
+    const d = await api(`/api/listings/search?q=${encodeURIComponent($('dashSearchQ').value.trim())}&category=${encodeURIComponent($('dashSearchCat').value)}`);
+    box.innerHTML = (d.listings || []).length
+      ? d.listings.map(l => `<div class="kv-row"><span class="k">${esc(l.title)}<br><span style="font-size:11px;">${esc(l.location||'')}</span></span><span class="v">${l.price_ngn ? ngn(l.price_ngn) : '—'}</span></div>`).join('')
+      : 'No listings match that yet.';
+  } catch(e){ showError(box, 'Search is unavailable right now.'); }
+});
+
+/* deed scanner */
+$('deedFile').addEventListener('change', e => {
+  const f = e.target.files[0];
+  $('deedDrop').textContent = f ? `Attached: ${f.name}` : 'Click to attach the document · PDF, JPG or PNG';
+});
+$('deedScanBtn').addEventListener('click', async () => {
+  const u = session.get(); const box = $('deedResult');
+  const f = $('deedFile').files[0];
+  box.className = 'result-box show'; box.innerHTML = 'Scanning document…';
+  try {
+    const d = await api('/api/tools/deed-scan', { method:'POST', body:{
+      gmail: u ? u.gmail : '', docType: $('deedType').value,
+      regNumber: $('deedReg').value.trim(), fileName: f ? f.name : ''
+    }});
+    if (d.status !== 'success') return showError(box, d.message || 'Scan failed.');
+    const cls = d.verdict === 'clear' ? 'v-clear' : d.verdict === 'review' ? 'v-review' : 'v-risk';
+    const label = d.verdict === 'clear' ? 'No issues detected' : d.verdict === 'review' ? 'Needs review' : 'High risk';
+    box.innerHTML = `
+      <span class="verdict ${cls}">${label} · risk ${d.riskScore}/100</span>
+      ${d.flags.length ? `<ul class="flag-list">${d.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>`
+        : '<p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65);">Nothing flagged in the metadata check. Registry confirmation is still required before funds move.</p>'}`;
+  } catch(e){ showError(box, 'We couldn\'t reach the scanner. Try again shortly.'); }
+});
+
+/* GIS */
+$('gisLocateBtn').addEventListener('click', () => {
+  if (!navigator.geolocation) return showError($('gisResult'), 'Your browser doesn\'t support location.');
+  navigator.geolocation.getCurrentPosition(
+    p => { $('gisLat').value = p.coords.latitude.toFixed(6); $('gisLng').value = p.coords.longitude.toFixed(6); },
+    () => showError($('gisResult'), 'Location permission denied. Enter the coordinates manually.')
+  );
+});
+$('gisCheckBtn').addEventListener('click', async () => {
+  const u = session.get(); const box = $('gisResult');
+  const lat = parseFloat($('gisLat').value), lng = parseFloat($('gisLng').value);
+  if (Number.isNaN(lat) || Number.isNaN(lng)) return showError(box, 'Enter both a latitude and a longitude.');
+  box.className = 'result-box show'; box.innerHTML = 'Checking against master plans…';
+  try {
+    const d = await api('/api/tools/gis-check', { method:'POST', body:{ gmail: u ? u.gmail : '', lat, lng } });
+    const map = {
+      free:       ['v-clear',  'Free / allocable',        'No infrastructure commitment found at these coordinates. Confirm the plot-level allocation before payment.'],
+      committed:  ['v-risk',   'Committed to government', 'These coordinates fall inside a government infrastructure setback. Land here carries demolition risk.'],
+      agricultural:['v-review','Zoned agricultural',      'Zoned for agricultural use. Residential or commercial development requires a formal change of use.'],
+      unknown:    ['v-review', 'No master-plan match',    'These coordinates aren\'t in our zone dataset yet. Our team will run a manual registry check.']
+    };
+    const [cls, label, note] = map[d.zoneType] || map.unknown;
+    box.innerHTML = `<span class="verdict ${cls}">${label}</span>
+      ${d.matchedZone ? `<div class="kv-row" style="margin-top:12px;"><span class="k">Matched zone</span><span class="v">${esc(d.matchedZone)}</span></div>` : ''}
+      <p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65); line-height:1.55;">${note}</p>`;
+  } catch(e){ showError(box, 'The mapper is unavailable right now.'); }
+});
+
+/* community risk */
+$('omoBtn').addEventListener('click', async () => {
+  const box = $('omoResult'), area = $('omoArea').value.trim();
+  if (!area) return showError(box, 'Enter an area to check.');
+  box.className = 'result-box show'; box.innerHTML = 'Looking up the area…';
+  try {
+    const d = await api(`/api/tools/omonile-risk?area=${encodeURIComponent(area)}`);
+    if (d.status !== 'success') return showResult(box, `<p style="font-size:12.5px; color:rgba(8,24,48,.65);">No profile on file for that area yet. Our field team can build one — raise it with the desk in chat.</p>`);
+    const badge = r => `<span class="verdict ${r === 'low' ? 'v-clear' : r === 'medium' ? 'v-review' : 'v-risk'}" style="font-size:10.5px; padding:4px 10px;">${(r || '—').toUpperCase()}</span>`;
+    box.innerHTML = `
+      <div style="font-size:14px; font-weight:800;">${esc(d.area)}</div>
+      <div class="kv-row" style="margin-top:12px;"><span class="k">Double-sale risk</span><span>${badge(d.doubleSaleRisk)}</span></div>
+      <div class="kv-row"><span class="k">Youth disruption risk</span><span>${badge(d.youthDisruptionRisk)}</span></div>
+      ${d.litigationHistory ? `<p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.7);"><b>Litigation history:</b> ${esc(d.litigationHistory)}</p>` : ''}
+      ${d.notes ? `<p style="margin-top:8px; font-size:12.5px; color:rgba(8,24,48,.65);">${esc(d.notes)}</p>` : ''}`;
+  } catch(e){ showError(box, 'The risk database is unavailable right now.'); }
+});
+
+/* fee calculator */
+$('feePrice').addEventListener('input', e => {
+  const n = numOnly(e.target.value);
+  e.target.value = n ? n.toLocaleString('en-NG') : '';
+});
+$('feeBtn').addEventListener('click', async () => {
+  const box = $('feeResult'), price = numOnly($('feePrice').value);
+  if (price <= 0) return showError(box, 'Enter the land price.');
+  box.className = 'result-box show'; box.innerHTML = 'Calculating…';
+  try {
+    const d = await api('/api/tools/fee-calculator', { method:'POST', body:{ priceNgn: price } });
+    if (d.status !== 'success') return showError(box, d.message || 'Could not calculate.');
+    const b = d.breakdown;
+    const row = (k, v) => `<div class="kv-row"><span class="k">${k}</span><span class="v">${ngn(v)}</span></div>`;
+    box.innerHTML =
+      row('Land price', b.landPrice) + row('Agency fee (5%)', b.agencyFee) +
+      row('Legal fee (1.5%)', b.legalFee) + row('Survey fee', b.surveyFee) +
+      row('Title perfection (2%)', b.titlePerfectionFee) +
+      row('Community levy estimate (1%)', b.communityLevyEstimate) +
+      `<div class="kv-row total"><span class="k">True total cost</span><span class="v">${ngn(b.total)}</span></div>`;
+  } catch(e){ showError(box, 'The calculator is unavailable right now.'); }
+});
+
+/* escrow */
+$('escrowAmount').addEventListener('input', e => {
+  const n = numOnly(e.target.value);
+  e.target.value = n ? n.toLocaleString('en-NG') : '';
+});
+$('escrowCreateBtn').addEventListener('click', async () => {
+  const u = session.get(), box = $('escrowResult'), amt = numOnly($('escrowAmount').value);
+  if (!u) return showError(box, 'Log in to open an escrow deal.');
+  if (amt <= 0) return showError(box, 'Enter the deal value.');
+  box.className = 'result-box show'; box.innerHTML = 'Opening escrow…';
+  try {
+    const d = await api('/api/escrow/deals', { method:'POST', body:{ gmail:u.gmail, totalNgn: amt } });
+    if (d.status !== 'success') return showError(box, d.message || 'Could not open the deal.');
+    sessionStorage.setItem('apexx_deal_id', d.dealId);
+    const tranches = [['Title verification', .2], ['Physical allocation', .4], ['Deed execution', .4]];
+    box.innerHTML = `<span class="verdict v-clear">Escrow opened · deal #${d.dealId}</span>` +
+      tranches.map(([l, p]) => `<div class="kv-row"><span class="k">${l} (${p*100}%)</span><span class="v">${ngn(amt*p)}</span></div>`).join('') +
+      `<p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65);">Funds release only after each stage is independently verified. Track progress under Live build dashboard.</p>`;
+    loadMilestones();
+  } catch(e){ showError(box, 'Escrow is unavailable right now.'); }
+});
+
+/* live build */
+async function loadMilestones(){
+  const wrap = $('buildMilestones');
+  const dealId = sessionStorage.getItem('apexx_deal_id');
+  if (!dealId) { wrap.innerHTML = '<div class="dash-note" style="margin-top:0;">No active build yet. Open an escrow deal and your milestones will appear here.</div>'; return; }
+  wrap.innerHTML = 'Loading milestones…';
+  try {
+    const d = await api(`/api/escrow/deals/${dealId}/milestones`);
+    wrap.innerHTML = (d.milestones || []).map((m, i) => `
+      <div class="milestone">
+        <div class="ms-dot ${m.status === 'verified' ? 'done' : ''}">${m.status === 'verified' ? '<svg class="i" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="5,13 10,18 19,7"/></svg>' : i + 1}</div>
+        <div class="ms-body">
+          <div class="t">${esc(m.label)} · ${m.pct}%</div>
+          <div class="d">${m.status === 'verified' ? 'Verified ' + timeLabel(m.verified_at) : 'Awaiting independent verification'}</div>
+        </div>
+      </div>`).join('') || '<div class="dash-note" style="margin-top:0;">No milestones on this deal yet.</div>';
+  } catch(e){ wrap.innerHTML = '<div class="dash-note" style="margin-top:0;">Couldn\'t load milestones right now.</div>'; }
+}
+/* Drone/evidence upload UI removed from the customer dashboard — see the
+   dash-card note above for why. The real inspector-facing upload flow
+   belongs in the admin panel (Phase 3), not here. */
+
+/* materials */
+async function loadMaterials(){
+  const wrap = $('materialList');
+  wrap.innerHTML = 'Loading index…';
+  try {
+    const d = await api('/api/construction/materials');
+    wrap.innerHTML = (d.materials || []).map(m => `
+      <div class="mat-row">
+        <div><div style="font-weight:700;">${esc(m.material)}</div><div class="u">${esc(m.unit)} · updated ${timeLabel(m.recorded_at)}</div></div>
+        <div class="p">${ngn(m.price_ngn)}</div>
+      </div>`).join('') || '<div class="dash-note" style="margin-top:0;">No pricing recorded yet.</div>';
+  } catch(e){ wrap.innerHTML = '<div class="dash-note" style="margin-top:0;">Couldn\'t load the index right now.</div>'; }
+}
+$('materialRefreshBtn').addEventListener('click', loadMaterials);
+
+/* wallet */
+$('walletAmount').addEventListener('input', e => {
+  const n = numOnly(e.target.value);
+  e.target.value = n ? n.toLocaleString('en-NG') : '';
+});
+$('walletConvertBtn').addEventListener('click', async () => {
+  const u = session.get(), box = $('walletResult'), amt = numOnly($('walletAmount').value);
+  if (!u) return showError(box, 'Log in to use the wallet.');
+  if (amt <= 0) return showError(box, 'Enter an amount.');
+  box.className = 'result-box show'; box.innerHTML = 'Fetching rate…';
+  try {
+    const d = await api('/api/wallet/convert', { method:'POST', body:{ gmail:u.gmail, currency:$('walletCurrency').value, amount: amt } });
+    if (d.status !== 'success') return showError(box, d.message || 'Conversion unavailable.');
+    box.innerHTML = `
+      <div class="kv-row"><span class="k">You send</span><span class="v">${$('walletCurrency').value} ${amt.toLocaleString()}</span></div>
+      <div class="kv-row"><span class="k">Indicative rate</span><span class="v">${d.fxRate.toLocaleString()}</span></div>
+      <div class="kv-row total"><span class="k">Into escrow</span><span class="v">${ngn(d.ngnEquiv)}</span></div>
+      <p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65);">This is a preview. The rate is locked when funds are received, and AML checks run before settlement.</p>`;
+    loadWalletHistory();
+  } catch(e){ showError(box, 'The wallet is unavailable right now.'); }
+});
+async function loadWalletHistory(){
+  const u = session.get(), wrap = $('walletHistory');
+  if (!u) return;
+  try {
+    const d = await api(`/api/wallet/transactions?gmail=${encodeURIComponent(u.gmail)}`);
+    wrap.innerHTML = (d.transactions || []).map(t => `
+      <div class="kv-row">
+        <span class="k">${timeLabel(t.created_at)} · ${esc(t.currency)} ${Number(t.amount).toLocaleString()}<br><span style="font-size:11px;">${esc(t.status)} · ${esc(t.reference || '')}</span></span>
+        <span class="v">${ngn(t.ngn_equiv)}</span>
+      </div>`).join('') || '<div class="dash-note" style="margin-top:0;">No transactions yet.</div>';
+  } catch(e){ wrap.innerHTML = '<div class="dash-note" style="margin-top:0;">Couldn\'t load transactions.</div>'; }
+}
+
+/* chat */
+function renderMessages(container, messages, myRole){
+  if (!messages.length) {
+    container.innerHTML = '<div class="dash-chat-empty">No correspondence yet. Messages here go to our client desk directly — no automated replies.</div>';
+    return;
+  }
+  container.innerHTML = messages.map(m => {
+    const mine = m.sender === myRole;
+    const who = mine ? 'You' : (myRole === 'admin' ? 'Client' : 'APEXXCRESTWAY desk');
+    return `<div class="msg-entry ${mine ? 'out' : 'in'}">
+      <div class="msg-head"><span class="who">${who}</span><span class="when">${timeLabel(m.timestamp)}</span></div>
+      <div class="msg-text">${esc(m.text)}</div>
+    </div>`;
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+async function refreshChat(){
+  const u = session.get(); if (!u) return;
+  try {
+    const d = await api(`/api/messages?gmail=${encodeURIComponent(u.gmail)}`);
+    if (d.status === 'success') renderMessages($('dashChatBody'), d.messages, 'customer');
+  } catch(e){}
+}
+async function sendChat(){
+  const u = session.get(), input = $('dashChatInput'), text = input.value.trim();
+  if (!u || !text) return;
+  input.value = ''; $('dashChatSendBtn').disabled = true;
+  try {
+    await api('/api/messages/send', { method:'POST', body:{ gmail:u.gmail, sender:'customer', text } });
+    await refreshChat();
+  } catch(e){ input.value = text; }
+  finally { $('dashChatSendBtn').disabled = false; }
+}
+$('dashChatSendBtn').addEventListener('click', sendChat);
+$('dashChatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+
+/* ---------- admin ----------
+   Auth state lives ONLY server-side now (httpOnly cookie). The frontend
+   can't read it directly — it asks /api/admin/me whenever it needs to know. */
+const adminShell = $('adminShell');
+let activeGmail = null, adminChatTimer = null, adminListTimer = null, cachedSignups = [];
+const initials = n => (n || '?').trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase();
+
+$('adminLinkBtn').addEventListener('click', () => navigate('admin'));
+
+$('adminLoginSubmitBtn').addEventListener('click', async () => {
+  const username = $('adminUsername').value.trim(), password = $('adminPassword').value;
+  const msg = $('adminLoginMsg'), btn = $('adminLoginSubmitBtn');
+  if (!username || !password) { msg.innerHTML = '<div class="msg-box msg-err">Enter your email and password.</div>'; return; }
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const d = await api('/api/admin/login', { method:'POST', body:{ username, password } });
+    if (d.status === 'success') {
+      $('adminEmailLabel').textContent = username;
+      showAdminAuthed();
+    } else msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Invalid credentials.')}</div>`;
+  } catch(e){ msg.innerHTML = '<div class="msg-box msg-err">Couldn\'t reach the server.</div>'; }
+  finally { btn.disabled = false; btn.textContent = 'Log in'; }
+});
+
+function showAdminAuthed(){
+  $('adminGate').style.display = 'none';
+  $('adminShellBody').style.display = 'flex';
+  loadSignups();
+  clearInterval(adminListTimer);
+  adminListTimer = setInterval(loadSignups, 8000);
+}
+async function openAdminShell(){
+  adminShell.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  $('adminShellBody').style.display = 'none';
+  $('adminGate').style.display = 'none'; // brief neutral state while we ask the server
+  const d = await api('/api/admin/me').catch(() => ({ authorized: false }));
+  if (d.authorized) {
+    $('adminEmailLabel').textContent = d.identity || '';
+    showAdminAuthed();
+  } else {
+    $('adminGate').style.display = 'flex';
+  }
+}
+function closeAdminShell(){
+  adminShell.classList.remove('open');
+  document.body.style.overflow = '';
+  clearInterval(adminChatTimer); clearInterval(adminListTimer);
+}
+$('adminCloseBtn').addEventListener('click', () => navigate('home'));
+$('adminRefreshBtn').addEventListener('click', () => { loadSignups(); refreshAdminThread(); });
+$('adminLogoutBtn').addEventListener('click', async () => {
+  await api('/api/admin/logout', { method:'POST' }).catch(() => {});
+  activeGmail = null; navigate('home');
+});
+
+async function loadSignups(){
+  try {
+    const d = await api('/api/admin/signups');
+    if (d.status === 'success') { cachedSignups = d.signups; renderAdminList(); }
+    else $('adminListItems').innerHTML = `<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">${esc(d.message)}</div>`;
+  } catch(e){
+    $('adminListItems').innerHTML = '<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">Couldn\'t load members.</div>';
+  }
+}
+function renderAdminList(){
+  const mode = $('adminSortSelect').value;
+  const sorted = [...cachedSignups].sort((a,b) =>
+    mode === 'name' ? (a.name||'').localeCompare(b.name||'')
+    : mode === 'oldest' ? new Date(a.timestamp) - new Date(b.timestamp)
+    : new Date(b.timestamp) - new Date(a.timestamp));
+  $('adminMemberCount').textContent = sorted.length + (sorted.length === 1 ? ' member' : ' members');
+  $('adminListItems').innerHTML = sorted.map(s => `
+    <div class="admin-row ${s.gmail === activeGmail ? 'active' : ''}" data-gmail="${esc(s.gmail)}" data-name="${esc(s.name)}">
+      <div class="av2">${esc(initials(s.name))}</div>
+      <div class="info">
+        <div class="n"><span>${esc(s.name)}</span>${s.unread > 0 ? `<span class="unread-badge">${s.unread}</span>` : ''}</div>
+        <div class="g">${esc(s.gmail)}</div>
+        <div class="m">${esc(s.investorType || '')} · ${timeLabel(s.timestamp)}</div>
+      </div>
+    </div>`).join('') || '<div style="padding:20px; font-size:12.5px; color:rgba(8,24,48,.5);">No members yet.</div>';
+  document.querySelectorAll('.admin-row').forEach(r =>
+    r.addEventListener('click', () => openAdminThread(r.dataset.gmail, r.dataset.name)));
+}
+$('adminSortSelect').addEventListener('change', renderAdminList);
+
+function openAdminThread(gmail, name){
+  activeGmail = gmail;
+  const s = cachedSignups.find(x => x.gmail === gmail) || {};
+  const interests = (s.interest || '').split(',').map(x => x.trim()).filter(Boolean);
+  const tags = [
+    s.investorType ? `<span class="dtag role">${esc(s.investorType)}</span>` : '',
+    ...interests.map(i => `<span class="dtag">${esc(i)}</span>`)
+  ].join('');
+  $('adminChatPane').innerHTML = `
+    <div class="admin-chat-head">
+      <div class="id-row">
+        <div class="av2">${esc(initials(name))}</div>
+        <div><div class="n">${esc(name)}</div><div class="g">${esc(gmail)}</div></div>
+      </div>
+      ${tags ? `<div class="tag-row">${tags}</div>` : ''}
+    </div>
+    <div class="admin-chat-body" id="adminChatBody"></div>
+    <div class="admin-chat-input">
+      <input type="text" id="adminChatInput" placeholder="Reply…">
+      <button id="adminChatSendBtn">Send</button>
+    </div>`;
+  refreshAdminThread();
+  clearInterval(adminChatTimer);
+  adminChatTimer = setInterval(refreshAdminThread, 4000);
+  $('adminChatSendBtn').addEventListener('click', sendAdminMessage);
+  $('adminChatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendAdminMessage(); });
+  renderAdminList();
+}
+async function refreshAdminThread(){
+  if (!activeGmail) return;
+  const body = $('adminChatBody'); if (!body) return;
+  try {
+    const d = await api(`/api/messages?gmail=${encodeURIComponent(activeGmail)}`);
+    if (d.status === 'success') renderMessages(body, d.messages, 'admin');
+  } catch(e){}
+}
+async function sendAdminMessage(){
+  const input = $('adminChatInput'), btn = $('adminChatSendBtn'), text = input.value.trim();
+  if (!activeGmail || !text) return;
+  input.value = ''; btn.disabled = true;
+  try {
+    await api('/api/messages/send', { method:'POST', body:{ gmail:activeGmail, sender:'admin', text } });
+    await refreshAdminThread();
+  } catch(e){ input.value = text; }
+  finally { btn.disabled = false; }
+}
+
+/* hidden admin entry: Ctrl+Shift+A */
+addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+    e.preventDefault();
+    navigate('admin');
+  }
+});
+
+/* ---------- legal modals ---------- */
+function openModal(id){ $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal(id){ $(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('[data-modal]').forEach(b =>
+  b.addEventListener('click', () => openModal(b.dataset.modal + 'Modal')));
+document.querySelectorAll('[data-close]').forEach(b =>
+  b.addEventListener('click', () => closeModal(b.dataset.close)));
+['aboutModal','privacyModal','termsModal'].forEach(id => {
+  const el = $(id);
+  el.addEventListener('click', e => { if (e.target === el) closeModal(id); });
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') ['aboutModal','privacyModal','termsModal'].forEach(closeModal);
+});
+
+/* ---------- Admin Test Data Controls ---------- */
+$('adminPurgeTestBtn')?.addEventListener('click', async () => {
+  if (!confirm('Are you sure you want to purge all test and demo data? Real users and admin records will NOT be deleted.')) return;
+  try {
+    const res = await api('/api/admin/reset-test-data', { method: 'POST' });
+    alert(res.message || 'All test data successfully purged.');
+    loadAdminSignups();
+  } catch(err) {
+    alert('Purge failed: ' + (err.message || err));
+  }
+});
+
+$('adminSeedDemoBtn')?.addEventListener('click', async () => {
+  try {
+    const res = await api('/api/admin/seed-demo-data', { method: 'POST' });
+    alert(res.message || 'Demo data seeded successfully.');
+    loadAdminSignups();
+  } catch(err) {
+    alert('Seed failed: ' + (err.message || err));
+  }
+});
+
+/* ---------- URL-Aware Routing on Initial Load (MPA on SPA) ---------- */
+const initialRoute = getRouteFromPath();
+navigate(initialRoute, false);
+</script>
+</body>
+</html>
