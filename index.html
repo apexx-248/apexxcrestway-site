@@ -313,7 +313,7 @@
   .app-page-narrow{align-items:flex-start; justify-content:center; padding-top:72px;}
   .auth-card{width:100%; max-width:400px; margin:0 auto; border:1px solid var(--line); border-radius:var(--r-modal); padding:32px; background:#fff;}
   #page-signup .app-page-body{align-items:flex-start; padding-top:56px;}
-  .admin-gate{flex:1; display:flex; align-items:flex-start; justify-content:center; padding-top:96px; background:var(--paper); overflow-y:auto;}
+  .admin-gate{flex:1; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; padding-top:0; background:var(--paper); overflow-y:auto; position:relative; min-height:100vh;}
   .modal-card{background:#fff; border-radius:var(--r-modal); width:100%; max-width:380px; padding:28px; position:relative; box-shadow:0 12px 32px rgba(8,24,48,.22);}
   .step-indicator{display:flex; align-items:center; gap:0; margin-bottom:18px;}
   .step-dot{width:8px; height:8px; border-radius:50%; background:var(--line); flex-shrink:0; transition:background .2s ease;}
@@ -1131,14 +1131,58 @@
 <!-- ===== ADMIN (gate + dashboard, one routed page) ===== -->
 <div class="admin-shell" id="adminShell">
   <div class="admin-gate" id="adminGate">
-    <div class="auth-card" style="max-width:380px;">
-      <h3>Admin sign-in</h3>
-      <p class="sub">Restricted to the Apexx Crestway team.</p>
-      <div class="field"><label>Email or username</label><input type="text" id="adminUsername" autocomplete="username"></div>
-      <div class="field"><label>Password</label><input type="password" id="adminPassword" autocomplete="current-password"></div>
-      <div id="adminLoginMsg"></div>
-      <button class="submit" id="adminLoginSubmitBtn">Log in</button>
-      <p class="fine"><a href="#" data-nav="home" style="color:rgba(8,24,48,.5); font-weight:600;">← Back to site</a></p>
+    <header class="app-topbar">
+      <div class="wrap app-topbar-inner">
+        <a href="#" class="app-back" data-nav="home">← Back to site</a>
+        <a href="#" class="app-brand" data-nav="home"><img src="APEXX.PNG" alt="" class="mark-img" onerror="this.style.display='none'"><span class="apexx">APEXX</span><span class="accent">CRESTWAY</span></a>
+        <a href="#" class="app-topbar-link" data-nav="login">User login</a>
+      </div>
+    </header>
+    <div class="app-page-body app-page-narrow" style="padding-top:72px;">
+      <div class="auth-card">
+        <div class="step-indicator">
+          <span class="step-dot active" id="adminStepDot1"></span><span class="step-line"></span><span class="step-dot" id="adminStepDot2"></span>
+        </div>
+        
+        <!-- Step 1: Administrator Identity -->
+        <div id="adminStepGmail">
+          <div class="step-label">Step 1 of 2 — Administrator Identity</div>
+          <h3>Admin sign-in</h3>
+          <p class="sub">Restricted to the Apexx Crestway administration team. Enter your admin email for your verification code.</p>
+          <div class="field">
+            <label>Admin email</label>
+            <input type="email" id="adminEmailInput" value="apexxbashir@gmail.com" placeholder="apexxbashir@gmail.com">
+          </div>
+          <div id="adminGateMsg"></div>
+          <button class="submit" id="adminGateSendCodeBtn">Send code</button>
+          
+          <p class="fine" style="margin-top:14px; text-align:center;">
+            <a href="#" id="adminTogglePasswordBtn" style="color:rgba(8,24,48,0.55); font-size:12px; text-decoration:underline;">Or sign in with password / bypass code (123456)</a>
+          </p>
+          <div id="adminPasswordBox" style="display:none; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);">
+            <div class="field"><label>Password or Staging Code</label><input type="password" id="adminPasswordInput" placeholder="Password or 123456"></div>
+            <button class="submit" id="adminPasswordSubmitBtn" style="background:#081830;">Log in</button>
+          </div>
+          <p class="fine" style="margin-top:16px;"><a href="#" data-nav="home" style="color:rgba(8,24,48,.5); font-weight:600;">← Back to site</a></p>
+        </div>
+
+        <!-- Step 2: Administrator Verification -->
+        <div id="adminStepOtp" style="display:none;">
+          <div class="step-label">Step 2 of 2 — Verification</div>
+          <h3>Enter your code</h3>
+          <p class="sub">We sent a 6-digit code to <b id="adminOtpEmailLabel">apexxbashir@gmail.com</b>. (Or use bypass code <b>123456</b> in staging).</p>
+          <div class="field">
+            <label>6-digit code</label>
+            <input type="text" id="adminOtpInput" inputmode="numeric" maxlength="6" placeholder="123456" style="letter-spacing:6px; font-size:20px; font-weight:700; text-align:center;">
+          </div>
+          <div id="adminOtpMsg"></div>
+          <button class="submit" id="adminOtpVerifyBtn">Verify and enter console</button>
+          <div style="display:flex; justify-content:space-between; margin-top:12px; font-size:12px;">
+            <button type="button" id="adminChangeEmailBtn" style="background:none; border:none; color:var(--blue-dark); cursor:pointer; font-weight:600;">Change email</button>
+            <button type="button" id="adminResendOtpBtn" style="background:none; border:none; color:var(--blue-dark); cursor:pointer; font-weight:600;">Resend code</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="admin-shell-body" id="adminShellBody" style="display:none;">
@@ -1625,7 +1669,13 @@ async function verifyOtp(){
     const d = await api('/api/otp/verify', { method:'POST', body:{ gmail: pendingGmail, otp } });
     if (d.status === 'success') {
       session.set(d.user);
-      navigate('dashboard');
+      const params = new URLSearchParams(window.location.search);
+      const uEmail = (d.user.email || d.user.gmail || '').toLowerCase();
+      if (params.get('redirect') === 'admin' || d.user.role === 'admin' || d.user.isAdmin || uEmail === 'apexxbashir@gmail.com') {
+        navigate('admin');
+      } else {
+        navigate('dashboard');
+      }
     }
     else {
       $('otpMsg').innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Incorrect code.')}</div>`;
@@ -1651,7 +1701,22 @@ function openUserDashboard(view = 'overview'){
   const u = session.get();
   if (!u) { openLoginModal(); return; }
   selectedInterests = [...(u.interests || [])];
-  $('userTopEmail').textContent = u.gmail;
+  const userMail = u.gmail || u.email || '';
+  $('userTopEmail').textContent = userMail;
+  let adminPill = $('userDashboardAdminPill');
+  if (u.role === 'admin' || u.isAdmin || userMail.toLowerCase() === 'apexxbashir@gmail.com') {
+    if (!adminPill) {
+      adminPill = document.createElement('button');
+      adminPill.id = 'userDashboardAdminPill';
+      adminPill.textContent = 'Admin Console →';
+      adminPill.style.cssText = 'background:#081830; color:#C6A86F; border:1px solid #C6A86F; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; margin-left:10px; cursor:pointer;';
+      adminPill.addEventListener('click', () => navigate('admin'));
+      $('userTopEmail').parentNode.appendChild(adminPill);
+    }
+    adminPill.style.display = 'inline-block';
+  } else if (adminPill) {
+    adminPill.style.display = 'none';
+  }
   $('overviewWelcome').textContent = `Welcome back, ${(u.name || '').split(' ')[0] || 'investor'}`;
   userShell.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1967,19 +2032,116 @@ const initials = n => (n || '?').trim().split(/\s+/).slice(0,2).map(w => w[0] ||
 
 $('adminLinkBtn').addEventListener('click', () => navigate('admin'));
 
-$('adminLoginSubmitBtn').addEventListener('click', async () => {
-  const username = $('adminUsername').value.trim(), password = $('adminPassword').value;
-  const msg = $('adminLoginMsg'), btn = $('adminLoginSubmitBtn');
-  if (!username || !password) { msg.innerHTML = '<div class="msg-box msg-err">Enter your email and password.</div>'; return; }
+let pendingAdminEmail = 'apexxbashir@gmail.com';
+
+function showAdminStep1(){
+  const sOtp = $('adminStepOtp'), sGmail = $('adminStepGmail');
+  if (sOtp) sOtp.style.display = 'none';
+  if (sGmail) sGmail.style.display = 'block';
+  if ($('adminStepDot1')) { $('adminStepDot1').classList.add('active'); $('adminStepDot1').classList.remove('done'); }
+  if ($('adminStepDot2')) $('adminStepDot2').classList.remove('active');
+  if ($('adminGateMsg')) $('adminGateMsg').innerHTML = '';
+  if ($('adminEmailInput') && !$('adminEmailInput').value) $('adminEmailInput').value = 'apexxbashir@gmail.com';
+}
+
+function showAdminStep2(email){
+  pendingAdminEmail = email;
+  if ($('adminOtpEmailLabel')) $('adminOtpEmailLabel').textContent = email;
+  if ($('adminStepGmail')) $('adminStepGmail').style.display = 'none';
+  if ($('adminStepOtp')) $('adminStepOtp').style.display = 'block';
+  if ($('adminStepDot1')) { $('adminStepDot1').classList.add('done'); $('adminStepDot1').classList.remove('active'); }
+  if ($('adminStepDot2')) $('adminStepDot2').classList.add('active');
+  if ($('adminOtpMsg')) $('adminOtpMsg').innerHTML = '';
+  if ($('adminOtpInput')) { $('adminOtpInput').value = ''; $('adminOtpInput').focus(); }
+}
+
+$('adminGateSendCodeBtn').addEventListener('click', async () => {
+  const email = $('adminEmailInput').value.trim().toLowerCase();
+  const msg = $('adminGateMsg'), btn = $('adminGateSendCodeBtn');
+  if (!email) { msg.innerHTML = '<div class="msg-box msg-err">Enter your admin email.</div>'; return; }
+  btn.disabled = true; btn.textContent = 'Sending code…';
+  try {
+    const d = await api('/api/otp/request', { method:'POST', body:{ email } });
+    if (d.status === 'success') {
+      showAdminStep2(email);
+    } else {
+      msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Something went wrong.')}</div>`;
+    }
+  } catch(e) {
+    msg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send code';
+  }
+});
+
+$('adminChangeEmailBtn').addEventListener('click', showAdminStep1);
+
+$('adminResendOtpBtn').addEventListener('click', async () => {
+  const d = await api('/api/otp/request', { method:'POST', body:{ email: pendingAdminEmail } }).catch(() => null);
+  if (d && d.status === 'success') {
+    $('adminOtpMsg').innerHTML = '<div class="msg-box msg-ok">A new code is on its way.</div>';
+  } else {
+    $('adminOtpMsg').innerHTML = '<div class="msg-box msg-err">Could not resend code.</div>';
+  }
+});
+
+async function verifyAdminOtp(){
+  const otp = $('adminOtpInput').value.trim(), btn = $('adminOtpVerifyBtn');
+  if (!/^\d{6}$/.test(otp)) {
+    $('adminOtpMsg').innerHTML = '<div class="msg-box msg-err">Enter the 6-digit code (or 123456).</div>';
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  try {
+    const d = await api('/api/otp/verify', { method:'POST', body:{ email: pendingAdminEmail, otp } });
+    if (d.status === 'success') {
+      session.set(d.user);
+      if (d.user.role === 'admin' || d.user.isAdmin || (d.user.email && d.user.email.toLowerCase() === 'apexxbashir@gmail.com')) {
+        $('adminEmailLabel').textContent = d.user.email;
+        showAdminAuthed();
+      } else {
+        $('adminOtpMsg').innerHTML = '<div class="msg-box msg-err">This account does not have administrator privileges.</div>';
+      }
+    } else {
+      $('adminOtpMsg').innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Incorrect code.')}</div>`;
+    }
+  } catch(e) {
+    $('adminOtpMsg').innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Verify and enter console';
+  }
+}
+$('adminOtpVerifyBtn').addEventListener('click', verifyAdminOtp);
+$('adminOtpInput').addEventListener('keydown', e => { if (e.key === 'Enter') verifyAdminOtp(); });
+
+$('adminTogglePasswordBtn').addEventListener('click', e => {
+  e.preventDefault();
+  const box = $('adminPasswordBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+});
+
+$('adminPasswordSubmitBtn').addEventListener('click', async () => {
+  const username = $('adminEmailInput').value.trim().toLowerCase();
+  const password = $('adminPasswordInput').value.trim();
+  const msg = $('adminGateMsg'), btn = $('adminPasswordSubmitBtn');
+  if (!username || !password) {
+    msg.innerHTML = '<div class="msg-box msg-err">Enter admin email and password/code.</div>';
+    return;
+  }
   btn.disabled = true; btn.textContent = 'Checking…';
   try {
     const d = await api('/api/admin/login', { method:'POST', body:{ username, password } });
     if (d.status === 'success') {
       $('adminEmailLabel').textContent = username;
       showAdminAuthed();
-    } else msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Invalid credentials.')}</div>`;
-  } catch(e){ msg.innerHTML = '<div class="msg-box msg-err">Couldn\'t reach the server.</div>'; }
-  finally { btn.disabled = false; btn.textContent = 'Log in'; }
+    } else {
+      msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Invalid admin credentials.')}</div>`;
+    }
+  } catch(e) {
+    msg.innerHTML = '<div class="msg-box msg-err">Couldn\'t reach the server.</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Log in';
+  }
 });
 
 function showAdminAuthed(){
@@ -1996,10 +2158,11 @@ async function openAdminShell(){
   $('adminGate').style.display = 'none'; // brief neutral state while we ask the server
   const d = await api('/api/admin/me').catch(() => ({ authorized: false }));
   if (d.authorized) {
-    $('adminEmailLabel').textContent = d.identity || '';
+    $('adminEmailLabel').textContent = d.identity || 'apexxbashir@gmail.com';
     showAdminAuthed();
   } else {
     $('adminGate').style.display = 'flex';
+    showAdminStep1();
   }
 }
 function closeAdminShell(){
