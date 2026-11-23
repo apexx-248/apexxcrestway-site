@@ -1572,40 +1572,27 @@ $('sendCodeBtn').addEventListener('click', async () => {
   const msg = $('loginMsg'), btn = $('sendCodeBtn');
   if (!isGmail(gmail)) { msg.innerHTML = '<div class="msg-box msg-err">Enter a valid Gmail address.</div>'; return; }
 
-  if (awaitingQuickRegister) {
-    const name = $('loginNameQuick').value.trim();
-    if (name.length < 2) { msg.innerHTML = '<div class="msg-box msg-err">Enter your full name.</div>'; return; }
-    btn.disabled = true; btn.textContent = 'Registering…';
-    try {
-      const r = await api('/api/register', { method:'POST', body:{ name, gmail, source: location.href } });
-      if (r.status !== 'success' && r.status !== 'duplicate') {
-        msg.innerHTML = `<div class="msg-box msg-err">${esc(r.message || 'Could not register.')}</div>`; return;
-      }
-      const o = await api('/api/otp/request', { method:'POST', body:{ gmail } });
-      if (o.status === 'success') showOtpStep(gmail);
-      else msg.innerHTML = `<div class="msg-box msg-err">${esc(o.message || 'Could not send code.')}</div>`;
-    } catch (e) {
-      msg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
-    } finally { btn.disabled = false; btn.textContent = 'Register and send code'; }
-    return;
-  }
-
-  btn.disabled = true; btn.textContent = 'Sending…';
+  btn.disabled = true; btn.textContent = 'Sending code…';
   try {
     const d = await api('/api/otp/request', { method:'POST', body:{ gmail } });
-    if (d.status === 'success') showOtpStep(gmail);
-    else if (d.status === 'not_found') {
-      awaitingQuickRegister = true;
-      $('loginQuickName').style.display = 'block';
-      msg.innerHTML = '';
-      btn.textContent = 'Register and send code';
-      $('loginNameQuick').focus();
-    } else msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Something went wrong.')}</div>`;
+    if (d.status === 'success') {
+      showOtpStep(gmail);
+    } else if (d.status === 'not_found') {
+      // Auto-populate email on full /signup form and navigate there
+      if ($('gmail')) $('gmail').value = gmail;
+      const formMsg = $('formMsg');
+      if (formMsg) {
+        formMsg.innerHTML = '<div class="msg-box msg-info">No account found for <b>' + esc(gmail) + '</b>. Please complete your registration below to create your account.</div>';
+      }
+      navigate('signup');
+    } else {
+      msg.innerHTML = `<div class="msg-box msg-err">${esc(d.message || 'Something went wrong.')}</div>`;
+    }
   } catch (e) {
     msg.innerHTML = '<div class="msg-box msg-err">We couldn\'t reach the server. Try again shortly.</div>';
   } finally {
     btn.disabled = false;
-    if (!awaitingQuickRegister) btn.textContent = 'Send code';
+    btn.textContent = 'Send code';
   }
 });
 
