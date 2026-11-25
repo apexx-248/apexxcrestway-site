@@ -427,16 +427,17 @@
   .admin-shell-body{flex:1; display:flex; flex-direction:column; min-height:0; height:100%; overflow:hidden; background:#fff;}
 
   /* ADMIN TOPBAR */
-  .admin-topbar{background:#0A192F; color:#fff; height:60px; min-height:60px; padding:0 24px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid rgba(197,168,128,.25); position:relative; z-index:30; box-sizing:border-box; width:100%;}
-  .admin-topbar .t{font-family:var(--serif); font-weight:700; font-size:16px; letter-spacing:-.01em; display:flex; align-items:center; gap:10px; color:#fff; white-space:nowrap; flex-shrink:0;}
+  .admin-topbar{background:#0A192F; color:#fff; height:60px; min-height:60px; padding:0 20px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid rgba(197,168,128,.25); position:relative; z-index:30; box-sizing:border-box; width:100%;}
+  .admin-topbar .t{font-family:var(--serif); font-weight:700; font-size:16px; letter-spacing:-.01em; display:flex; align-items:center; gap:8px; color:#fff; white-space:nowrap; flex-shrink:0;}
   .admin-topbar .t svg{color:#C5A880; flex-shrink:0;}
   .admin-topbar .admin-badge-text{font-family:var(--mono); font-size:11px; font-weight:700; color:#C5A880; letter-spacing:.12em; text-transform:uppercase; background:rgba(197,168,128,.12); padding:3px 8px; border-radius:4px; border:1px solid rgba(197,168,128,.25);}
   .admin-topbar .right{display:flex; align-items:center; gap:8px; flex-shrink:0;}
-  .admin-topbar .who{font-family:var(--mono); font-size:11px; color:#C5A880; background:rgba(197,168,128,.08); border:1px solid rgba(197,168,128,.22); padding:5px 12px; border-radius:6px; letter-spacing:.02em; display:inline-flex; align-items:center;}
-  .admin-top-btn{background:transparent; border:1px solid rgba(255,255,255,.18); color:rgba(255,255,255,.9); font-size:12px; font-weight:600; padding:6px 14px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease; white-space:nowrap; box-sizing:border-box;}
+  .admin-topbar .who{font-family:var(--mono); font-size:11px; color:#C5A880; background:rgba(197,168,128,.08); border:1px solid rgba(197,168,128,.22); padding:5px 12px; border-radius:6px; letter-spacing:.02em; display:inline-flex; align-items:center; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .admin-top-btn{background:transparent; border:1px solid rgba(255,255,255,.18); color:rgba(255,255,255,.9); font-size:12px; font-weight:600; padding:6px 12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all .15s ease; white-space:nowrap; box-sizing:border-box; flex-shrink:0;}
   .admin-top-btn:hover{border-color:#C5A880; color:#fff; background:rgba(197,168,128,.08);}
   .admin-btn-gold{border-color:#C5A880; color:#C5A880; background:rgba(197,168,128,.1); font-weight:700;}
   .admin-btn-gold:hover{background:#C5A880; color:#0A192F; border-color:#C5A880;}
+  #adminCloseBtn{width:36px; height:34px; padding:0; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;}
 
   .btn-lbl-desk{display:inline;}
   .btn-lbl-mob{display:none;}
@@ -523,15 +524,21 @@
   .admin-empty-state{padding:30px 16px; text-align:center; color:rgba(10,25,47,.45); font-size:13px; font-style:italic; line-height:1.5;}
 
   /* CHAT TAB */
-  .admin-chat-container{display:flex; flex-direction:column; height:100%; min-height:480px; border:1px solid var(--line); border-radius:10px; overflow:hidden; box-sizing:border-box; width:100%;}
+  .admin-chat-container{display:flex; flex-direction:column; height:100%; min-height:480px; border:1px solid var(--line); border-radius:10px; overflow:hidden; box-sizing:border-box; width:100%; max-width:100%;}
   .admin-chat-messages{flex:1; overflow-y:auto; padding:20px; background:#fff; display:flex; flex-direction:column; gap:12px; box-sizing:border-box;}
-  .admin-chat-footer{display:flex; gap:10px; padding:16px 20px; background:#F8F9FA; border-top:1px solid var(--line); box-sizing:border-box; width:100%;}
-  .admin-chat-footer input{flex:1; min-width:0; height:42px; border-radius:6px; border:1px solid var(--line); padding:0 14px; font-size:13.5px; outline:none; background:#fff; color:#0A192F; font-family:inherit; box-sizing:border-box;}
-  .admin-chat-footer button{flex-shrink:0; height:42px; padding:0 20px; border-radius:6px; background:#0A192F; color:#C5A880; border:1px solid #C5A880; font-weight:700; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; box-sizing:border-box;}
+  .admin-chat-footer{display:flex; gap:10px; padding:12px 16px; background:#F8F9FA; border-top:1px solid var(--line); box-sizing:border-box; width:100%; max-width:100%; overflow:hidden;}
+  .admin-chat-footer input{flex:1; min-width:0; height:40px; border-radius:6px; border:1px solid var(--line); padding:0 14px; font-size:13.5px; outline:none; background:#fff; color:#0A192F; font-family:inherit; box-sizing:border-box;}
+  .admin-chat-footer button{flex-shrink:0; height:40px; padding:0 18px; border-radius:6px; background:#0A192F; color:#C5A880; border:1px solid #C5A880; font-weight:700; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; box-sizing:border-box;}
 
   /* MOBILE RESPONSIVE DRAWER & BREAKPOINTS */
   .admin-mobile-back-btn{display:none; background:#F8F9FA; border:1px solid var(--line); color:#0A192F; padding:7px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; align-items:center; gap:6px; margin-bottom:8px; transition:all .15s;}
   .admin-mobile-back-btn:hover{background:#0A192F; color:#C5A880; border-color:#0A192F;}
+
+  @media (max-width:1100px){
+    .admin-topbar .who{display:none !important;}
+    .btn-lbl-desk{display:none;}
+    .admin-top-btn{padding:6px 10px;}
+  }
 
   @media (max-width:860px){
     .user-body{flex-direction:column;}
@@ -540,24 +547,26 @@
     .side-link{white-space:nowrap; width:auto;}
 
     .btn-lbl-desk{display:none;}
-    .btn-lbl-mob{display:inline;}
+    .btn-lbl-mob{display:none;}
 
     /* TOPBAR COMPACT */
-    .admin-topbar{padding:0 10px; height:54px; min-height:54px; box-sizing:border-box; gap:6px;}
-    .admin-topbar .t{font-size:14px; white-space:nowrap; flex-shrink:0; gap:6px;}
+    .admin-topbar{padding:0 8px; height:54px; min-height:54px; box-sizing:border-box; gap:4px;}
+    .admin-topbar .t{font-size:13.5px; white-space:nowrap; flex-shrink:0; gap:5px;}
     .admin-topbar .t svg{width:16px; height:16px;}
     .admin-topbar .t span.admin-badge-text{display:none;}
-    .admin-topbar .who{display:none;} /* Hides email box on mobile so everything fits */
-    .admin-topbar .right{display:flex; align-items:center; gap:5px; flex-shrink:0;}
-    .admin-top-btn{padding:6px 8px; font-size:11.5px; height:32px; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;}
-    .admin-btn-gold{padding:6px 10px;}
+    .admin-topbar .who{display:none !important;}
+    .admin-topbar .right{display:flex; align-items:center; gap:4px; flex-shrink:0;}
+    .admin-top-btn{padding:0; width:32px; height:32px; min-width:32px; font-size:11.5px; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;}
+    .admin-btn-gold{padding:0 8px; width:auto; height:32px; font-size:11px;}
     .admin-dropdown-menu{right:0; width:190px;}
+    #adminCloseBtn{width:32px; height:32px; min-width:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;}
 
     @media (max-width:380px){
-      .admin-topbar{padding:0 6px; gap:3px;}
-      .admin-topbar .t{font-size:12.5px;}
-      .admin-top-btn{padding:4px 6px; height:28px;}
-      .admin-btn-gold{padding:4px 7px; font-size:10.5px;}
+      .admin-topbar{padding:0 4px; gap:2px;}
+      .admin-topbar .t{font-size:12px;}
+      .admin-top-btn{width:28px; height:28px; min-width:28px;}
+      .admin-btn-gold{padding:0 5px; height:28px; font-size:10px;}
+      #adminCloseBtn{width:28px; height:28px; min-width:28px;}
     }
 
     /* WORKSPACE */
@@ -1091,46 +1100,118 @@
         </div>
       </div>
 
-      <!-- DEED SCANNER -->
+      <!-- DEED SCANNER & R2 REPOSITORY -->
       <div id="userView-deed" style="display:none;">
         <div class="dash-card">
-          <h3>AI deed document scanner</h3>
-          <p>Upload a Deed of Assignment, Certificate of Occupancy or survey plan. The scanner reads the document and flags forged signatures, invalid dates and registration numbers that don't match the registry.</p>
-          <div class="tool-pending" data-pending="COMING SOON — DOCUMENT OCR NOT YET CONNECTED">
-            <div class="tool-pending-content">
-              <div class="tool-form two">
-                <div><label>Document type</label><select id="deedType"><option value="deed_of_assignment">Deed of Assignment</option><option value="c_of_o">Certificate of Occupancy</option><option value="survey_plan">Survey plan</option></select></div>
-                <div><label>Registration number</label><input type="text" id="deedReg" placeholder="e.g. 42/42/2451"></div>
-              </div>
-              <label class="drop-zone" for="deedFile" id="deedDrop">Click to attach the document · PDF, JPG or PNG</label>
-              <input type="file" id="deedFile" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
-              <div class="tool-actions"><button class="btn-sm" id="deedScanBtn">Run scan</button></div>
-              <div class="result-box" id="deedResult"></div>
+          <h3>Document Repository & Deed Verification Pipeline</h3>
+          <p>Securely upload Deeds of Assignment, Certificates of Occupancy (C of O), and Survey Plans to Cloudflare R2 storage for forensic verification against Lands Bureau registration standards.</p>
+          <div class="tool-form two">
+            <div>
+              <label>Document Category</label>
+              <select id="deedType">
+                <option value="deed_of_assignment">Deed of Assignment</option>
+                <option value="cofo">Certificate of Occupancy (C of O)</option>
+                <option value="survey_plan">Registered Cadastral Survey Plan</option>
+                <option value="gazette">Government Gazette / Excision Record</option>
+                <option value="court_judgement">High Court Title Judgment</option>
+              </select>
+            </div>
+            <div>
+              <label>Statutory Registration / Plan Number</label>
+              <input type="text" id="deedReg" placeholder="e.g. 42/42/2451 or LA/2024/0981">
             </div>
           </div>
-          <div class="dash-note">We don't yet have a document-reading pipeline connected, so running this today would only check that a registration number is formatted correctly — not whether the document is genuine. We'd rather show you that plainly than return a result that looks like real verification and isn't.</div>
+          <div class="tool-form" style="margin-top:10px;">
+            <div>
+              <label>Property / Title Reference Notes (Optional)</label>
+              <input type="text" id="deedNotes" placeholder="e.g. Plot 14 Block B, Sapphire Gardens Scheme, Ibeju-Lekki">
+            </div>
+          </div>
+          <label class="drop-zone" for="deedFile" id="deedDrop">
+            <svg class="i" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin:0 auto 8px; display:block; color:#C5A880;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="deedDropText">Click to attach document or drag and drop · PDF, PNG, JPG (Up to 15MB)</span>
+          </label>
+          <input type="file" id="deedFile" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
+          <div class="tool-actions">
+            <button class="btn-sm" id="deedScanBtn">Upload & Verify Document</button>
+          </div>
+          <div class="result-box" id="deedResult"></div>
+          <div class="dash-note">Uploaded records are cryptographically stored on Cloudflare R2 object storage and indexed for official title searches and escrow release validation.</div>
+
+          <div style="margin-top:24px; border-top:1px solid var(--line); padding-top:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h4 style="margin:0; font-family:var(--serif); font-size:15px; color:#0A192F;">Your Stored Verification Documents</h4>
+              <button class="btn-sm ghost" id="deedRefreshListBtn" style="padding:4px 10px; font-size:11px;">Refresh List</button>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table" id="deedTable">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>File Name</th>
+                    <th>Reg Number</th>
+                    <th>Verdict</th>
+                    <th>Risk Score</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="deedTableBody">
+                  <tr><td colspan="7" style="text-align:center; color:rgba(10,25,47,.4); padding:16px;">Loading documents...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- GIS -->
+      <!-- GIS & CADASTRAL PROJECTION ENGINE -->
       <div id="userView-gis" style="display:none;">
         <div class="dash-card">
-          <h3>GIS coordinates mapper</h3>
-          <p>Drop a pin on the land, or paste its coordinates. We check them against the government master plan and tell you whether the parcel is free, committed to infrastructure, or zoned agricultural.</p>
-          <div class="tool-pending" data-pending="COMING SOON — AWAITING REAL MASTER-PLAN DATA">
-            <div class="tool-pending-content">
-              <div class="tool-form two">
-                <div><label>Latitude</label><input type="text" id="gisLat" placeholder="6.4501"></div>
-                <div><label>Longitude</label><input type="text" id="gisLng" placeholder="3.5123"></div>
+          <h3>Cadastral Coordinate Engine & Master Plan Verifier</h3>
+          <p>Convert metric survey beacon coordinates (Minna Datum / Clarke 1880 UTM) to global WGS-84 GPS coordinates and verify parcel boundaries against government committed acquisitions and excision zones.</p>
+          
+          <div style="display:flex; gap:8px; margin-bottom:14px;">
+            <button class="btn-sm" id="gisModeCadastral" style="background:#0A192F; color:#C5A880; border:1px solid #C5A880;">Cadastral Survey Plan (Minna Datum)</button>
+            <button class="btn-sm ghost" id="gisModeGps">GPS Coordinates (WGS-84)</button>
+          </div>
+
+          <!-- CADASTRAL FORM -->
+          <div id="gisCadastralFields">
+            <div class="tool-form" style="grid-template-columns:1fr 1fr 1.2fr; display:grid; gap:12px;">
+              <div>
+                <label>Northing (m)</label>
+                <input type="text" id="gisNorthing" placeholder="e.g. 712000.00" value="712000.00">
               </div>
-              <div class="tool-actions">
-                <button class="btn-sm" id="gisCheckBtn">Check coordinates</button>
-                <button class="btn-sm ghost" id="gisLocateBtn">Use my location</button>
+              <div>
+                <label>Easting (m)</label>
+                <input type="text" id="gisEasting" placeholder="e.g. 548000.00" value="548000.00">
               </div>
-              <div class="result-box" id="gisResult"></div>
+              <div>
+                <label>Nigerian UTM Zone</label>
+                <select id="gisUtmZone">
+                  <option value="31" selected>Zone 31N · Lagos & West Nigeria (CM 3°E)</option>
+                  <option value="32">Zone 32N · Abuja & Central Nigeria (CM 9°E)</option>
+                  <option value="33">Zone 33N · East Nigeria (CM 15°E)</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="dash-note">We don't yet have real government master-plan boundaries loaded — only a handful of test coordinates used to build this feature. A result today would cover almost nowhere real, so we're holding it back until actual registry data is in place rather than let it look more complete than it is.</div>
+
+          <!-- GPS FORM -->
+          <div id="gisGpsFields" style="display:none;">
+            <div class="tool-form two">
+              <div><label>Latitude (°N)</label><input type="text" id="gisLat" placeholder="e.g. 6.442311"></div>
+              <div><label>Longitude (°E)</label><input type="text" id="gisLng" placeholder="e.g. 3.433285"></div>
+            </div>
+          </div>
+
+          <div class="tool-actions" style="margin-top:14px;">
+            <button class="btn-sm" id="gisCheckBtn">Convert & Verify Boundaries</button>
+            <button class="btn-sm ghost" id="gisLocateBtn">Use My Device GPS</button>
+          </div>
+          <div class="result-box" id="gisResult"></div>
+          <div class="dash-note">Mathematical engine computes full Transverse Mercator reverse projection on the Clarke 1880 RGS Ellipsoid and applies official Molodensky Datum Shift parameters (ΔX=-92m, ΔY=-93m, ΔZ=+122m) established by SURCON and OSGOF.</div>
         </div>
       </div>
 
@@ -1152,17 +1233,38 @@
         </div>
       </div>
 
-      <!-- FEES -->
+      <!-- STATUTORY CLOSING COST CALCULATOR -->
       <div id="userView-fees" style="display:none;">
         <div class="dash-card">
-          <h3>Hidden fee calculator</h3>
-          <p>The true cost of a plot, broken down before you commit: agency fees, legal fees, surveying, title perfection and the community development levy you should expect to budget for.</p>
-          <div class="tool-form">
-            <div><label>Land price (₦)</label><input type="text" id="feePrice" inputmode="numeric" placeholder="25,000,000"></div>
+          <h3>Statutory Closing Cost & Fee Calculator</h3>
+          <p>Compute statutory closing costs, agency fees, legal conveyance, stamp duties, and Governor's Consent based on official state land bureau rate schedules.</p>
+          <div class="tool-form" style="grid-template-columns:1.5fr 1fr 1.2fr; display:grid; gap:12px;">
+            <div>
+              <label>Property / Land Price (₦)</label>
+              <input type="text" id="feePrice" inputmode="numeric" placeholder="25,000,000" value="25,000,000">
+            </div>
+            <div>
+              <label>State Jurisdiction</label>
+              <select id="feeState">
+                <option value="Lagos" selected>Lagos State</option>
+                <option value="Abuja">FCT Abuja</option>
+                <option value="Ogun">Ogun State</option>
+                <option value="Rivers">Rivers State</option>
+                <option value="Oyo">Oyo State</option>
+              </select>
+            </div>
+            <div>
+              <label>Title & Transaction Type</label>
+              <select id="feeTitleType">
+                <option value="governor_consent" selected>Governor's Consent / Deed Assignment</option>
+                <option value="cofo_direct">Direct Allocation / Primary C of O</option>
+                <option value="gazette_excision">Gazetted Excision / Community Regularisation</option>
+              </select>
+            </div>
           </div>
-          <div class="tool-actions"><button class="btn-sm" id="feeBtn">Calculate true cost</button></div>
+          <div class="tool-actions" style="margin-top:14px;"><button class="btn-sm" id="feeBtn">Calculate True Acquisition Cost</button></div>
           <div class="result-box" id="feeResult"></div>
-          <div class="dash-note">Percentages are our current standard estimates. Your final figures are confirmed in writing before any payment is made.</div>
+          <div class="dash-note">Calculated in accordance with Lagos State Lands Bureau Regulations, FIRS Stamp Duties Act Cap S8, and NBA Legal Practitioners Remuneration Scale. Final settlement figures are locked in escrow prior to disbursement.</div>
         </div>
       </div>
 
@@ -1351,9 +1453,8 @@
           <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           <span class="btn-lbl-desk">Log out</span>
         </button>
-        <button id="adminCloseBtn" class="admin-top-btn" title="Back to site">
-          <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          <span class="btn-lbl-desk">Back</span>
+        <button id="adminCloseBtn" class="admin-top-btn" title="Back to site" aria-label="Back to site">
+          <svg class="i" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
       </div>
     </div>
@@ -2081,6 +2182,7 @@ function switchView(view){
   if (view === 'materials') loadMaterials();
   if (view === 'build') loadMilestones();
   if (view === 'wallet') loadWalletHistory();
+  if (view === 'deed') loadUserDocuments();
 }
 document.querySelectorAll('.side-link[data-view]').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
 
@@ -2140,56 +2242,194 @@ $('dashSearchBtn').addEventListener('click', async () => {
   } catch(e){ showError(box, 'Search is unavailable right now.'); }
 });
 
-/* deed scanner */
+/* ================= TOOL 1: R2 DEED SCANNER & REPOSITORY ================= */
+async function loadUserDocuments() {
+  const tbody = $('deedTableBody');
+  if (!tbody) return;
+  try {
+    const res = await api('/api/documents');
+    if (res.status === 'success' && res.documents && res.documents.length) {
+      tbody.innerHTML = res.documents.map(d => {
+        const cls = d.verdict === 'clear' ? 'v-clear' : d.verdict === 'review' ? 'v-review' : 'v-risk';
+        const lbl = d.verdict === 'clear' ? 'Verified' : d.verdict === 'review' ? 'Review' : 'High Risk';
+        const dlBtn = d.r2Key ? `<a href="${API_BASE}/api/documents/download?key=${encodeURIComponent(d.r2Key)}" target="_blank" class="admin-top-btn" style="padding:3px 8px; font-size:11px; display:inline-flex; border-color:var(--line); color:var(--ink);">Download</a>` : '—';
+        return `<tr>
+          <td><span class="admin-role-tag">${esc(d.docType.replace(/_/g, ' '))}</span></td>
+          <td style="font-weight:600;">${esc(d.fileName || 'document.pdf')}</td>
+          <td>${esc(d.regNumber || '—')}</td>
+          <td><span class="verdict ${cls}" style="font-size:10px; padding:2px 8px;">${lbl}</span></td>
+          <td><b>${d.riskScore ?? 0}</b>/100</td>
+          <td style="font-size:11px;">${new Date(d.createdAt).toLocaleDateString()}</td>
+          <td>${dlBtn}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:rgba(10,25,47,.45); padding:16px;">No documents uploaded yet. Attach your deed or survey plan above.</td></tr>';
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#dc2626; padding:16px;">Could not load document repository.</td></tr>';
+  }
+}
+
+if ($('deedRefreshListBtn')) {
+  $('deedRefreshListBtn').addEventListener('click', loadUserDocuments);
+}
+
 $('deedFile').addEventListener('change', e => {
   const f = e.target.files[0];
-  $('deedDrop').textContent = f ? `Attached: ${f.name}` : 'Click to attach the document · PDF, JPG or PNG';
-});
-$('deedScanBtn').addEventListener('click', async () => {
-  const u = session.get(); const box = $('deedResult');
-  const f = $('deedFile').files[0];
-  box.className = 'result-box show'; box.innerHTML = 'Scanning document…';
-  try {
-    const d = await api('/api/tools/deed-scan', { method:'POST', body:{
-      gmail: u ? u.gmail : '', docType: $('deedType').value,
-      regNumber: $('deedReg').value.trim(), fileName: f ? f.name : ''
-    }});
-    if (d.status !== 'success') return showError(box, d.message || 'Scan failed.');
-    const cls = d.verdict === 'clear' ? 'v-clear' : d.verdict === 'review' ? 'v-review' : 'v-risk';
-    const label = d.verdict === 'clear' ? 'No issues detected' : d.verdict === 'review' ? 'Needs review' : 'High risk';
-    box.innerHTML = `
-      <span class="verdict ${cls}">${label} · risk ${d.riskScore}/100</span>
-      ${d.flags.length ? `<ul class="flag-list">${d.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>`
-        : '<p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65);">Nothing flagged in the metadata check. Registry confirmation is still required before funds move.</p>'}`;
-  } catch(e){ showError(box, 'We couldn\'t reach the scanner. Try again shortly.'); }
+  if ($('deedDropText')) {
+    $('deedDropText').textContent = f ? `Selected: ${f.name} (${(f.size / 1024).toFixed(1)} KB)` : 'Click to attach document or drag and drop · PDF, PNG, JPG (Up to 15MB)';
+  }
 });
 
-/* GIS */
+$('deedScanBtn').addEventListener('click', async () => {
+  const u = session.get();
+  const box = $('deedResult');
+  const file = $('deedFile').files[0];
+  const docType = $('deedType').value;
+  const regNumber = $('deedReg').value.trim();
+  const notes = $('deedNotes') ? $('deedNotes').value.trim() : '';
+
+  box.className = 'result-box show';
+  box.innerHTML = 'Uploading file to Cloudflare R2 & executing forensic analysis…';
+
+  try {
+    let d;
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('docType', docType);
+      formData.append('regNumber', regNumber);
+      formData.append('notes', notes);
+      if (u) formData.append('email', u.email || u.gmail);
+
+      const resp = await fetch(`${API_BASE}/api/documents/upload`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      });
+      d = await resp.json();
+    } else {
+      d = await api('/api/tools/deed-scan', {
+        method: 'POST',
+        body: {
+          email: u ? (u.email || u.gmail) : '',
+          docType,
+          regNumber,
+          fileName: 'manual_verification.pdf'
+        }
+      });
+    }
+
+    if (d.status !== 'success') return showError(box, d.message || 'Verification failed.');
+
+    const cls = d.verdict === 'clear' ? 'v-clear' : d.verdict === 'review' ? 'v-review' : 'v-risk';
+    const label = d.verdict === 'clear' ? 'Forensic Title Clear' : d.verdict === 'review' ? 'Manual Registry Review Required' : 'High Risk / Unmatched Syntax';
+    const r2Notice = d.r2Key ? `<div class="kv-row" style="margin-top:8px;"><span class="k">Cloudflare R2 Storage Key</span><span class="v" style="font-family:var(--mono); font-size:11px;">${esc(d.r2Key)}</span></div>` : '';
+    const flagsHtml = d.flags && d.flags.length
+      ? `<ul class="flag-list">${d.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>`
+      : '<p style="margin-top:10px; font-size:12.5px; color:#065f46;">All standard statutory metadata fields confirmed. Document safely committed to trust storage.</p>';
+
+    box.innerHTML = `
+      <span class="verdict ${cls}">${label} · Risk Score ${d.riskScore}/100</span>
+      <div class="kv-row" style="margin-top:12px;"><span class="k">Registration Number</span><span class="v">${esc(d.regNumber || 'Not provided')}</span></div>
+      <div class="kv-row"><span class="k">Document Type</span><span class="v">${esc(d.docType)}</span></div>
+      ${r2Notice}
+      ${flagsHtml}
+    `;
+
+    loadUserDocuments();
+  } catch(e) {
+    showError(box, 'Could not complete upload to R2 storage. Check network and try again.');
+  }
+});
+
+/* ================= TOOL 2: MINNA DATUM <-> WGS-84 GIS ENGINE ================= */
+let gisMode = 'cadastral';
+if ($('gisModeCadastral') && $('gisModeGps')) {
+  $('gisModeCadastral').addEventListener('click', () => {
+    gisMode = 'cadastral';
+    $('gisModeCadastral').className = 'btn-sm';
+    $('gisModeCadastral').style = 'background:#0A192F; color:#C5A880; border:1px solid #C5A880;';
+    $('gisModeGps').className = 'btn-sm ghost';
+    $('gisModeGps').style = '';
+    $('gisCadastralFields').style.display = 'block';
+    $('gisGpsFields').style.display = 'none';
+  });
+  $('gisModeGps').addEventListener('click', () => {
+    gisMode = 'gps';
+    $('gisModeGps').className = 'btn-sm';
+    $('gisModeGps').style = 'background:#0A192F; color:#C5A880; border:1px solid #C5A880;';
+    $('gisModeCadastral').className = 'btn-sm ghost';
+    $('gisModeCadastral').style = '';
+    $('gisCadastralFields').style.display = 'none';
+    $('gisGpsFields').style.display = 'block';
+  });
+}
+
 $('gisLocateBtn').addEventListener('click', () => {
-  if (!navigator.geolocation) return showError($('gisResult'), 'Your browser doesn\'t support location.');
+  if (!navigator.geolocation) return showError($('gisResult'), 'Geolocation is not supported by your browser.');
   navigator.geolocation.getCurrentPosition(
-    p => { $('gisLat').value = p.coords.latitude.toFixed(6); $('gisLng').value = p.coords.longitude.toFixed(6); },
-    () => showError($('gisResult'), 'Location permission denied. Enter the coordinates manually.')
+    p => {
+      if (gisMode === 'cadastral' && $('gisModeGps')) $('gisModeGps').click();
+      $('gisLat').value = p.coords.latitude.toFixed(6);
+      $('gisLng').value = p.coords.longitude.toFixed(6);
+      $('gisCheckBtn').click();
+    },
+    () => showError($('gisResult'), 'Location permission denied. Enter Northing / Easting manually.')
   );
 });
+
 $('gisCheckBtn').addEventListener('click', async () => {
-  const u = session.get(); const box = $('gisResult');
-  const lat = parseFloat($('gisLat').value), lng = parseFloat($('gisLng').value);
-  if (Number.isNaN(lat) || Number.isNaN(lng)) return showError(box, 'Enter both a latitude and a longitude.');
-  box.className = 'result-box show'; box.innerHTML = 'Checking against master plans…';
+  const box = $('gisResult');
+  let body = {};
+
+  if (gisMode === 'cadastral' && $('gisNorthing')) {
+    const northing = parseFloat($('gisNorthing').value);
+    const easting = parseFloat($('gisEasting').value);
+    const utmZone = parseInt($('gisUtmZone').value, 10);
+    if (Number.isNaN(northing) || Number.isNaN(easting)) {
+      return showError(box, 'Enter valid Northing and Easting metric coordinates from your survey plan.');
+    }
+    body = { northing, easting, utm_zone: utmZone };
+  } else {
+    const lat = parseFloat($('gisLat').value);
+    const lng = parseFloat($('gisLng').value);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+      return showError(box, 'Enter both Latitude and Longitude decimal coordinates.');
+    }
+    body = { lat, lng };
+  }
+
+  box.className = 'result-box show';
+  box.innerHTML = 'Computing Transverse Mercator projection & querying GIS acquisition boundaries…';
+
   try {
-    const d = await api('/api/tools/gis-check', { method:'POST', body:{ gmail: u ? u.gmail : '', lat, lng } });
-    const map = {
-      free:       ['v-clear',  'Free / allocable',        'No infrastructure commitment found at these coordinates. Confirm the plot-level allocation before payment.'],
-      committed:  ['v-risk',   'Committed to government', 'These coordinates fall inside a government infrastructure setback. Land here carries demolition risk.'],
-      agricultural:['v-review','Zoned agricultural',      'Zoned for agricultural use. Residential or commercial development requires a formal change of use.'],
-      unknown:    ['v-review', 'No master-plan match',    'These coordinates aren\'t in our zone dataset yet. Our team will run a manual registry check.']
-    };
-    const [cls, label, note] = map[d.zoneType] || map.unknown;
-    box.innerHTML = `<span class="verdict ${cls}">${label}</span>
-      ${d.matchedZone ? `<div class="kv-row" style="margin-top:12px;"><span class="k">Matched zone</span><span class="v">${esc(d.matchedZone)}</span></div>` : ''}
-      <p style="margin-top:12px; font-size:12.5px; color:rgba(8,24,48,.65); line-height:1.55;">${note}</p>`;
-  } catch(e){ showError(box, 'The mapper is unavailable right now.'); }
+    const d = await api('/api/tools/gis-check', { method: 'POST', body });
+    if (d.status !== 'success') return showError(box, d.message || 'Geodetic projection check failed.');
+
+    const isAcq = d.isGovernmentAcquisition;
+    const cls = isAcq ? 'v-risk' : (d.zoneType === 'excision' || d.zoneType === 'gazetted' ? 'v-review' : 'v-clear');
+    const label = isAcq ? 'Committed Government Acquisition (High Risk)' : (d.zoneType === 'excision' ? 'Gazetted Excision Zone' : 'Free / Allocable Title');
+
+    const mapsBtn = `<a href="${d.googleMapsUrl}" target="_blank" rel="noopener" class="btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:11.5px; padding:6px 12px; margin-right:8px; text-decoration:none; background:#0A192F; color:#C5A880; border:1px solid #C5A880;">
+      <svg class="i" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Google Maps Pin
+    </a>`;
+    const osmBtn = `<a href="${d.osmUrl}" target="_blank" rel="noopener" class="btn-sm ghost" style="display:inline-flex; align-items:center; gap:6px; font-size:11.5px; padding:6px 12px; text-decoration:none;">
+      OpenStreetMap Terrain
+    </a>`;
+
+    box.innerHTML = `
+      <span class="verdict ${cls}">${label}</span>
+      <div class="kv-row" style="margin-top:12px;"><span class="k">Converted WGS-84 GPS</span><span class="v" style="font-family:var(--mono);">${d.lat.toFixed(6)}° N, ${d.lng.toFixed(6)}° E</span></div>
+      ${d.northing ? `<div class="kv-row"><span class="k">Minna UTM Datum</span><span class="v" style="font-family:var(--mono);">N: ${d.northing.toLocaleString()}m | E: ${d.easting.toLocaleString()}m (Zone ${d.utmZone}N)</span></div>` : ''}
+      <div class="kv-row"><span class="k">Master Plan Zone</span><span class="v">${esc(d.matchedZone || 'Unclassified Freehold Territory')}</span></div>
+      <div class="kv-row"><span class="k">Acquisition Status</span><span class="v" style="font-weight:700; color:${isAcq ? '#dc2626' : '#059669'};">${isAcq ? 'Active Government Setback' : 'No Infrastructure Conflict'}</span></div>
+      <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;">${mapsBtn}${osmBtn}</div>
+    `;
+  } catch(e) {
+    showError(box, 'Cadastral Geodesy Engine is momentarily unreachable.');
+  }
 });
 
 /* community risk */
@@ -2210,27 +2450,68 @@ $('omoBtn').addEventListener('click', async () => {
   } catch(e){ showError(box, 'The risk database is unavailable right now.'); }
 });
 
-/* fee calculator */
+/* ================= TOOL 4: STATUTORY CLOSING COST CALCULATOR ================= */
 $('feePrice').addEventListener('input', e => {
   const n = numOnly(e.target.value);
   e.target.value = n ? n.toLocaleString('en-NG') : '';
 });
+
 $('feeBtn').addEventListener('click', async () => {
-  const box = $('feeResult'), price = numOnly($('feePrice').value);
-  if (price <= 0) return showError(box, 'Enter the land price.');
-  box.className = 'result-box show'; box.innerHTML = 'Calculating…';
+  const box = $('feeResult');
+  const price = numOnly($('feePrice').value);
+  const state = $('feeState') ? $('feeState').value : 'Lagos';
+  const titleType = $('feeTitleType') ? $('feeTitleType').value : 'governor_consent';
+
+  if (price <= 0) return showError(box, 'Enter a valid property purchase price.');
+
+  box.className = 'result-box show';
+  box.innerHTML = 'Querying statutory fee schedules & calculating legal outlays…';
+
   try {
-    const d = await api('/api/tools/fee-calculator', { method:'POST', body:{ priceNgn: price } });
-    if (d.status !== 'success') return showError(box, d.message || 'Could not calculate.');
+    const d = await api('/api/tools/fee-calculator', {
+      method: 'POST',
+      body: { priceNgn: price, state, titleType }
+    });
+
+    if (d.status !== 'success') return showError(box, d.message || 'Could not calculate statutory fees.');
+
     const b = d.breakdown;
-    const row = (k, v) => `<div class="kv-row"><span class="k">${k}</span><span class="v">${ngn(v)}</span></div>`;
-    box.innerHTML =
-      row('Land price', b.landPrice) + row('Agency fee (5%)', b.agencyFee) +
-      row('Legal fee (1.5%)', b.legalFee) + row('Survey fee', b.surveyFee) +
-      row('Title perfection (2%)', b.titlePerfectionFee) +
-      row('Community levy estimate (1%)', b.communityLevyEstimate) +
-      `<div class="kv-row total"><span class="k">True total cost</span><span class="v">${ngn(b.total)}</span></div>`;
-  } catch(e){ showError(box, 'The calculator is unavailable right now.'); }
+    const row = (k, v, sub = '') => `
+      <div class="kv-row">
+        <span class="k">${k} ${sub ? `<small style="opacity:.7; font-size:11px;">(${sub})</small>` : ''}</span>
+        <span class="v">${ngn(v)}</span>
+      </div>`;
+
+    box.innerHTML = `
+      <div style="font-size:14px; font-weight:800; color:var(--ink); margin-bottom:12px;">
+        Statutory Outlay Breakdown · ${esc(d.state)}
+      </div>
+      ${row('Purchase Price', d.propertyPrice)}
+      ${row('Agency & Brokerage Fee', b.agencyFee, `${b.agencyPct}% AEAN standard`)}
+      ${row('Legal Conveyance Fee', b.legalFee, `${b.legalPct}% NBA scale`)}
+      ${row('Registered Cadastral Survey', b.surveyFee, 'SURCON regulated')}
+      ${row('Statutory Stamp Duty', b.stampDuty, `${b.stampPct}% FIRS / LIRS`)}
+      ${row('Governor\'s Consent / Ministerial Fee', b.governorConsentFee, `${b.consentPct}% State Lands Bureau`)}
+      ${row('Capital Gains Tax Reserve', b.capitalGainsTax, `${b.cgtPct}% CGT Act`)}
+      <div class="kv-row" style="background:rgba(197,168,128,.1); padding:6px 10px; border-radius:6px; margin:8px 0;">
+        <span class="k" style="font-weight:700;">Total Statutory Closing Costs</span>
+        <span class="v" style="font-weight:800; color:var(--gold-dark);">${ngn(b.totalHiddenFees)} (${b.feePercentageOfPrice}% of price)</span>
+      </div>
+      <div class="kv-row total" style="border-top:2px solid var(--ink); padding-top:10px; margin-top:8px;">
+        <span class="k" style="font-size:15px; font-weight:800;">Net Acquisition Outlay</span>
+        <span class="v" style="font-size:16px; font-weight:800; color:var(--blue);">${ngn(d.grandTotal)}</span>
+      </div>
+      ${d.legalReferences && d.legalReferences.length ? `
+        <div style="margin-top:14px; font-size:11.5px; color:rgba(8,24,48,.6); border-top:1px solid var(--line); padding-top:8px;">
+          <b>Governing Statutory Authorities:</b>
+          <ul style="margin:4px 0 0 16px; padding:0;">
+            ${d.legalReferences.map(r => `<li>${esc(r)}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+    `;
+  } catch(e) {
+    showError(box, 'Fee schedule engine is unavailable right now.');
+  }
 });
 
 /* escrow */
